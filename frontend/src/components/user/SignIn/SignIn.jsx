@@ -1,8 +1,7 @@
-import CssBaseline from "@mui/material/CssBaseline";
-import * as React from "react";
+import { React, useState } from "react";
 import LoginImages from "../LoginImages";
-import axios from "../../../Axios";
-import { useState } from "react";
+import axios from '../../../Axios'
+import { useNavigate } from "react-router-dom";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -13,66 +12,35 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import GoogleIcon from "@mui/icons-material/Google";
 
-function SignUp() {
-  const initialValues = { username: "", email: "", number: "", password: "" };
-  const [FormValues, setFromValues] = useState(initialValues);
+function SignIn() {
+    const navigate = useNavigate()
   const [FormErrors, setFormErrors] = useState({});
-
+  const [FormValues, setFormValues] = useState({});
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log(FormValues)
+    axios.post('/signin',{FormValues})
+    .then(res=>{
+        if(res.status === 200){
+            console.log(res.data.jwtToken)
+            localStorage.setItem('token',res.data.jwtToken)
+            console.log("user sign sucessfull")
+            navigate('/')
+        }
+    })
+    .catch((error)=>{
+        if(error.response && error.response.status===401){
+            console.log(`${error.response.data.message}`)
+        }
+        else{
+            console.log("Error during signup:", error.message);
+        }
+    })
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFromValues({ ...FormValues, [name]: value });
+    setFormValues({ ...FormValues, [name]: value });
   };
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    const errors = {};
-    const regexofemail =
-      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    const regexOfNumber = /^[0-9]{10}$/;
-    if (!FormValues.username) {
-      errors.username = "Username required";
-    } else if (FormValues.username.length < 5) {
-      errors.username = "Atleast 5 characters required";
-    }
-    if (!FormValues.email) {
-      errors.email = "Email is required ";
-    } else if (!regexofemail.test(FormValues.email)) {
-      errors.email = "Enter a valid email";
-    }
-    if (!FormValues.number) {
-      errors.number = "Enter a phone number";
-    } else if (!regexOfNumber.test(FormValues.number)) {
-      errors.number = "Enter a valid phone number";
-    }
-    if (!FormValues.password) {
-      errors.password = "Please enter a password";
-    } else if (FormValues.password.length < 5) {
-      errors.password = "Atleast 5 characters required";
-    }
-    if (Object.keys(errors).length > 0) {
-      setFormErrors(errors);
-      return;
-    } else {
-      setFormErrors("");
-    }
-    // validation
-    axios.post("/signup", { FormValues })
-      .then((res) => {
-        if (res.data.success) {
-          console.log(`User saved: ${res.data.useremail}`);
-        } else {
-          console.log(res.data.message);
-        }
-      })
-      .catch((error) => {
-        if (error.response && error.response.status === 409) {
-          errors.signup = `${error.response.data.message}`;
-        } else {
-          console.log("Error during signup:", error.message);
-        }
-        setFormErrors(errors);
-      });
-  };
-
   return (
     <>
       <LoginImages />
@@ -83,7 +51,6 @@ function SignUp() {
           alignItems: "center",
         }}
       >
-        <CssBaseline />
         <Container
           component="main"
           sx={{
@@ -130,7 +97,7 @@ function SignUp() {
               mt="5px"
               fontWeight="700"
             >
-              Sign Up
+              Sign In
             </Typography>
             <Box
               component="form"
@@ -139,20 +106,8 @@ function SignUp() {
               sx={{ mt: 0.5 }}
             >
               <Typography sx={{ color: "red", fontWeight: "500" }}>
-                {FormErrors.signup}
+                {FormErrors.signin}
               </Typography>
-              <TextField
-                margin="normal"
-                fullWidth
-                id="username"
-                label="Username"
-                name="username"
-                autoComplete="username"
-                onChange={handleChange}
-                autoFocus
-                error={!!FormErrors.username}
-                helperText={FormErrors.username}
-              />
 
               <TextField
                 margin="normal"
@@ -165,19 +120,6 @@ function SignUp() {
                 autoFocus
                 error={!!FormErrors.email}
                 helperText={FormErrors.email}
-              />
-
-              <TextField
-                margin="normal"
-                fullWidth
-                name="number"
-                label="Phone Number"
-                id="number"
-                type="number"
-                autoComplete="number"
-                onChange={handleChange}
-                error={!!FormErrors.number}
-                helperText={FormErrors.number}
               />
 
               <TextField
@@ -206,12 +148,12 @@ function SignUp() {
                   backgroundColor: "blue",
                 }}
               >
-                Sign Up
+                Sign In
               </Button>
               <Grid container alignItems="center" sx={{ my: 0.5 }}>
                 <Grid item>
                   <Typography sx={{ fontWeight: "700" }}>
-                    Already have an account?
+                    Don't have a account?
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -224,14 +166,14 @@ function SignUp() {
                       fontWeight: "600",
                     }}
                   >
-                    Sign IN
+                    Sign UP
                   </Link>
                 </Grid>
               </Grid>
             </Box>
           </Box>
           <Typography sx={{ my: 1, textAlign: "left", fontSize: "14px" }}>
-            By sign Up you are agreeing all the terms and conditionsof the
+            By Sign In you are agreeing all the terms and conditionsof the
             projestro plateform.T&C
           </Typography>
           <Grid>
@@ -250,4 +192,4 @@ function SignUp() {
   );
 }
 
-export default SignUp;
+export default SignIn;
