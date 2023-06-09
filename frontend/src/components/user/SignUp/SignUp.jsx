@@ -1,11 +1,11 @@
+import CssBaseline from "@mui/material/CssBaseline";
 import * as React from "react";
 import LoginImages from "../LoginImages";
 import axios from "../../../Axios";
 import { useState } from "react";
-import PhoneInput from "react-phone-number-input";
 
 import Button from "@mui/material/Button";
-import CssBaseline from "@mui/material/CssBaseline";
+
 import TextField from "@mui/material/TextField";
 import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
@@ -13,9 +13,8 @@ import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import GoogleIcon from "@mui/icons-material/Google";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-const defaultTheme = createTheme();
+
 
 function SignUp() {
   const initialValues = { username: "", email: "", number: "", password: "" };
@@ -60,11 +59,27 @@ function SignUp() {
     }
     // validation
     console.log("sign up");
-    axios.post("/signup", { FormValues });
+    axios.post("/signup", { FormValues })
+    .then(res => {
+      if (res.data.success) {
+        console.log(`User saved: ${res.data.useremail}`);
+      } else {
+        console.log(res.data.message);
+      }
+    })
+    .catch(error => {
+      if (error.response && error.response.status === 409) {
+        console.log(`Conflict: ${error.response.data.message}`);
+      } else {
+        console.log("Error during signup:", error.message);
+      }
+    });
+  
+
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+   <>
       <LoginImages />
       <Box
         sx={{
@@ -233,7 +248,7 @@ function SignUp() {
           </Grid>
         </Container>
       </Box>
-    </ThemeProvider>
+      </>
   );
 }
 

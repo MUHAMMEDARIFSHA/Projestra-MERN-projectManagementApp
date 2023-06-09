@@ -19,8 +19,8 @@
     "dotenv": "^16.1.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-phone-number-input": "^3.2.23",
     "react-redux": "^8.0.7",
+    "react-router-dom": "^6.12.1",
     "react-scripts": "^5.0.1"
   },
   "devDependencies": {
