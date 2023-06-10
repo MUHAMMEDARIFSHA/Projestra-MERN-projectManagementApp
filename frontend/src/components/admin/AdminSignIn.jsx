@@ -1,9 +1,9 @@
 import { React, useState } from "react";
-import LoginImages from "../LoginImages";
-import axios from '../../../Axios'
+import LoginImages from "../user/LoginImages"
+import axios from '../../Axios'
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { userSetAuth } from "../../../action/userAuthAction";
+
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -14,7 +14,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import GoogleIcon from "@mui/icons-material/Google";
 
-function SignIn() {
+function AdminSignIn() {
     const navigate = useNavigate()
     const dispatch = useDispatch()
   const [FormErrors, setFormErrors] = useState({});
@@ -23,14 +23,14 @@ function SignIn() {
     const errors = {}
     e.preventDefault();
     console.log(FormValues)
-    axios.post('/signin',{FormValues})
+    axios.post('/admin/signin',{FormValues})
     .then(res=>{
         if(res.status === 200){
             console.log(res.data.jwtToken)
             localStorage.setItem('token',res.data.jwtToken)
             console.log("user sign sucessfull")
-            dispatch(userSetAuth())
-            navigate('/')
+            // dispatch(userSetAuth())
+            // navigate('/admin')
         }
     })
     .catch((error)=>{
@@ -104,7 +104,7 @@ function SignIn() {
               mt="5px"
               fontWeight="700"
             >
-              Sign In
+              Admin SignIn
             </Typography>
             <Box
               component="form"
@@ -147,7 +147,7 @@ function SignIn() {
                 variant="contained"
                 sx={{
                   mt: 3,
-                  mb: 2,
+                  mb: 6,
                   borderRadius: "3px",
                   height: "40px",
                   fontWeight: "700",
@@ -156,46 +156,15 @@ function SignIn() {
               >
                 Sign In
               </Button>
-              <Grid container alignItems="center" sx={{ my: 0.5 }}>
-                <Grid item>
-                  <Typography sx={{ fontWeight: "700" }}>
-                    Don't have a account?
-                  </Typography>
-                </Grid>
-                <Grid item>
-                  <Link
-                    href="#"
-                    variant="body"
-                    sx={{
-                      textDecoration: "none",
-                      fontSize: "18px",
-                      fontWeight: "600",
-                    }}
-                  >
-                    Sign UP
-                  </Link>
-                </Grid>
-              </Grid>
+              
+              
             </Box>
           </Box>
-          <Typography sx={{ my: 1, textAlign: "left", fontSize: "14px" }}>
-            By Sign In you are agreeing all the terms and conditionsof the
-            projestro plateform.T&C
-          </Typography>
-          <Grid>
-            <Typography
-              sx={{ fontWeight: "700", fontSize: "20px", opacity: 0.5 }}
-            >
-              OR
-            </Typography>
-            <GoogleIcon
-              sx={{ my: 2, fontSize: "35px", color: "blue", cursor: "pointer" }}
-            />
-          </Grid>
+       
         </Container>
       </Box>
     </>
   );
 }
 
-export default SignIn;
+export default AdminSignIn;

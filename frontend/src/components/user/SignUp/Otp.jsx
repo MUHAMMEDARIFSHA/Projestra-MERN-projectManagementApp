@@ -1,9 +1,8 @@
 import { React, useState } from "react";
 import LoginImages from "../LoginImages";
-import axios from '../../../Axios'
+import axios from "../../../Axios";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { userSetAuth } from "../../../action/userAuthAction";
+import { useSelector } from "react-redux";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -12,41 +11,42 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import GoogleIcon from "@mui/icons-material/Google";
+import emailReducer from "../../../reducers/emailOtpReducer";
 
-function SignIn() {
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
+function Otp() {
+  const navigate = useNavigate();
+
   const [FormErrors, setFormErrors] = useState({});
-  const [FormValues, setFormValues] = useState({});
+  const [otp, setOtp] = useState("");
+  const storedEmail = useSelector((state) => state.email);
+  console.log(storedEmail);
   const handleSubmit = (e) => {
-    const errors = {}
     e.preventDefault();
-    console.log(FormValues)
-    axios.post('/signin',{FormValues})
-    .then(res=>{
-        if(res.status === 200){
-            console.log(res.data.jwtToken)
-            localStorage.setItem('token',res.data.jwtToken)
-            console.log("user sign sucessfull")
-            dispatch(userSetAuth())
-            navigate('/')
+    const errors = {};
+    console.log(otp);
+    console.log(storedEmail.email+"   " + "email of user")
+    axios
+      .post("/signup/verifyotp", { otp, email:storedEmail.email })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(`${res.data.message}`);
+          console.log("user verify sucessfull");
+              navigate('/signin')
         }
-    })
-    .catch((error)=>{
-        if(error.response && error.response.status===401){
-            console.log(`${error.response.data.message}`)
-            errors.signin=`${error.response.data.message}`
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 400) {
+          console.log(`${error.response.data.message}`);
+          errors.otp = `${error.response.data.message}`;
+        } else {
+          console.log("Error during verify otp:", error.message);
         }
-        else{
-            console.log("Error during signup:", error.message);
-        }
-        setFormErrors(errors)
-    })
+        setFormErrors(errors);
+      });
   };
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues({ ...FormValues, [name]: value });
+    const { value } = e.target;
+    setOtp(value);
   };
   return (
     <>
@@ -104,7 +104,7 @@ function SignIn() {
               mt="5px"
               fontWeight="700"
             >
-              Sign In
+              OTP Verification
             </Typography>
             <Box
               component="form"
@@ -112,35 +112,20 @@ function SignIn() {
               noValidate
               sx={{ mt: 0.5 }}
             >
-              <Typography sx={{ color: "red", fontWeight: "500" }}>
-                {FormErrors.signin}
-              </Typography>
-
               <TextField
                 margin="normal"
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="otp"
+                label="Enter Otp"
+                name="otp"
+                type="otp"
+                autoComplete="otp"
                 onChange={handleChange}
                 autoFocus
-                // error={!!FormErrors.signin}
-                // helperText={FormErrors.signin}
+                error={!!FormErrors.otp}
+                helperText={FormErrors.otp}
               />
 
-              <TextField
-                margin="normal"
-                fullWidth
-                id="password"
-                label="Password"
-                name="password"
-                type="password"
-                autoComplete="password"
-                onChange={handleChange}
-                autoFocus
-                
-              />
               <Button
                 type="submit"
                 fullWidth
@@ -154,12 +139,12 @@ function SignIn() {
                   backgroundColor: "blue",
                 }}
               >
-                Sign In
+                Submit
               </Button>
               <Grid container alignItems="center" sx={{ my: 0.5 }}>
                 <Grid item>
                   <Typography sx={{ fontWeight: "700" }}>
-                    Don't have a account?
+                    Don't get otp?
                   </Typography>
                 </Grid>
                 <Grid item>
@@ -172,30 +157,19 @@ function SignIn() {
                       fontWeight: "600",
                     }}
                   >
-                    Sign UP
+                    Resent Otp
                   </Link>
                 </Grid>
               </Grid>
             </Box>
           </Box>
           <Typography sx={{ my: 1, textAlign: "left", fontSize: "14px" }}>
-            By Sign In you are agreeing all the terms and conditionsof the
-            projestro plateform.T&C
+            Don't share the otp to anyone.
           </Typography>
-          <Grid>
-            <Typography
-              sx={{ fontWeight: "700", fontSize: "20px", opacity: 0.5 }}
-            >
-              OR
-            </Typography>
-            <GoogleIcon
-              sx={{ my: 2, fontSize: "35px", color: "blue", cursor: "pointer" }}
-            />
-          </Grid>
         </Container>
       </Box>
     </>
   );
 }
 
-export default SignIn;
+export default Otp;

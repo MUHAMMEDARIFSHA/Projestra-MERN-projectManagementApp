@@ -1,7 +1,7 @@
 const User = require("../models/userSchema");
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-require("dotenv").config();
+const twilio = require('../utils/twilio')
 
 const registerUser = async (req, res) => {
   console.log("sign up");
@@ -25,12 +25,37 @@ const registerUser = async (req, res) => {
     });
     try {
       await newUser.save();
+      await twilio.sentotp(number)
       res.json({ success: true, useremail: email });
     } catch (error) {
       res.status(500).json({ success: false, message: "Failed to save user" });
     }
   }
 };
+
+const verifySignUpOtp = async(req,res)=>{
+  console.log(req.body.otp)
+  const otpCode = req.body.otp
+  const email   = req.body.email
+ 
+  try{
+    const user =await User.findOne({email:email})
+  if(!otpCode){
+    res.status(400).json({success:false,message:"Please enter the otp"})
+  }
+  else{
+    const check = await twilio.check(otpCode,user.number)
+    if (check.status == 'approved') {
+      res.status(200).json({success:true,message:"Otp verified sucessfully"})
+    }
+  }
+}
+catch(error){
+  res.status(500).json({success:false, message:"Failed to verify the otp"})
+}
+ 
+
+}
 
 const signInUser=async(req,res)=>{
   console.log("hi singn in ")
@@ -60,4 +85,7 @@ const signInUser=async(req,res)=>{
   
 }
 
-module.exports = { registerUser,signInUser };
+module.exports = 
+{ registerUser,
+  signInUser ,
+  verifySignUpOtp};

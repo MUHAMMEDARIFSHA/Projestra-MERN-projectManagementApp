@@ -12,13 +12,18 @@ import Button from '@mui/material/Button';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
+import { useNavigate } from 'react-router-dom';
+import { userClearAuth } from '../../action/userAuthAction';
+import { useDispatch } from 'react-redux';
 
 const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const settings = ['Logout'];
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -31,8 +36,10 @@ function Navbar() {
     setAnchorElNav(null);
   };
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null);
+  const logout = () => {
+    localStorage.removeItem('token')
+     dispatch(userClearAuth())
+       navigate('/signin')
   };
 
   return (
@@ -158,11 +165,11 @@ function Navbar() {
                 horizontal: 'right',
               }}
               open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+             
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+                <MenuItem key={setting} onClick={logout}>
+                  <Typography textAlign="center">Logout</Typography>
                 </MenuItem>
               ))}
             </Menu>

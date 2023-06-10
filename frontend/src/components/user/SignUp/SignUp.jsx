@@ -3,6 +3,9 @@ import * as React from "react";
 import LoginImages from "../LoginImages";
 import axios from "../../../Axios";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { storeEmail } from "../../../action/emailOtpAction";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -14,6 +17,8 @@ import Container from "@mui/material/Container";
 import GoogleIcon from "@mui/icons-material/Google";
 
 function SignUp() {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
   const initialValues = { username: "", email: "", number: "", password: "" };
   const [FormValues, setFromValues] = useState(initialValues);
   const [FormErrors, setFormErrors] = useState({});
@@ -59,6 +64,8 @@ function SignUp() {
       .then((res) => {
         if (res.data.success) {
           console.log(`User saved: ${res.data.useremail}`);
+          dispatch(storeEmail(res.data.useremail))
+          navigate('/signup/otp')
         } else {
           console.log(res.data.message);
         }
