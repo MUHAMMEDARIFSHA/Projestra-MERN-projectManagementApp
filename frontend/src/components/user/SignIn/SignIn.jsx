@@ -1,9 +1,9 @@
 import { React, useState } from "react";
 import LoginImages from "../LoginImages";
-import axios from '../../../Axios'
+import axios from "../../../Axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { userSetAuth } from "../../../action/userAuthAction";
+import { userSetAuth } from "../../../features/userAuth/userSlice";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -15,34 +15,33 @@ import Container from "@mui/material/Container";
 import GoogleIcon from "@mui/icons-material/Google";
 
 function SignIn() {
-    const navigate = useNavigate()
-    const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [FormErrors, setFormErrors] = useState({});
   const [FormValues, setFormValues] = useState({});
   const handleSubmit = (e) => {
-    const errors = {}
+    const errors = {};
     e.preventDefault();
-    console.log(FormValues)
-    axios.post('/signin',{FormValues})
-    .then(res=>{
-        if(res.status === 200){
-            console.log(res.data.jwtToken)
-            localStorage.setItem('token',res.data.jwtToken)
-            console.log("user sign sucessfull")
-            dispatch(userSetAuth())
-            navigate('/')
+    console.log(FormValues);
+    axios.post("/signin", { FormValues })
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res.data.jwtToken);
+          localStorage.setItem("token", res.data.jwtToken);
+          console.log("user sign sucessfull");
+          dispatch(userSetAuth());
+          navigate("/");
         }
-    })
-    .catch((error)=>{
-        if(error.response && error.response.status===401){
-            console.log(`${error.response.data.message}`)
-            errors.signin=`${error.response.data.message}`
+      })
+      .catch((error) => {
+        if (error.response && error.response.status === 401) {
+          console.log(`${error.response.data.message}`);
+          errors.signin = `${error.response.data.message}`;
+        } else {
+          console.log("Error during signup:", error.message);
         }
-        else{
-            console.log("Error during signup:", error.message);
-        }
-        setFormErrors(errors)
-    })
+        setFormErrors(errors);
+      });
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -125,8 +124,6 @@ function SignIn() {
                 autoComplete="email"
                 onChange={handleChange}
                 autoFocus
-                // error={!!FormErrors.signin}
-                // helperText={FormErrors.signin}
               />
 
               <TextField
@@ -139,7 +136,6 @@ function SignIn() {
                 autoComplete="password"
                 onChange={handleChange}
                 autoFocus
-                
               />
               <Button
                 type="submit"

@@ -15,8 +15,8 @@ app.use(express.json());
 app.use(express.urlencoded({ exteded: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 
 // code for giving access to headers through axios
 const corsOptions = {

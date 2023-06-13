@@ -13,7 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import AdbIcon from '@mui/icons-material/Adb';
 import { useNavigate } from 'react-router-dom';
-import { userClearAuth } from '../../action/userAuthAction';
+import { userClearAuth } from '../../features/userAuth/userSlice'
 import { useDispatch } from 'react-redux';
 
 const pages = ['Products', 'Pricing', 'Blog'];
