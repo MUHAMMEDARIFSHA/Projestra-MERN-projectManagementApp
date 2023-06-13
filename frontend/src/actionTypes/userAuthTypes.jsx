@@ -1,3 +1,0 @@
-export const USER_SET_AUTH = "USER_SET_AUTH"
-export const USER_CLEAR_AUTH ="USER_CLEAR_AUTH"
-export const STORE_EMAIL = 'STORE_EMAIL';
