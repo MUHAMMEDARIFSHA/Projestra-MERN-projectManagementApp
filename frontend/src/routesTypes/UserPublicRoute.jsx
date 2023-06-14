@@ -23,7 +23,7 @@ const UserPublicRoutes = () => {
 
         return state.userAuth?.authState;
     })
-    return(!UserAuthState ? <Outlet/>: <Navigate to='/'/>)
+    return(!UserAuthState ? <Outlet/>: <Navigate to='/home'/>)
 
 }
 

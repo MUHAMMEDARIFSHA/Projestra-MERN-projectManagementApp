@@ -30,7 +30,7 @@ function SignIn() {
           localStorage.setItem("token", res.data.jwtToken);
           console.log("user sign sucessfull");
           dispatch(userSetAuth());
-          navigate("/");
+          navigate("/home");
         }
       })
       .catch((error) => {
@@ -47,6 +47,10 @@ function SignIn() {
     const { name, value } = e.target;
     setFormValues({ ...FormValues, [name]: value });
   };
+  const navigateSignUp =(e)=>{
+    e.preventDefault()
+    navigate('/signup')
+  }
   return (
     <>
       <LoginImages />
@@ -160,16 +164,19 @@ function SignIn() {
                 </Grid>
                 <Grid item>
                   <Link
-                    href="#"
+             
+                    onClick={navigateSignUp}
                     variant="body"
                     sx={{
                       textDecoration: "none",
                       fontSize: "18px",
                       fontWeight: "600",
+                      cursor:"pointer",
+                      ml:1
                     }}
                   >
                     Sign UP
-                  </Link>
+                    </Link>
                 </Grid>
               </Grid>
             </Box>

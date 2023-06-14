@@ -79,6 +79,10 @@ function SignUp() {
         setFormErrors(errors);
       });
   };
+  const navigateSignIn = (e)=>{
+    e.preventDefault()
+    navigate('/signin')
+  }
 
   return (
     <>
@@ -223,12 +227,14 @@ function SignUp() {
                 </Grid>
                 <Grid item>
                   <Link
-                    href="#"
+                    onClick={navigateSignIn}
                     variant="body"
                     sx={{
                       textDecoration: "none",
                       fontSize: "18px",
                       fontWeight: "600",
+                      ml:1,
+                      cursor:"pointer"
                     }}
                   >
                     Sign IN

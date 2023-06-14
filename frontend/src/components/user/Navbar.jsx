@@ -43,7 +43,7 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="fixed" className="navbar" sx={{height:"70px",backgroundColor:"white",color:"black"}}>
+    <AppBar position="fixed" color='transparent'  className="navbar" sx={{height:"70px"}}>
       <Container maxWidth="xl" >
         <Toolbar disableGutters>
         <Box
@@ -99,11 +99,11 @@ function Navbar() {
               }}
             >
               {pages.map((page) => (
-               <MenuItem key={page} onClick={handleCloseNavMenu} sx={{color:"black"}}>
-               <Typography variant="body1" sx={{ color: 'black' }}>
+               
+               <Typography key={page} variant="body1" >
                  {page}
                </Typography>
-             </MenuItem>
+            
               ))}
             </Menu>
           </Box>
@@ -138,7 +138,7 @@ function Navbar() {
               <Button
                 key={page}
                 onClick={handleCloseNavMenu}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                sx={{ my: 2, color: 'black', display: 'block' }}
               >
                 {page}
               </Button>
