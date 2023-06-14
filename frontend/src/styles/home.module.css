@@ -1,5 +1,20 @@
-.main-box{
-    background-color: aqua;
-    color: aqua;
-    height: 300px;
+.mainBox{
+    min-height: 400px;
+    width: 100vw;
+    background-size: cover;
+    background-color: blue;
+    
+   
 }
+.in{
+    background: linear-gradient(to right , #2684FF ,#79F2C0);
+    height: "550px";
+    width:"100vw"!important;
+    margin-top: "5rem";
+    display: "flex";
+    position:"absolute";
+    text-align:"left";
+    top:0 !important;
+    left: 0, !important;
+}
+

@@ -59,6 +59,7 @@ function SignIn() {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+         
         }}
       >
         <Container
@@ -67,6 +68,7 @@ function SignIn() {
             boxShadow: "0px 0px 30px rgba(0, 0, 0, 0.3)",
             borderRadius: "5px",
             width: "420px",
+            alignItems:"center"
           }}
         >
           <Box
@@ -191,7 +193,7 @@ function SignIn() {
             >
               OR
             </Typography>
-            <GoogleIcon
+            <GoogleIcon item
               sx={{ my: 2, fontSize: "35px", color: "blue", cursor: "pointer" }}
             />
           </Grid>

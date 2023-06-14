@@ -43,7 +43,7 @@ function Navbar() {
   };
 
   return (
-    <AppBar position="fixed" color='transparent'  className="navbar" sx={{height:"70px"}}>
+    <AppBar position="fixed"   className="navbar" sx={{height:"70px",backgroundColor:"white"}}>
       <Container maxWidth="xl" >
         <Toolbar disableGutters>
         <Box
