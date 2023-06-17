@@ -9,4 +9,5 @@ router.post('/signup',registerUser)
 router.post('/signin',signInUser)
 router.post('/signup/verifyotp',verifySignUpOtp)
 
+
 module.exports = router

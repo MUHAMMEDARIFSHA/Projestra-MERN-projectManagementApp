@@ -6,4 +6,3 @@ import {STORE_EMAIL} from '../actionTypes/userAuthTypes'
       payload: email,
     };
   };
-

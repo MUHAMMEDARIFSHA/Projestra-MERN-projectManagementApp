@@ -6,6 +6,9 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const db = require("./database/mongoDb");
 
+const userRouter = require("./routes/userRoutes");
+const adminRouter = require('./routes/adminRoutes')
+
 // .env file
 dotenv.config();
 //  creating express
@@ -15,8 +18,6 @@ app.use(express.json());
 app.use(express.urlencoded({ exteded: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// app.use(bodyParser.json());
-// app.use(bodyParser.urlencoded({ extended: true }));
 
 // code for giving access to headers through axios
 const corsOptions = {
@@ -33,9 +34,9 @@ const corsOptions = {
 // cors connecting
 app.use(cors(corsOptions));
 
-// creating the routes
-const userRouter = require("./routes/userRoutes");
+// / creating the routes
 app.use("/", userRouter);
+app.use("/admin",adminRouter)
 
 // listening to the port
 const PORT = process.env.PORT || 5001;

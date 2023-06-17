@@ -89,9 +89,14 @@ function SignUp() {
       <LoginImages />
       <Box
         sx={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          width: "100%",
         }}
       >
         <CssBaseline />
@@ -101,6 +106,7 @@ function SignUp() {
             boxShadow: "0px 0px 30px rgba(0, 0, 0, 0.3)",
             borderRadius: "5px",
             width: "420px",
+            padding:"20px"
           }}
         >
           <Box

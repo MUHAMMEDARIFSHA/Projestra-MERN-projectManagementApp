@@ -8,6 +8,9 @@ import Otp from "./components/user/SignUp/Otp";
 import HomeBeforeSignIn from "./components/user/HomePage/HomeBeforeSignIn";
 import HomeAfterSignIn from "./components/user/HomePage/HomeAfterSignIn.jsx";
 import AdminSignIn from "./components/admin/AdminSignIn";
+import AdminHome from "./components/admin/adminHome";
+import UserDetails from "./components/admin/UserDeatails";
+
 
 
 // Public Routes
@@ -24,13 +27,17 @@ function AppRoutes() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup/otp" element={<Otp />} />
-          <Route path='/' element={<HomeBeforeSignIn/>}/>
+         
         </Route>
 
         <Route element={<UserProtectedRoutes />}>
+        <Route path='/' element={<HomeBeforeSignIn/>}/>
           <Route path="/home" element={<HomeAfterSignIn />} />
         </Route>
         <Route path="/admin/signin" element={<AdminSignIn />} />
+        <Route path="/admin/home" element={<AdminHome/>}/>
+        <Route path="/admin/users" element={<UserDetails/>}/>
+
       </Routes>
     </Router>
   );

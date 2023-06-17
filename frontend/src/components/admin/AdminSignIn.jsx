@@ -7,12 +7,10 @@ import { useDispatch } from "react-redux";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import Link from "@mui/material/Link";
 import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import GoogleIcon from "@mui/icons-material/Google";
 
 function AdminSignIn() {
     const navigate = useNavigate()
@@ -26,17 +24,15 @@ function AdminSignIn() {
     axios.post('/admin/signin',{FormValues})
     .then(res=>{
         if(res.status === 200){
-            console.log(res.data.jwtToken)
-            localStorage.setItem('token',res.data.jwtToken)
-            console.log("user sign sucessfull")
+            console.log("admin sign sucessfull")
             // dispatch(userSetAuth())
-            // navigate('/admin')
+             navigate('/admin/home')
         }
     })
     .catch((error)=>{
         if(error.response && error.response.status===401){
             console.log(`${error.response.data.message}`)
-            errors.signin=`${error.response.data.message}`
+            errors.adminsignin=`${error.response.data.message}`
         }
         else{
             console.log("Error during signup:", error.message);
@@ -53,9 +49,15 @@ function AdminSignIn() {
       <LoginImages />
       <Box
         sx={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          height: "100vh",
+          width: "100%",
         }}
       >
         <Container
@@ -113,7 +115,7 @@ function AdminSignIn() {
               sx={{ mt: 0.5 }}
             >
               <Typography sx={{ color: "red", fontWeight: "500" }}>
-                {FormErrors.signin}
+                {FormErrors.adminsignin}
               </Typography>
 
               <TextField
@@ -154,7 +156,7 @@ function AdminSignIn() {
                   backgroundColor: "blue",
                 }}
               >
-                Sign In
+                Admin Sign In
               </Button>
               
               

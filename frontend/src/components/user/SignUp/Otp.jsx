@@ -53,9 +53,15 @@ function Otp() {
       <LoginImages />
       <Box
         sx={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          height: "100vh",
+          width: "100%",
         }}
       >
         <Container

@@ -23,7 +23,8 @@ function SignIn() {
     const errors = {};
     e.preventDefault();
     console.log(FormValues);
-    axios.post("/signin", { FormValues })
+    axios
+      .post("/signin", { FormValues })
       .then((res) => {
         if (res.status === 200) {
           console.log(res.data.jwtToken);
@@ -47,28 +48,36 @@ function SignIn() {
     const { name, value } = e.target;
     setFormValues({ ...FormValues, [name]: value });
   };
-  const navigateSignUp =(e)=>{
-    e.preventDefault()
-    navigate('/signup')
-  }
+  const navigateSignUp = (e) => {
+    e.preventDefault();
+    navigate("/signup");
+  };
   return (
     <>
       <LoginImages />
-      <Box
+      <Box  
         sx={{
+          position: "fixed",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-         
+          height: "100vh",
+          width: "100%",
+        
         }}
       >
         <Container
+          item
           component="main"
           sx={{
             boxShadow: "0px 0px 30px rgba(0, 0, 0, 0.3)",
             borderRadius: "5px",
             width: "420px",
-            alignItems:"center"
+            padding:"20px"
+           
           }}
         >
           <Box
@@ -166,19 +175,18 @@ function SignIn() {
                 </Grid>
                 <Grid item>
                   <Link
-             
                     onClick={navigateSignUp}
                     variant="body"
                     sx={{
                       textDecoration: "none",
                       fontSize: "18px",
                       fontWeight: "600",
-                      cursor:"pointer",
-                      ml:1
+                      cursor: "pointer",
+                      ml: 1,
                     }}
                   >
                     Sign UP
-                    </Link>
+                  </Link>
                 </Grid>
               </Grid>
             </Box>
@@ -193,7 +201,8 @@ function SignIn() {
             >
               OR
             </Typography>
-            <GoogleIcon item
+            <GoogleIcon
+              item
               sx={{ my: 2, fontSize: "35px", color: "blue", cursor: "pointer" }}
             />
           </Grid>

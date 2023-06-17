@@ -60,7 +60,7 @@ catch(error){
 const signInUser=async(req,res)=>{
   console.log("hi singn in ")
   const  {email,password} = req.body.FormValues
-   const user = await User.findOne({email:email})
+   const user = await User.findOne({email:email,isBlocked:false})
   try{
     if(user){
       const match = await bcrypt.compare(password, user.password)
