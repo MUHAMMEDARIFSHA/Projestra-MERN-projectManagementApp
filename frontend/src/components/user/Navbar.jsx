@@ -21,33 +21,40 @@ const settings = ["Logout"];
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
   };
-  const handleOpenUserMenu = (event) => {
-    setAnchorElUser(event.currentTarget);
-  };
 
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+  const handleMenuOpen = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  const logout = () => {
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
     localStorage.removeItem("token");
     dispatch(userClearAuth());
     navigate("/signin");
   };
+
+  const handleProfile = () => {};
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="fixed"
         className="navbar"
-        sx={{ height: "70px", backgroundColor: "white"}}
+        sx={{ height: "70px", backgroundColor: "white" }}
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
@@ -145,33 +152,20 @@ function Navbar() {
                 </Button>
               ))}
             </Box>
-
-            <Box sx={{ flexGrow: 0 }}>
-              <Tooltip title="Open settings">
-                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                </IconButton>
-              </Tooltip>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <Avatar
+                alt="User Avatar"
+                src="/path/to/user-avatar.jpg"
+                onClick={handleMenuOpen}
+                sx={{ cursor: "pointer", marginRight: 1 }}
+              />
               <Menu
-                sx={{ mt: "45px" }}
-                id="menu-appbar"
-                anchorEl={anchorElUser}
-                anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                keepMounted
-                transformOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
-                }}
-                open={Boolean(anchorElUser)}
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
               >
-                {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={logout}>
-                    <Typography textAlign="center">Logout</Typography>
-                  </MenuItem>
-                ))}
+                <MenuItem onClick={handleProfile}>Profile</MenuItem>
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
               </Menu>
             </Box>
           </Toolbar>
@@ -182,53 +176,3 @@ function Navbar() {
 }
 
 export default Navbar;
-
-// import * as React from 'react';
-// import AppBar from '@mui/material/AppBar';
-// import Box from '@mui/material/Box';
-// import Toolbar from '@mui/material/Toolbar';
-// import Typography from '@mui/material/Typography';
-// import Button from '@mui/material/Button';
-// import IconButton from '@mui/material/IconButton';
-// import MenuIcon from '@mui/icons-material/Menu';
-// import Tooltip from "@mui/material/Tooltip";
-// import { Avatar } from '@mui/material';
-// import {Menu} from '@mui/material';
-// import MenuItem from "@mui/material/MenuItem";
-
-
-// function Navbar() {
-//   const [anchorElUser, setAnchorElUser] = React.useState(null);
-
-//   const handleOpenUserMenu = (event) => {
-//         setAnchorElUser(event.currentTarget);
-//       };
-//   const logout = () => {
-//         localStorage.removeItem("token");
-//         dispatch(userClearAuth());
-//         navigate("/signin");
-//       };
-//   return (
-//     <Box sx={{ flexGrow: 1 }}>
-//       <AppBar  position="sticky" sx={{ height: "70px", backgroundColor: "white" ,position:"sticky"} }>
-//         <Toolbar>
-        
-//           <Typography
-//               href="/"
-//               component="h3"
-//               variant="h5"
-//               color="#245194"
-//               fontWeight="600"
-//               sx={{ mr: 4}}
-//             >
-//               Projestra
-//             </Typography>
-            
-         
-//         </Toolbar>
-//       </AppBar>
-//     </Box>
-//   );
-// }
-
-// export default Navbar

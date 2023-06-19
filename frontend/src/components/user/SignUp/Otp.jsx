@@ -11,27 +11,26 @@ import Grid from "@mui/material/Grid";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import emailReducer from "../../../reducers/emailOtpReducer";
 
 function Otp() {
   const navigate = useNavigate();
 
   const [FormErrors, setFormErrors] = useState({});
   const [otp, setOtp] = useState("");
-  const storedEmail = useSelector((state) => state.email);
-  console.log(storedEmail);
+  const storedEmail = useSelector((state) => state.emailReducer.email);
+  console.log(storedEmail + "stored email");
   const handleSubmit = (e) => {
     e.preventDefault();
     const errors = {};
     console.log(otp);
-    console.log(storedEmail.email+"   " + "email of user")
+    console.log(storedEmail + "   " + "email of user");
     axios
-      .post("/signup/verifyotp", { otp, email:storedEmail.email })
+      .post("/signup/verifyotp", { otp, email: storedEmail })
       .then((res) => {
         if (res.status === 200) {
           console.log(`${res.data.message}`);
           console.log("user verify sucessfull");
-              navigate('/signin')
+          navigate("/signin");
         }
       })
       .catch((error) => {

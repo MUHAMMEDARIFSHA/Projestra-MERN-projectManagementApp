@@ -3,7 +3,7 @@ import LoginImages from "../user/LoginImages"
 import axios from '../../Axios'
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-
+import { adminSetAuth } from "../../features/adminAuth/adminSlice";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -25,7 +25,9 @@ function AdminSignIn() {
     .then(res=>{
         if(res.status === 200){
             console.log("admin sign sucessfull")
-            // dispatch(userSetAuth())
+            console.log(res.data.jwtToken + "  admin jwt")
+            localStorage.setItem("adminToken",res.data.jwtToken )
+            dispatch(adminSetAuth())
              navigate('/admin/home')
         }
     })

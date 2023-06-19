@@ -1,5 +1,6 @@
 const Admin = require('../models/adminSchema')
 const User = require('../models/userSchema')
+const jwt = require('jsonwebtoken')
 
 const signInAdmin = async(req,res)=>{
    console.log(req.body.FormValues)
@@ -8,9 +9,13 @@ const signInAdmin = async(req,res)=>{
    const admin = await Admin.findOne({username:username})
    try{
    if(admin){
-    console.log(" user found")
+    console.log(" admin found")
     if(password === admin.password){
-        res.status(200).json({success:true})
+                // jwt token creation
+                const token = jwt.sign({email: username },process.env.SECRET_KEY_JWT,{expiresIn:"3d"});
+                console.log(token +" admin jwt token");
+                // jwt token creation
+        res.status(200).json({success:true,jwtToken:token})
     }
     else{
         res.status(401).json({success:false, message:"Incorrect Password"})
@@ -52,6 +57,7 @@ const blockUser = async(req,res)=>{
 }
 
 const unBlockUser = async(req,res)=>{
+
     const {id}  = req.body
     console.log(id)
     try{

@@ -5,7 +5,7 @@ import axios from "../../../Axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { storeEmail } from "../../../action/emailOtpAction";
+import { setEmail } from "../../../features/userAuth/emailSlice";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -64,7 +64,7 @@ function SignUp() {
       .then((res) => {
         if (res.data.success) {
           console.log(`User saved: ${res.data.useremail}`);
-          dispatch(storeEmail(res.data.useremail))
+          dispatch(setEmail(res.data.useremail))
           navigate('/signup/otp')
         } else {
           console.log(res.data.message);
@@ -106,12 +106,13 @@ function SignUp() {
             boxShadow: "0px 0px 30px rgba(0, 0, 0, 0.3)",
             borderRadius: "5px",
             width: "420px",
+            maxHeight:"800px",
             padding:"20px"
           }}
         >
           <Box
             sx={{
-              marginTop: 5,
+              marginTop: 4,
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
@@ -144,7 +145,7 @@ function SignUp() {
               component="h1"
               variant="h4"
               color="black"
-              mt="5px"
+              mt="3px"
               fontWeight="700"
             >
               Sign Up

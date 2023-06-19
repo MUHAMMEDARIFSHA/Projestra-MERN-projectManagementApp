@@ -5,6 +5,8 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const dotenv = require("dotenv");
 const db = require("./database/mongoDb");
+const passport = require("passport")
+const cookieSession = require("cookie-session")
 
 const userRouter = require("./routes/userRoutes");
 const adminRouter = require('./routes/adminRoutes')
@@ -17,6 +19,7 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ exteded: false }));
 app.use(express.static(path.join(__dirname, "public")));
+app.use(passport.initialize())
 
 
 // code for giving access to headers through axios

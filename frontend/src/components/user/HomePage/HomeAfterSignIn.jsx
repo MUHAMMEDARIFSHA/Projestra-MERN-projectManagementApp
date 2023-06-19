@@ -24,7 +24,7 @@ function HomeAfterSignIn() {
     <>
       <Navbar />
       {/*  banner */}
-      <Stack direction="column" marginTop="70px">
+      <Stack direction="column" marginTop="60px">
         <Box
           sx={{
             background: "linear-gradient(to right , #2684FF ,#79F2C0)",

@@ -10,11 +10,15 @@
 
 import { configureStore } from '@reduxjs/toolkit';
 import userAuthReducer from '../features/userAuth/userSlice'
+import adminAuthReducer from '../features/adminAuth/adminSlice'
+import emailReducer from '../features/userAuth/emailSlice'
 
 
 const store = configureStore({
   reducer: {
-   userAuth:userAuthReducer
+   userAuth:userAuthReducer,
+   adminAuth:adminAuthReducer,
+   emailReducer:emailReducer
   },
 });
 
