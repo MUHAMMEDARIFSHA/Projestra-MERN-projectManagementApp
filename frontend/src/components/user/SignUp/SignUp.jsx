@@ -6,6 +6,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setEmail } from "../../../features/userAuth/emailSlice";
+import GoogleButton from "../GoogleAuth/GoogleButton";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -260,9 +261,10 @@ function SignUp() {
             >
               OR
             </Typography>
-            <GoogleIcon
+            {/* <GoogleIcon
               sx={{ my: 2, fontSize: "35px", color: "blue", cursor: "pointer" }}
-            />
+            /> */}
+            <GoogleButton/>
           </Grid>
         </Container>
       </Box>

@@ -100,5 +100,12 @@ const signInUser = async (req, res) => {
     return res.status(500).json({ success: false, message: "Failed to login" });
   }
 };
+const signInUserGoogle =async(req,res)=>{
+  console.log("google")
+  const user = req.body.user
+  console.log(user)
+  console.log(user.name)
+  
+}
 
-module.exports = { registerUser, signInUser, verifySignUpOtp };
+module.exports = { registerUser, signInUser, verifySignUpOtp,signInUserGoogle };
