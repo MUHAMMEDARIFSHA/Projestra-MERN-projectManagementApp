@@ -4,6 +4,8 @@ import axios from "../../../Axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { userSetAuth } from "../../../features/userAuth/userSlice";
+import GoogleButton from "../GoogleAuth/GoogleButton";
+import { setEmail } from "../../../features/userAuth/emailSlice";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -52,10 +54,38 @@ function SignIn() {
     e.preventDefault();
     navigate("/signup");
   };
+  const forgotPassword = async (e) => {
+    const errors = {};
+    e.preventDefault();
+    console.log("forgot password");
+    if (!FormValues.email) {
+      errors.forgot = "please enter a email";
+      setFormErrors(errors);
+    } else {
+      setFormErrors({});
+ await axios.post("/signin/forgotpassword", { email: FormValues.email })
+        .then((res) => {
+          if (res.status === 200) {
+            console.log("email found");
+            dispatch(setEmail(FormValues.email))
+            errors.success = res.data.message
+          }
+          setFormErrors(errors)
+        })
+        .catch((error) => {
+          if (error.response && error.response.status === 404) {
+            console.log(`${error.response.data.message}`);
+            errors.forgot = `${error.response.data.message}`;
+          }
+          setFormErrors(errors);
+        });
+    }
+  };
+
   return (
     <>
       <LoginImages />
-      <Box  
+      <Box
         sx={{
           position: "fixed",
           top: "50%",
@@ -66,7 +96,6 @@ function SignIn() {
           alignItems: "center",
           height: "100vh",
           width: "100%",
-        
         }}
       >
         <Container
@@ -76,8 +105,7 @@ function SignIn() {
             boxShadow: "0px 0px 30px rgba(0, 0, 0, 0.3)",
             borderRadius: "5px",
             width: "420px",
-            padding:"20px"
-           
+            padding: "20px",
           }}
         >
           <Box
@@ -126,10 +154,13 @@ function SignIn() {
               noValidate
               sx={{ mt: 0.5 }}
             >
-              <Typography sx={{ color: "red", fontWeight: "500" }}>
-                {FormErrors.signin}
+              <Typography sx={{color:"green" ,fontWeight:"500"}}>
+                {FormErrors.success}
               </Typography>
-
+              <Typography sx={{ color: "red", fontWeight: "500" }}>
+                {FormErrors.signin || FormErrors.forgot}
+              </Typography>
+              
               <TextField
                 margin="normal"
                 fullWidth
@@ -152,12 +183,26 @@ function SignIn() {
                 onChange={handleChange}
                 autoFocus
               />
+              <Grid container alignItems="center" sx={{}}>
+                <Grid item>
+                  <Typography
+                    onClick={forgotPassword}
+                    sx={{
+                      fontWeight: "600",
+                      cursor: "pointer",
+                      color: "#89CFF0",
+                    }}
+                  >
+                    Forgot password?
+                  </Typography>
+                </Grid>
+              </Grid>
               <Button
                 type="submit"
                 fullWidth
                 variant="contained"
                 sx={{
-                  mt: 3,
+                  mt: 2,
                   mb: 2,
                   borderRadius: "3px",
                   height: "40px",
@@ -201,10 +246,7 @@ function SignIn() {
             >
               OR
             </Typography>
-            <GoogleIcon
-              item
-              sx={{ my: 2, fontSize: "35px", color: "blue", cursor: "pointer" }}
-            />
+            <GoogleButton />
           </Grid>
         </Container>
       </Box>

@@ -4,20 +4,21 @@ const bcrypt = require("bcrypt");
 const UserSchema = new mongoose.Schema({
   username: {
     type: String,
-    required: true,
   },
   email: {
     type: String,
     lowercase: true,
     required: true,
   },
+  isGoogle: {
+    type: Boolean,
+    default: false,
+  },
   number: {
     type: Number,
-    required: true,
   },
   password: {
     type: String,
-    required: true,
   },
   isBlocked: {
     type: Boolean,
@@ -30,16 +31,16 @@ const UserSchema = new mongoose.Schema({
   profilePicture: {
     type: String,
   },
-//   projects: [
-//     {
-//       type: {
-//         projectId: {
-//           type: mongoose.Schema.Types.ObjectId,
-//           ref: "Projects",
-//         },
-//       },
-//     },
-//   ],
+  //   projects: [
+  //     {
+  //       type: {
+  //         projectId: {
+  //           type: mongoose.Schema.Types.ObjectId,
+  //           ref: "Projects",
+  //         },
+  //       },
+  //     },
+  //   ],
 
   company: {
     type: String,
@@ -52,19 +53,19 @@ const UserSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
-UserSchema.pre('save', async function(next){
-    try {
-      hashedPassword = await bcrypt.hash(this.password, 10)
-      this.password = hashedPassword
-      next();
-    } catch (error) {
-      console.log(error)
-    }
-  })
-  const User = mongoose.model('User',UserSchema)
-  
-  module.exports = User
+UserSchema.pre("save", async function (next) {
+  try {
+    hashedPassword = await bcrypt.hash(this.password, 10);
+    this.password = hashedPassword;
+    next();
+  } catch (error) {
+    console.log(error);
+  }
+});
+const User = mongoose.model("User", UserSchema);
+
+module.exports = User;

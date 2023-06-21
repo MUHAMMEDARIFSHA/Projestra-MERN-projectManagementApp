@@ -18,8 +18,8 @@ import Container from "@mui/material/Container";
 import GoogleIcon from "@mui/icons-material/Google";
 
 function SignUp() {
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
   const initialValues = { username: "", email: "", number: "", password: "" };
   const [FormValues, setFromValues] = useState(initialValues);
   const [FormErrors, setFormErrors] = useState({});
@@ -61,12 +61,13 @@ function SignUp() {
       setFormErrors("");
     }
     // validation
-    axios.post("/signup", { FormValues })
+    axios
+      .post("/signup", { FormValues })
       .then((res) => {
         if (res.data.success) {
           console.log(`User saved: ${res.data.useremail}`);
-          dispatch(setEmail(res.data.useremail))
-          navigate('/signup/otp')
+          dispatch(setEmail(res.data.useremail));
+          navigate("/signup/otp");
         } else {
           console.log(res.data.message);
         }
@@ -80,10 +81,10 @@ function SignUp() {
         setFormErrors(errors);
       });
   };
-  const navigateSignIn = (e)=>{
-    e.preventDefault()
-    navigate('/signin')
-  }
+  const navigateSignIn = (e) => {
+    e.preventDefault();
+    navigate("/signin");
+  };
 
   return (
     <>
@@ -107,8 +108,8 @@ function SignUp() {
             boxShadow: "0px 0px 30px rgba(0, 0, 0, 0.3)",
             borderRadius: "5px",
             width: "420px",
-            maxHeight:"800px",
-            padding:"20px"
+            maxHeight: "800px",
+            padding: "20px",
           }}
         >
           <Box
@@ -241,8 +242,8 @@ function SignUp() {
                       textDecoration: "none",
                       fontSize: "18px",
                       fontWeight: "600",
-                      ml:1,
-                      cursor:"pointer"
+                      ml: 1,
+                      cursor: "pointer",
                     }}
                   >
                     Sign IN
@@ -255,16 +256,13 @@ function SignUp() {
             By sign Up you are agreeing all the terms and conditionsof the
             projestro plateform.T&C
           </Typography>
-          <Grid>
+          <Grid alignItems={"center"} justifyContent="center">
             <Typography
               sx={{ fontWeight: "700", fontSize: "20px", opacity: 0.5 }}
             >
               OR
             </Typography>
-            {/* <GoogleIcon
-              sx={{ my: 2, fontSize: "35px", color: "blue", cursor: "pointer" }}
-            /> */}
-            <GoogleButton/>
+            <GoogleButton />
           </Grid>
         </Container>
       </Box>
