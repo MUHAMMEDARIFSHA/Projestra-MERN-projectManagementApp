@@ -4,8 +4,8 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const twilio = require("../utils/twilio");
 const cloudinary = require("../utils/cloudinary");
-const verifyEmail = require('../utils/nodemailer')
-const crypto = require("crypto")
+const verifyEmail = require("../utils/nodemailer");
+const crypto = require("crypto");
 
 const registerUser = async (req, res) => {
   console.log("sign up");
@@ -132,34 +132,81 @@ const forgotPassword = async (req, res) => {
   try {
     if (user) {
       console.log("inside user");
-      const token = new tokenSchema({userId:user._id,token:crypto.randomBytes(16).toString('hex')})
-      console.log(token)
-      await token.save()
-      console.log("verify email 1")
-      const link = `${process.env.BASE_URL}/user/${user._id}/verify/${token.token}`
-      await verifyEmail(user.email,link);
-      console.log("verify email")
-      res.status(200).json({success:true,message:"check your email"})
+      const token = new tokenSchema({
+        userId: user._id,
+        token: crypto.randomBytes(16).toString("hex"),
+      });
+      console.log(token);
+      await token.save();
+      console.log("verify email 1");
+      const link = `${process.env.BASE_URL}/user/${user._id}/verify/${token.token}/editpassword`;
+      await verifyEmail(user.email, link);
+      console.log("verify email");
+      res.status(200).json({ success: true, message: "check your email" });
     } else {
-      return res.status(404).json({ success: false, message: "user with email not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "user with email not found" });
     }
   } catch (error) {
     return res.status(500).json({ success: false, message: error });
   }
 };
-const emailVerified = async(req,res)=>{
-   try{
-    const token = await tokenSchema.findOne({token:req.params.token})
-    if(token){
-      await tokenSchema.findByIdAndDelete(token._id)
-      return res.status(200).json({success:true,message:"email verified"})
-    }
-    else{
-      return res.status(404).json({success:false,message:"email not verified"})
-    }
-   }catch(error){
-    res.status(500).json({success:false,error:error})
-   }
-}
 
-module.exports = { registerUser, signInUser, verifySignUpOtp, forgotPassword ,emailVerified};
+const removeTokenAfterVerification = async (req, res) => {
+  const userId = req.body.userId;
+  const token = req.body.token;
+  console.log(userId, token);
+  try {
+    const tokenDelete = await tokenSchema.findOne({ token: token });
+    const user = await User.findOne({ _id: userId });
+    console.log(user);
+    if (tokenDelete) {
+      console.log("token found");
+      await tokenSchema.findByIdAndDelete(tokenDelete._id);
+      return res
+        .status(200)
+        .json({
+          success: true,
+          userEmail: user.email,
+          message: "email verified",
+        });
+    } else {
+      return res
+        .status(404)
+        .json({ success: false, messege: "token not correct" });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "failed to verify" });
+  }
+};
+
+const editPassword = async (req, res) => {
+  console.log("edit");
+  const newPassword = req.body.password;
+  const userEmail = req.body.userEmail;
+  console.log(newPassword, userEmail);
+  try {
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    await User.findOneAndUpdate(
+      { email: userEmail },
+      { $set: { password:hashedPassword } }
+    );
+
+    return res
+      .status(200)
+      .json({ success: true, message: "password updated succesfully" });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "update password failed" });
+  }
+};
+module.exports = {
+  registerUser,
+  signInUser,
+  verifySignUpOtp,
+  forgotPassword,
+  removeTokenAfterVerification,
+  editPassword,
+};
