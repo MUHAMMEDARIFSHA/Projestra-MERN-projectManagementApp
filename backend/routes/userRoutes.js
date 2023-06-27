@@ -1,9 +1,13 @@
 const express = require("express")
 const router  =express.Router()
+const verifyToken = require('../middlewares/Authorization')
 
-const {registerUser,signInUser,verifySignUpOtp,forgotPassword,removeTokenAfterVerification,editPassword} = require('../controllers/userController')
+const {registerUser,signInUser,verifySignUpOtp,forgotPassword,removeTokenAfterVerification,editPassword,getUserData} = require('../controllers/userController')
 const signInUserGoogle = require('../controllers/googleAuthController')
+const {getUserDataForEdit,editUserProfile,editUserNumber} = require('../controllers/userProfileController')
 
+router.get('/user/getdata',verifyToken,getUserData)
+router.get('/user/profile/getdata',verifyToken,getUserDataForEdit)
 
 
 router.post('/signup',registerUser)
@@ -13,6 +17,8 @@ router.post('/signin/google',signInUserGoogle)
 router.post('/signin/forgotpassword',forgotPassword)
 router.post('/forgotpassword/verifedtoken',removeTokenAfterVerification)
 router.post('/editpassword',editPassword)
+router.post('/user/profile/edit',verifyToken,editUserProfile)
+router.post('/user/profile/edit/number/otp',verifyToken,editUserNumber)
 
 
 

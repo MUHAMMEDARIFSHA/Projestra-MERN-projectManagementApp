@@ -105,7 +105,7 @@ const signInUser = async (req, res) => {
         );
         console.log(token);
         // jwt token creation
-        return res.status(200).json({ success: true, jwtToken: token });
+        return res.status(200).json({ success: true, jwtToken: token,user:user });
       } else {
         return res
           .status(401)
@@ -202,6 +202,30 @@ const editPassword = async (req, res) => {
     res.status(500).json({ success: false, message: "update password failed" });
   }
 };
+
+const getUserData = async(req,res)=>{
+  console.log("get user data")
+  const email = req.email
+  console.log(email);
+  const user = await User.findOne({
+    email: email,
+    isVerified: true,
+    isBlocked: false,
+    },"-password")
+    try{
+    if(user){
+      return res.status(200).json({user:user,message:"user data found"})
+    }
+    else{
+      return res.status(404).json({message:"user not found"})
+    }
+  }
+  catch(error){
+    return res.status(500).json({message: "error occured ",error:error})
+  }
+
+
+}
 module.exports = {
   registerUser,
   signInUser,
@@ -209,4 +233,5 @@ module.exports = {
   forgotPassword,
   removeTokenAfterVerification,
   editPassword,
+  getUserData,
 };

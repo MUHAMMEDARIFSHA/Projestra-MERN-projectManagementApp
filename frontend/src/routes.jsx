@@ -12,6 +12,7 @@ import AdminHome from "./components/admin/adminHome";
 import UserDetails from "./components/admin/UserDeatails";
 import EditPassword from "./components/user/SignIn/EditPassword";
 import UserProfile from "./components/user/Profile/UserProfile";
+import ProfileEdit from "./components/user/Profile/ProfileEdit";
 
 // Public Routes
 import UserPublicRoutes from "./routesTypes/UserPublicRoute";
@@ -36,6 +37,7 @@ function AppRoutes() {
           <Route path="/" element={<HomeBeforeSignIn />} />
           <Route path="/home" element={<HomeAfterSignIn />} />
          <Route path="/user/profile" element={<UserProfile/>}/>
+         <Route path ="/user/profile/edit" element={<ProfileEdit/>}/>
         </Route>
 
         <Route element={<AdminPublicRoutes />}>

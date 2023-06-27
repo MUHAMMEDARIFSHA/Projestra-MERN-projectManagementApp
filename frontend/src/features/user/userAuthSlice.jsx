@@ -4,7 +4,7 @@ const initialState = {
     authState: localStorage.getItem('token') ? localStorage.getItem('token') : null
 }
 const authSlice = createSlice({
-    name: 'user',
+    name: 'userauth',
     initialState,
     reducers: {
        userSetAuth : (state) => {
@@ -12,7 +12,7 @@ const authSlice = createSlice({
            state.authState = localStorage.getItem('token')
        } ,
        userClearAuth: (state) => {
-        console.log("entered user clear aut")
+        console.log("entered user clear auth")
           state.authState = null
        }
      }

@@ -5,7 +5,7 @@ import axios from "../../../Axios";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { setEmail } from "../../../features/userAuth/emailSlice";
+import { setEmail } from "../../../features/user/emailSlice";
 import GoogleButton from "../GoogleAuth/GoogleButton";
 
 import Button from "@mui/material/Button";

@@ -1,4 +1,11 @@
-import * as React from "react";
+import  {React,useState,useEffect} from "react";
+import axios from "../../Axios"
+import {setUser}  from "../../features/user/userSlice";
+import { useNavigate } from "react-router-dom";
+import { userClearAuth } from "../../features/user/userAuthSlice";
+import { useDispatch ,useSelector} from "react-redux";
+
+
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
@@ -12,16 +19,13 @@ import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
-import { useNavigate } from "react-router-dom";
-import { userClearAuth } from "../../features/userAuth/userSlice";
-import { useDispatch } from "react-redux";
 
 const pages = ["Products", "Pricing", "Blog"];
 const settings = ["Logout"];
 
 function Navbar() {
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -48,6 +52,25 @@ function Navbar() {
   };
 
   const handleProfile = () => {};
+ const username = useSelector((state) => state.userReducer.user.username);
+  const getData = ()=>{
+    console.log("get data");
+    axios.get('/user/getdata',{ headers: { 'x-access-token': localStorage.getItem('token')} }).then((res)=>{
+      if(res.status===200){
+        console.log(res.data.user)
+        dispatch(setUser(res.data.user))
+      }
+    
+    }).catch((error)=>{
+   if(response.error && response.error.status===404){
+    console.log(error.response.data.message)
+   }
+    })
+  }
+
+  useEffect(()=>{
+   getData()
+  },[])
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -69,7 +92,7 @@ function Navbar() {
               src="/images/logo-projestro.png"
             />
             <Typography
-              href="/"
+              href="/home"
               component="h3"
               variant="h5"
               color="#245194"
@@ -113,8 +136,10 @@ function Navbar() {
                     {page}
                   </Typography>
                 ))}
+                 
               </Menu>
             </Box>
+            
             <Box
               component="img"
               sx={{
@@ -151,6 +176,11 @@ function Navbar() {
                   {page}
                 </Button>
               ))}
+            </Box>
+            <Box>
+              <Typography color="black">
+              hi {username}
+              </Typography>
             </Box>
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Avatar

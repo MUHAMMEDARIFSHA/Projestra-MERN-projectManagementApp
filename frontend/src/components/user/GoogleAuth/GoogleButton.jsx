@@ -2,10 +2,10 @@ import { React, useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import axios from "../../../Axios";
 import { useDispatch } from "react-redux";
-import { setEmail } from "../../../features/userAuth/emailSlice";
+import { setEmail } from "../../../features/user/emailSlice";
 import { useNavigate } from "react-router-dom";
-import { userSetAuth } from "../../../features/userAuth/userSlice";
-import GoogleIcon from "@mui/icons-material/Google";
+import { userSetAuth } from "../../../features/user/userAuthSlice";
+
 
 
 function GoogleButton() {

@@ -3,9 +3,9 @@ import LoginImages from "../LoginImages";
 import axios from "../../../Axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { userSetAuth } from "../../../features/userAuth/userSlice";
+import { userSetAuth } from "../../../features/user/userAuthSlice";
 import GoogleButton from "../GoogleAuth/GoogleButton";
-import { setEmail } from "../../../features/userAuth/emailSlice";
+import { setEmail } from "../../../features/user/emailSlice";
 
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
