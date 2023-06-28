@@ -16,11 +16,12 @@ import { Javascript } from "@mui/icons-material";
 import { setUser } from "../../../features/user/userSlice";
 
 function ProfileEdit() {
+  const [FormErrors, setFormErrors] = useState({});
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [profileData, setProfileData] = useState({});
-  const [otpPage, setOtpPage] = useState('');
-  const [otp,setOtp] = useState("")
-
+  const [otpPage, setOtpPage] = useState("");
+  const [otp, setOtp] = useState("");
+ let errors={}
   const handleProfile = () => {
     console.log("profile");
   };
@@ -69,11 +70,10 @@ function ProfileEdit() {
         if (res.status === 200) {
           console.log("user updated succesfully");
           dispatch(setUser(res.data.user));
-        }
-       else if (res.status === 202) {
+        } else if (res.status === 202) {
           console.log("set otp page");
           setOtpPage(res.data.number);
-          console.log(otpPage +"otp page")
+          console.log(otpPage + "otp page");
         }
       })
       .catch((error) => {
@@ -83,18 +83,36 @@ function ProfileEdit() {
         console.log(error.data.error);
       });
   };
-  const otpChange = (e)=>{
-  setOtp(e.target.value)
-  } 
-   const handleSubmitOtp = async(e)=>{
-    e.preventDefault()
+  const otpChange = (e) => {
+    setOtp(e.target.value);
+  };
+  const handleSubmitOtp = async (e) => {
+    e.preventDefault();
     console.log("otp submit");
-await axios.post('/user/profile/edit/number/otp',{otp:otp}, { headers: { "x-access-token": localStorage.getItem("token") }}).then((res)=>{
- if(res.status(200)){
-    setOtpPage('')
-  }
-})
-  }
+    await axios
+      .post(
+        "/user/profile/edit/number/otp",
+        { otp: otp ,number:otpPage},
+        { headers: { "x-access-token": localStorage.getItem("token") } }
+      )
+      .then((res) => {
+        if (res.status===200) {
+             setOtpPage("")
+             setOtp('')
+        }
+      }).catch((error)=>{
+        if(error.response.status===400){
+          console.log(error.response.data.message);
+          errors.otp=`${error.response.data.message}`
+          setFormErrors(errors)
+        }
+        if(error.response.status===402){
+          console.log(error.response.data.message);
+          errors.otp=`${error.response.data.message}`
+          setFormErrors(errors)
+        }
+      })
+  };
   useEffect(() => {
     getUserData();
   }, []);
@@ -106,10 +124,10 @@ await axios.post('/user/profile/edit/number/otp',{otp:otp}, { headers: { "x-acce
           p: 4,
           background: "linear-gradient(to right , #73a7eb,#adf0d4)",
           marginTop: "60px",
-          minHeight:"685px"
+          minHeight: "685px",
         }}
       >
-        {otpPage=='' ? (
+        {otpPage == "" ? (
           <Container maxWidth="md">
             <Typography
               variant="h4"
@@ -266,31 +284,45 @@ await axios.post('/user/profile/edit/number/otp',{otp:otp}, { headers: { "x-acce
         ) : (
           // here starts the otp tag
           <Container>
-            <Grid component="form" onSubmit={handleSubmitOtp} alignItems="center" justifyContent="center" >
-              <Typography 
-               variant="h4"
-              fontWeight="600"
-              fontFamily="revert"
-              my={4}
-              sx={{ color: "success" }}>
-                Enter the OTP 
+            <Grid
+              component="form"
+              onSubmit={handleSubmitOtp}
+              alignItems="center"
+              justifyContent="center"
+            >
+              <Typography
+                variant="h4"
+                fontWeight="600"
+                fontFamily="revert"
+                my={4}
+                sx={{ color: "success" }}
+              >
+                Enter the OTP
               </Typography>
-              <TextField  label="OTP" name="otp" value = {otp} type="password" onChange={otpChange}></TextField>
+              <Typography sx={{ color: "red", fontWeight: "500" }}>
+                {FormErrors.otp}
+              </Typography>
+              <TextField
+                label="OTP"
+                name="otp"
+                value={otp}
+                type="password"
+                onChange={otpChange}
+              ></TextField>
               <Button
-                  type="submit"
-             fullWidth
-                  variant="contained"
-                  sx={{
-                    my: 7,
-                    borderRadius: "3px",
-                    height: "40px",
-                    fontWeight: "700",
-                    backgroundColor: "green",
-                  }}
-                >
-                  SUBMIT
-                </Button>
-
+                type="submit"
+                fullWidth
+                variant="contained"
+                sx={{
+                  my: 7,
+                  borderRadius: "3px",
+                  height: "40px",
+                  fontWeight: "700",
+                  backgroundColor: "green",
+                }}
+              >
+                SUBMIT
+              </Button>
             </Grid>
           </Container>
         )}

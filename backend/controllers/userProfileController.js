@@ -37,7 +37,7 @@ const editUserProfile = async (req, res) => {
         console.log(user.number+"   "+ number)
       try {
         console.log("not same number");
-        // await twilio.sentotp(number);
+        await twilio.sentotp(number);
         return res.status(202).json({ success: true,number:number});
       } catch (error) {
         return res
@@ -55,9 +55,40 @@ const editUserProfile = async (req, res) => {
       });
   }
 };
-const editUserNumber =(req,res)=>{
+const editUserNumber = async(req,res)=>{
     console.log("inside otp number");
  const otp = req.body.otp
-console.log(otp)}
+ const number = req.body.number
+ const email = req.email
+console.log(otp, "    ", number,'   ',email)
+
+try {
+  const user = await User.findOne({ email: email });
+  if (!otp) {
+   return res.status(400).json({ success: false, message: "Please enter the otp" });
+  } else {
+    console.log("verify otp");
+    const check = await twilio.check(otp,number);
+    console.log(check + "check");
+    if (check.status == "approved") {
+      await User.findOneAndUpdate(
+        { email: email },
+        { $set: { number:number} }
+      );
+     return res
+        .status(200)
+        .json({ success: true, message: "Otp verified sucessfully" });
+    }
+    else{
+      return  res.status(402).json({message:"enter valid otp", success:false})
+    }
+  }
+} catch (error) {
+ return res
+    .status(500)
+    .json({ success: false, message: "Failed to verify the otp" });
+}
+
+}
 
 module.exports = { getUserDataForEdit, editUserProfile,editUserNumber };
