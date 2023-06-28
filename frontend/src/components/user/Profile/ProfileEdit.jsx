@@ -1,6 +1,7 @@
 import { React, useEffect, useReducer, useState } from "react";
 import Navbar from "../Navbar";
 import axios from "../../../Axios";
+import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import {
   Box,
@@ -21,6 +22,7 @@ function ProfileEdit() {
   const [profileData, setProfileData] = useState({});
   const [otpPage, setOtpPage] = useState("");
   const [otp, setOtp] = useState("");
+  const navigate = useNavigate()
  let errors={}
   const handleProfile = () => {
     console.log("profile");
@@ -69,7 +71,8 @@ function ProfileEdit() {
       .then((res) => {
         if (res.status === 200) {
           console.log("user updated succesfully");
-          dispatch(setUser(res.data.user));
+          console.log(res.data.user)
+          navigate('/user/profile')
         } else if (res.status === 202) {
           console.log("set otp page");
           setOtpPage(res.data.number);
@@ -80,7 +83,6 @@ function ProfileEdit() {
         if (error.status === 404) {
           console.log("token error or user not found");
         }
-        console.log(error.data.error);
       });
   };
   const otpChange = (e) => {
@@ -99,6 +101,7 @@ function ProfileEdit() {
         if (res.status===200) {
              setOtpPage("")
              setOtp('')
+             navigate('/user/profile')
         }
       }).catch((error)=>{
         if(error.response.status===400){
@@ -248,22 +251,22 @@ function ProfileEdit() {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
-                  <Autocomplete
-                    multiple
+                  <TextField
+                    label="Working As"
+                    name="job"
+                    value={profileData.job}
+                    InputLabelProps={{
+                      ...(profileData.job
+                        ? { shrink: true }
+                        : { shrink: false }),
+                    }}
                     fullWidth
-                    options={["Java", "Javascript", "Node", "Python", "React"]}
-                    value={selectedSkills}
-                    onChange={handleSkillsChange}
-                    renderInput={(params) => (
-                      <TextField
-                        {...params}
-                        label="Skills"
-                        variant="outlined"
-                        color="success"
-                      />
-                    )}
+                    variant="outlined"
+                    color="success"
+                    onChange={handleChange}
                   />
                 </Grid>
+               
                 <Button
                   type="submit"
                   fullWidth

@@ -45,7 +45,7 @@ const editUserProfile = async (req, res) => {
           .json({ success: false, message: "Failed to update number" });
       }
     }
-   return res.status(200).json({success:true,message:"data updated succesfully"})
+   return res.status(200).json({success:true, user:user,message:"data updated succesfully"})
   } catch (error) {
     return res
       .status(500)
