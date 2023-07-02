@@ -14,6 +14,8 @@ import EditPassword from "./components/user/SignIn/EditPassword";
 import UserProfile from "./components/user/Profile/UserProfile";
 import ProfileEdit from "./components/user/Profile/ProfileEdit";
 import CreateProject from "./components/project/CreateProject";
+import IndivitualProject from "./components/project/IndivitualProject";
+import TrelloClone from "./components/project/trello";
 
 // Public Routes
 import UserPublicRoutes from "./routesTypes/UserPublicRoute";
@@ -40,6 +42,8 @@ function AppRoutes() {
          <Route path="/user/profile" element={<UserProfile/>}/>
          <Route path ="/user/profile/edit" element={<ProfileEdit/>}/>
          <Route path ="/user/createproject" element={<CreateProject/>}/>
+         <Route path ="/user/indivitualproject" element={<IndivitualProject/>}/>
+         <Route path='/trello' element={<TrelloClone/>}/>
         </Route>
 
         <Route element={<AdminPublicRoutes />}>

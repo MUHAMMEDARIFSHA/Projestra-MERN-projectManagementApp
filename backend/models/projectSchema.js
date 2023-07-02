@@ -16,6 +16,7 @@ const projectSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
+    default:"Indivitual"
   },
   end_date: {
     type: Date,
