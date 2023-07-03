@@ -31,6 +31,7 @@ const UserProfile = () => {
  }
  const toProjects = ()=>{
   console.log("project");
+  navigate('/user/indivitualproject')
  }
 
   return (

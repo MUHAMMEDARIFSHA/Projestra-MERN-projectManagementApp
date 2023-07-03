@@ -1,24 +1,29 @@
 import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react"
 import { useContext, createContext, useState,useEffect } from "react"
-
+import { useNavigate } from "react-router-dom"
 const SidebarContext = createContext()
 
 export default function Sidebar({ children }) {
   const [expanded, setExpanded] = useState(true)
   const [sidebarWidth, setSidebarWidth] = useState(60)
+  const navigate = useNavigate()
 
+  const toHome =()=>{
+    navigate('/home')
+  }
   useEffect(() => {
     setSidebarWidth(expanded ? 60 : 20)
   }, [expanded])
-
+ 
   return (
     <aside className={`w-${sidebarWidth} h-screen`}>
       <nav className={`h-full flex flex-col bg-white border-r shadow-sm w-${sidebarWidth}`}>
         <div className="p-4 pb-2 flex justify-between items-center">
           <img
-            src="https://img.logoipsum.com/243.svg"
+            src='/images/logo-projestro.png'
+            onClick={toHome}
             className={`overflow-hidden transition-all ${
-              expanded ? "w-32" : "w-0"
+              expanded ? "w-20" : "w-0"
             }`}
             alt=""
           />
@@ -47,8 +52,8 @@ export default function Sidebar({ children }) {
           `}
           >
             <div className="leading-4">
-              <h4 className="font-semibold">John Doe</h4>
-              <span className="text-xs text-gray-600">johndoe@gmail.com</span>
+              <h4 className="font-semibold">Username</h4>
+              <span className="text-xs text-gray-600">user@gmail.com</span>
             </div>
             <MoreVertical size={20} />
           </div>

@@ -51,7 +51,9 @@ function Navbar() {
     navigate("/signin");
   };
 
-  const handleProfile = () => {};
+  const handleProfile = () => {
+    navigate('/user/profile')
+  };
  const username = useSelector((state) => state.userReducer.user.username);
   const getData = ()=>{
     console.log("get data");

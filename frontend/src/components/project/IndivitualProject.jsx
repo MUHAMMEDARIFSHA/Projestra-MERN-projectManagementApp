@@ -1,5 +1,6 @@
 import React from 'react'
 import ProjectSidebar from './ProjectSidebar'
+import ProjectDashboard from './trello'
 import { BarChart, BarChart3 } from 'lucide-react'
 import { Typography ,Box,Grid} from '@mui/material'
 
@@ -12,6 +13,7 @@ function IndivitualProject() {
         <Grid container>
           <Grid item xs={12}>
             <Typography variant="h4">This is the project page</Typography>
+            <ProjectDashboard/>
           </Grid>
         </Grid>
       </Box>

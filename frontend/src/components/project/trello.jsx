@@ -42,7 +42,7 @@ const initialTasks = {
   completed: [],
 };
 
-const TrelloClone = () => {
+const ProjectDashboard = () => {
   const [tasks, setTasks] = useState(initialTasks);
   
   
@@ -148,4 +148,4 @@ const TrelloClone = () => {
   );
 };
 
-export default TrelloClone;
+export default ProjectDashboard;
