@@ -3,30 +3,63 @@ import Navbar from "../Navbar";
 import axios from "../../../Axios";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { InputText } from 'primereact/inputtext';
+import { Dialog } from 'primereact/dialog';
+import Avatar from "react-avatar-edit"
+        
 import {
   Box,
   Container,
   Grid,
   TextField,
   Typography,
-  Avatar,
   Autocomplete,
   Button,
 } from "@mui/material";
-import { Javascript } from "@mui/icons-material";
-import { setUser } from "../../../features/user/userSlice";
+
 
 function ProfileEdit() {
   const [FormErrors, setFormErrors] = useState({});
   const [selectedSkills, setSelectedSkills] = useState([]);
   const [profileData, setProfileData] = useState({});
+  const [selectedImage, setSelectedImage] = useState(null);
   const [otpPage, setOtpPage] = useState("");
   const [otp, setOtp] = useState("");
   const navigate = useNavigate()
- let errors={}
-  const handleProfile = () => {
-    console.log("profile");
-  };
+  let errors={}
+//  image update code
+const [profileImage ,setProfileImage] = useState('')
+const [imageCrop,setImageCrop] = useState(false)
+// const [src,setSrc] = useState(false)
+const [pview,setpview] = useState('')
+const [profile,setProfile] = useState('')
+const ProfileImage = profile
+
+const handleProfileImage = (e)=>{
+  const file = e.target.files[0]
+  if(file && file.type.substring(0,5) == "image"){
+    setProfileImage(file)
+  }
+  else{
+    setProfileImage(null)  }
+}
+const onCrop = (view)=>{
+  setpview(view)
+}
+const onClose =()=>{
+  setpview(null)
+}
+const SaveCropImage = () => {
+  setProfile(pview);
+  setImageCrop(false);
+  console.log(profile + "profile");
+};
+
+
+
+const img = 'https://images.unsplash.com/photo-1688283581052-7da75fe95a5c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2187&q=80'
+// image update code
+
 
   const getUserData = async () => {
     console.log("get user data in edit page");
@@ -57,33 +90,67 @@ function ProfileEdit() {
       ...prevData,
       [name]: value,
     }));
+    console.log(profileData)
   };
+  // const handleSubmit = async (e) => {
+  //   e.preventDefault();
+  //   console.log("hi edit");
+  //   console.log(profileData);
+  //   await axios
+  //     .post(
+  //       "/user/profile/edit",
+  //       { profileData },
+  //       { headers: { "x-access-token": localStorage.getItem("token") } }
+  //     )
+  //     .then((res) => {
+  //       if (res.status === 200) {
+  //         console.log("user updated succesfully");
+  //         console.log(res.data.user)
+  //         navigate('/user/profile')
+  //       } else if (res.status === 202) {
+  //         console.log("set otp page");
+  //         setOtpPage(res.data.number);
+  //         console.log(otpPage + "otp page");
+  //       }
+  //     })
+  //     .catch((error) => {
+  //       if (error.status === 404) {
+  //         console.log("token error or user not found");
+  //       }
+  //     });
+  // };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("hi edit");
-    console.log(profileData);
-    await axios
-      .post(
-        "/user/profile/edit",
-        { profileData },
-        { headers: { "x-access-token": localStorage.getItem("token") } }
-      )
-      .then((res) => {
-        if (res.status === 200) {
-          console.log("user updated succesfully");
-          console.log(res.data.user)
-          navigate('/user/profile')
-        } else if (res.status === 202) {
-          console.log("set otp page");
-          setOtpPage(res.data.number);
-          console.log(otpPage + "otp page");
-        }
-      })
-      .catch((error) => {
-        if (error.status === 404) {
-          console.log("token error or user not found");
-        }
+    
+    const formData = new FormData();
+    formData.append("image", profile,); // Append the selected image file
+    formData.append('profileData', JSON.stringify(profileData));
+    // Append other profile data to the formData
+  
+  
+    try {
+      console.log(formData +"form data")
+      const response = await axios.post("/user/profile/edit", formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "x-access-token": localStorage.getItem("token"),
+        },
       });
+  
+      if (response.status === 200) {
+        console.log("User updated successfully");
+        console.log(response.data.user);
+        navigate("/user/profile");
+      } else if (response.status === 202) {
+        console.log("Set OTP page");
+        setOtpPage(response.data.number);
+        console.log(otpPage + "otp page");
+      }
+    } catch (error) {
+      if (error.status === 404) {
+        console.log("Token error or user not found");
+      }
+    }
   };
   const otpChange = (e) => {
     setOtp(e.target.value);
@@ -143,14 +210,50 @@ function ProfileEdit() {
             </Typography>
             <Box component="form" onSubmit={handleSubmit}>
               <Grid container spacing={2}>
+
+                {/* profile image components */}
                 <Grid container alignItems={"center"} justifyContent={"center"}>
-                  <Avatar
-                    onClick={handleProfile}
+              {/* <Avatar
+                    onChange={handleProfile}
                     alt="Profile"
-                    src="https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg"
+                    src=""
                     sx={{ width: 120, height: 120, my: 3 }}
+                  /> */}
+                  <img
+                  style={{
+                    width:"200px",
+                    height:"200px",
+                    borderRadius:"50%",
+                    objectFit:"cover",
+                    border:"4px solid green"
+                  }}
+                  onClick={()=>setImageCrop(true)}
+                  src={ProfileImage.length? ProfileImage:img}
                   />
+                  <InputText type="file" accept="image/*" onChange={handleProfileImage} style={{display:"none"}}/>
+                  <Dialog
+                  visible={imageCrop}
+                  header={()=>(
+                    <p>Update Profile</p> )}
+                  onHide={()=>setImageCrop(false)}
+                  >
+                    <Avatar
+                    width={500}
+                    height={500}
+                    onCrop={onCrop}
+                    onClose={onClose}
+                    // src = {src}
+                    shadingColor="#474649"
+                    backgroundColor="#474649" />
+
+                    <Grid justifyContent={"center"}> 
+                    <Button onClick={SaveCropImage}>Save</Button>
+                    </Grid>
+
+                  
+                  </Dialog>
                 </Grid>
+                    {/* profile image components */}
                 <Grid item xs={12} sm={6} md={4}>
                   <TextField
                     label="Name"

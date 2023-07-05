@@ -55,6 +55,7 @@ function Navbar() {
     navigate('/user/profile')
   };
  const username = useSelector((state) => state.userReducer.user.username);
+ const profileImage = useSelector((state)=>state.userReducer.user. profilePicture)
   const getData = ()=>{
     console.log("get data");
     axios.get('/user/getdata',{ headers: { 'x-access-token': localStorage.getItem('token')} }).then((res)=>{
@@ -187,7 +188,7 @@ function Navbar() {
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <Avatar
                 alt="User Avatar"
-                src="/path/to/user-avatar.jpg"
+                src={profileImage}
                 onClick={handleMenuOpen}
                 sx={{ cursor: "pointer", marginRight: 1 }}
               />

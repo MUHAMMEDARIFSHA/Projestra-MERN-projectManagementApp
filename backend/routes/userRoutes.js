@@ -1,7 +1,7 @@
 const express = require("express")
 const router  =express.Router()
 const verifyToken = require('../middlewares/Authorization')
-
+const multer = require('../middlewares/multer')
 const {registerUser,signInUser,verifySignUpOtp,forgotPassword,removeTokenAfterVerification,editPassword,getUserData} = require('../controllers/userController')
 const signInUserGoogle = require('../controllers/googleAuthController')
 const {getUserDataForEdit,editUserProfile,editUserNumber} = require('../controllers/userProfileController')
@@ -18,7 +18,7 @@ router.post('/signin/google',signInUserGoogle)
 router.post('/signin/forgotpassword',forgotPassword)
 router.post('/forgotpassword/verifedtoken',removeTokenAfterVerification)
 router.post('/editpassword',editPassword)
-router.post('/user/profile/edit',verifyToken,editUserProfile)
+router.post('/user/profile/edit',verifyToken,multer.upload.single('image'), editUserProfile)
 router.post('/user/profile/edit/number/otp',verifyToken,editUserNumber)
 
 // project 

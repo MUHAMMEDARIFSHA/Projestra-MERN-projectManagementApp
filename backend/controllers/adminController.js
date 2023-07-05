@@ -27,8 +27,6 @@ const signInAdmin = async(req,res)=>{
    catch (error){
     res.status(500).json({success:false, message:"Failed to login",error:error})
    }
-   
-
 }
 
 const getUserDetails = async(req,res)=>{

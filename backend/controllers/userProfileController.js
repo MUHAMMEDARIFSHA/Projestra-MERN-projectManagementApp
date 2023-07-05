@@ -1,5 +1,6 @@
 const User = require("../models/userSchema");
 const twilio = require("../utils/twilio");
+const cloudinary = require("../utils/cloudinary");
 
 const getUserDataForEdit = async (req, res) => {
   console.log("get user data for edit");
@@ -25,70 +26,86 @@ const getUserDataForEdit = async (req, res) => {
 };
 const editUserProfile = async (req, res) => {
   console.log("edit user profile");
+  const image = req.body.image;
+  // console.log(image  ,"image")
   const email = req.email;
-  const userData = req.body.profileData;
+  const userData = JSON.parse(req.body.profileData);
   const user = await User.findOne({ email: email });
-  const number = userData.number
-  delete userData.number
+  const number = userData.number;
+  delete userData.number;
   console.log(userData, email, "data=>", userData.email, number);
   try {
+    if (image) {
+      try {
+        const result = await cloudinary.v2.uploader.upload(image, {
+          folder: "Projestra",
+        });
+        const imageURL = result.secure_url;
+        console.log(imageURL);
+        userData.profilePicture = imageURL;
+      } catch (error) {
+        console.log(error);
+      }
+    }
     await User.findOneAndUpdate({ email: email }, userData);
-    if (user.number!==number){
-        console.log(user.number+"   "+ number)
+    if (user.number !== number) {
+      console.log(user.number + "   " + number);
       try {
         console.log("not same number");
-        await twilio.sentotp(number);
-        return res.status(202).json({ success: true,number:number});
+        // await twilio.sentotp(number);
+        return res.status(202).json({ success: true, number: number });
       } catch (error) {
         return res
           .status(500)
           .json({ success: false, message: "Failed to update number" });
       }
     }
-   return res.status(200).json({success:true, user:user,message:"data updated succesfully"})
+    return res
+      .status(200)
+      .json({ success: true, user: user, message: "data updated succesfully" });
+  } catch (error) {
+    return res.status(500).json({
+      message: " some error occure while updating the user ",
+      error: error,
+    });
+  }
+};
+const editUserNumber = async (req, res) => {
+  console.log("inside otp number");
+  const otp = req.body.otp;
+  const number = req.body.number;
+  const email = req.email;
+  console.log(otp, "    ", number, "   ", email);
+
+  try {
+    const user = await User.findOne({ email: email });
+    if (!otp) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Please enter the otp" });
+    } else {
+      console.log("verify otp");
+      const check = await twilio.check(otp, number);
+      console.log(check + "check");
+      if (check.status == "approved") {
+        await User.findOneAndUpdate(
+          { email: email },
+          { $set: { number: number } }
+        );
+        return res
+          .status(200)
+          .json({ success: true, message: "Otp verified sucessfully" });
+      } else {
+        return res
+          .status(402)
+          .json({ message: "enter valid otp", success: false });
+      }
+    }
   } catch (error) {
     return res
       .status(500)
-      .json({
-        message: " some error occure while updating the user ",
-        error: error,
-      });
+      .json({ success: false, message: "Failed to verify the otp" });
   }
 };
-const editUserNumber = async(req,res)=>{
-    console.log("inside otp number");
- const otp = req.body.otp
- const number = req.body.number
- const email = req.email
-console.log(otp, "    ", number,'   ',email)
 
-try {
-  const user = await User.findOne({ email: email });
-  if (!otp) {
-   return res.status(400).json({ success: false, message: "Please enter the otp" });
-  } else {
-    console.log("verify otp");
-    const check = await twilio.check(otp,number);
-    console.log(check + "check");
-    if (check.status == "approved") {
-      await User.findOneAndUpdate(
-        { email: email },
-        { $set: { number:number} }
-      );
-     return res
-        .status(200)
-        .json({ success: true, message: "Otp verified sucessfully" });
-    }
-    else{
-      return  res.status(402).json({message:"enter valid otp", success:false})
-    }
-  }
-} catch (error) {
- return res
-    .status(500)
-    .json({ success: false, message: "Failed to verify the otp" });
-}
-
-}
-
-module.exports = { getUserDataForEdit, editUserProfile,editUserNumber };
+module.exports = { getUserDataForEdit, editUserProfile, editUserNumber };

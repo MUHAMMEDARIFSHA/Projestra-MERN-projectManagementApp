@@ -70,10 +70,7 @@ const verifySignUpOtp = async (req, res) => {
 
 const signInUser = async (req, res) => {
   console.log("hi sign in ");
-  // const image = '../models/new logo.jpeg'
-  // const result = await cloudinary.v2.uploader.upload("https://images.unsplash.com/photo-1686841812861-d22f3ce23a58?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2187&q=80",{
-  //   folder:"logoTest"
-  // })
+  
   const { email, password } = req.body.FormValues;
   console.log(email);
   const user = await User.findOne({
