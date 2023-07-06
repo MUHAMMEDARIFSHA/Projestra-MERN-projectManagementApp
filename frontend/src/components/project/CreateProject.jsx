@@ -1,6 +1,7 @@
 import { React, useState } from "react";
 import Navbar from "../user/Navbar";
 import axios from "../../Axios";
+import { useNavigate } from "react-router-dom";
 import {
   Box,
   Container,
@@ -15,6 +16,7 @@ import {
 
 function CreateProject() {
   const [projectData, setProjectData] = useState({});
+  const navigate = useNavigate()
   const teamLeadSuggestions = [
     "a",
     "b",
@@ -43,6 +45,7 @@ function CreateProject() {
     ).then((res)=>{
   if(res.status ===200){
     console.log(`${res.data.message}`)
+    navigate('/user/projects')
   }
     })
   };
@@ -140,10 +143,10 @@ function CreateProject() {
                   variant="outlined"
                   color="success"
                   name="type"
-                  value={projectData.type || "Indivitual"}
+                  value={projectData.type || "Individual"}
                   onChange={handleChange}
                 >
-                  <MenuItem value="Indivitual">Indivitual Project</MenuItem>
+                  <MenuItem value="Individual">Indivitual Project</MenuItem>
                   <MenuItem value="Group">Group Project </MenuItem>
                 </Select>
               </Grid>

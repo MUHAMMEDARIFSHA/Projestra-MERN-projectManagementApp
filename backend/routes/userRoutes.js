@@ -5,11 +5,11 @@ const multer = require('../middlewares/multer')
 const {registerUser,signInUser,verifySignUpOtp,forgotPassword,removeTokenAfterVerification,editPassword,getUserData} = require('../controllers/userController')
 const signInUserGoogle = require('../controllers/googleAuthController')
 const {getUserDataForEdit,editUserProfile,editUserNumber} = require('../controllers/userProfileController')
-const createProject = require('../controllers/projectConrtroller')
+const {createProject,getProjects} = require('../controllers/projectConrtroller')
 
 router.get('/user/getdata',verifyToken,getUserData)
 router.get('/user/profile/getdata',verifyToken,getUserDataForEdit)
-
+router.get('/user/projectlist',verifyToken,getProjects)
 
 router.post('/signup',registerUser)
 router.post('/signin',signInUser)

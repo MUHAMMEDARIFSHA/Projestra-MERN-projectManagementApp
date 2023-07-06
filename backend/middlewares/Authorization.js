@@ -11,8 +11,15 @@ const verifyToken = (req, res, next) => {
     }
     console.log(user.email + " email inside the verify token");
     req.email = user.email;
+    if(user){
+      console.log(" user in token")
+      next();
+    }
+    else{
+      console.log("no user in token")
+    }
   });
-  next();
+  
 };
 
 module.exports = verifyToken;

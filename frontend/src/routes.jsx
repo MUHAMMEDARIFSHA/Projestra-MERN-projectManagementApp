@@ -15,8 +15,7 @@ import UserProfile from "./components/user/Profile/UserProfile";
 import ProfileEdit from "./components/user/Profile/ProfileEdit";
 import CreateProject from "./components/project/CreateProject";
 import IndivitualProject from "./components/project/IndivitualProject";
-import TrelloClone from "./components/project/trello";
-
+import ProjectsListing from "./components/project/ProjectsListing";
 // Public Routes
 import UserPublicRoutes from "./routesTypes/UserPublicRoute";
 import AdminPublicRoutes from "./routesTypes/AdminPublicRoute";
@@ -33,17 +32,21 @@ function AppRoutes() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup/otp" element={<Otp />} />
-          <Route path='/user/:id/verify/:token/editpassword' element={<EditPassword/>}/>
+          <Route path="/user/:id/verify/:token/editpassword"element={<EditPassword />}
+          />
         </Route>
 
         <Route element={<UserProtectedRoutes />}>
           <Route path="/" element={<HomeBeforeSignIn />} />
           <Route path="/home" element={<HomeAfterSignIn />} />
-         <Route path="/user/profile" element={<UserProfile/>}/>
-         <Route path ="/user/profile/edit" element={<ProfileEdit/>}/>
-         <Route path ="/user/createproject" element={<CreateProject/>}/>
-         <Route path ="/user/indivitualproject" element={<IndivitualProject/>}/>
-         <Route path='/trello' element={<TrelloClone/>}/>
+          <Route path="/user/profile" element={<UserProfile />} />
+          <Route path="/user/profile/edit" element={<ProfileEdit />} />
+          <Route path="/user/createproject" element={<CreateProject />} />
+          <Route
+            path="/user/indivitualproject"
+            element={<IndivitualProject />}
+          />
+          <Route path="/user/projects" element={<ProjectsListing />} />
         </Route>
 
         <Route element={<AdminPublicRoutes />}>

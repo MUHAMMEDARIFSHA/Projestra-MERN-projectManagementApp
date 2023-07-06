@@ -52,7 +52,7 @@ const editUserProfile = async (req, res) => {
       console.log(user.number + "   " + number);
       try {
         console.log("not same number");
-        // await twilio.sentotp(number);
+        await twilio.sentotp(number);
         return res.status(202).json({ success: true, number: number });
       } catch (error) {
         return res

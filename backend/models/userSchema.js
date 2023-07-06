@@ -32,16 +32,16 @@ const UserSchema = new mongoose.Schema({
   profilePicture: {
     type: String,
   },
-  //   projects: [
-  //     {
-  //       type: {
-  //         projectId: {
-  //           type: mongoose.Schema.Types.ObjectId,
-  //           ref: "Projects",
-  //         },
-  //       },
-  //     },
-  //   ],
+    projects: [
+      {
+        
+          projectId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Project",
+          
+        },
+      },
+    ],
 
   company: {
     type: String,

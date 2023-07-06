@@ -20,8 +20,8 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 
-const pages = ["Products", "Pricing", "Blog"];
-const settings = ["Logout"];
+// const pages = ["Products", "Pricing", "Blog"];
+
 
 function Navbar() {
   const [anchorElNav, setAnchorElNav] = useState(null);
@@ -80,7 +80,7 @@ function Navbar() {
       <AppBar
         position="fixed"
         className="navbar"
-        sx={{ height: "70px", backgroundColor: "white" }}
+        sx={{ height: "60px", backgroundColor: "white" }}
       >
         <Container maxWidth="xl">
           <Toolbar disableGutters>
