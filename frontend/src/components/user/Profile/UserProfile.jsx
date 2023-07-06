@@ -68,7 +68,7 @@ const UserProfile = () => {
                   >
                     <Avatar
                       alt="Profile"
-                      src="https://img.freepik.com/premium-vector/man-avatar-profile-picture-vector-illustration_268834-538.jpg"
+                      src={userData.profilePicture?userData.profilePicture:""}
                       sx={{ width: 120, height: 120, my: 3 }}
                     />
                     <Typography variant="h5" mt="5px" component="div">
