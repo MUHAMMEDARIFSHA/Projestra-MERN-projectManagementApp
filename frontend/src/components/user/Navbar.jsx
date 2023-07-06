@@ -20,7 +20,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import AdbIcon from "@mui/icons-material/Adb";
 
-// const pages = ["Products", "Pricing", "Blog"];
+const pages = ["Products", "Pricing", "Blog"];
 
 
 function Navbar() {
@@ -114,9 +114,9 @@ function Navbar() {
                 onClick={handleOpenNavMenu}
                 color="inherit"
               >
-                <MenuIcon />
+                <AdbIcon/>
               </IconButton>
-              <Menu
+              {/* <Menu
                 id="menu-appbar"
                 anchorEl={anchorElNav}
                 anchorOrigin={{
@@ -140,7 +140,7 @@ function Navbar() {
                   </Typography>
                 ))}
                  
-              </Menu>
+              </Menu> */}
             </Box>
             
             <Box
@@ -169,7 +169,7 @@ function Navbar() {
             >
               Projestra
             </Typography>
-            <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
+            {/* <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {pages.map((page) => (
                 <Button
                   key={page}
@@ -179,7 +179,8 @@ function Navbar() {
                   {page}
                 </Button>
               ))}
-            </Box>
+            </Box>  */}
+             <Box sx={{ flexGrow: 1 }} />
             <Box>
               <Typography color="black">
               hi {username}
