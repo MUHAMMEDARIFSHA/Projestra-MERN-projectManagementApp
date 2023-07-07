@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "../../../Axios";
+import { useNavigate } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -18,18 +20,35 @@ const style = {
   p: 4,
 };
 
-export default function BasicModal() {
+export default function TaskModal({id,onClose}) {
+  const navigate = useNavigate()
   const [open, setOpen] = React.useState(false);
   const openModal = () => setOpen(true);
   const closeModal = () => setOpen(false);
   const [taskData, setTaskData] = useState({});
-  const [modalTask, setModalTask] = useState({ level: "to-do" });
-  const saveTask = (e) => {
+  const [modalTask, setModalTask] = useState({ });
+  const saveTask = async (e) => {
     e.preventDefault();
     console.log("save task");
-    // setModalTask({});
     console.log(modalTask);
-  };
+    await axios.patch( "/user/project/indivitual/addtask",
+        { task: modalTask ,projectId:id},
+        { headers: { "x-access-token": localStorage.getItem("token") } }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res.data.message + "   in modal");
+          onClose({ success: true,projectData:res.data.projectData ,message: "Task added successfully from modal" });
+          closeModal()
+        }
+      }).catch((error) => {
+        // if (error.response.status === 404) {
+        //   navigate('/user/projects');
+        // }
+         // onClose({ success: true, message: "Some error occurred" });
+    closeModal()
+      });
+   };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setModalTask((prevData) => ({
@@ -38,6 +57,9 @@ export default function BasicModal() {
     }));
     console.log(modalTask);
   };
+  useEffect(() => {
+    console.log(id);
+  }, [modalTask]);
   return (
     <div>
       <Button onClick={openModal}>Add Task</Button>
@@ -53,11 +75,17 @@ export default function BasicModal() {
               <Typography variant="h6">ADD TASK</Typography>
             </Grid>
             <Grid item xs={12}>
-              <TextField onChange={handleChange} label="Task Name" fullWidth />
+              <TextField
+                onChange={handleChange}
+                name="taskname"
+                label="Task Name"
+                fullWidth
+              />
             </Grid>
             <Grid item xs={12}>
               <TextField
                 onChange={handleChange}
+                name="description"
                 label="Description"
                 fullWidth
               />

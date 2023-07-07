@@ -14,7 +14,7 @@ import EditPassword from "./components/user/SignIn/EditPassword";
 import UserProfile from "./components/user/Profile/UserProfile";
 import ProfileEdit from "./components/user/Profile/ProfileEdit";
 import CreateProject from "./components/project/CreateProject";
-import IndivitualProject from "./components/project/IndivitualProject";
+import IndivitualProject from "./components/project/IndivitualProject/IndivitualProject";
 import ProjectsListing from "./components/project/ProjectsListing";
 // Public Routes
 import UserPublicRoutes from "./routesTypes/UserPublicRoute";

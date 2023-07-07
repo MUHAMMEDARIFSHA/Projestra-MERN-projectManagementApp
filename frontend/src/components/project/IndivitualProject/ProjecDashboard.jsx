@@ -1,11 +1,9 @@
-import React, { useState } from "react";
-import TaskCard from "./TaskCard";
-import TaskModal from "./TaskModal";
-import {
-  Typography,
-  Grid,
-  Paper,
-} from "@mui/material";
+import React, { useEffect, useState } from "react";
+import TaskCard from "../customItems/TaskCard";
+import TaskModal from "../customItems/TaskModal";
+import { useLocation } from "react-router-dom";
+import axios from "../../../Axios";
+import { Typography, Grid, Paper } from "@mui/material";
 import { styled, ThemeProvider } from "@mui/material/styles";
 import { createTheme } from "@mui/material/styles";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
@@ -43,10 +41,26 @@ const initialTasks = {
 };
 
 const ProjectDashboard = () => {
-  const [tasks, setTasks] = useState(initialTasks);
-  
-  
 
+  const [tasks, setTasks] = useState(initialTasks);
+  const [projectId, setProjectId] = useState("");
+  const [projectData,setProjectData] = useState({})
+  const location = useLocation();
+
+  const getProjectData =async () => {
+    const Id = new URLSearchParams(location.search).get("id");
+    console.log(Id + "  project Id");
+    setProjectId(Id);
+    await axios.post('/user/project/indivitual',{projectId:Id}, { headers: { "x-access-token": localStorage.getItem("token") } }).then((res)=>{
+ if(res.status===200){
+  console.log(`${res.data.message}`)
+  console.log(res.data.projectData);
+  setProjectData(res.data.projectData)
+ }
+    }).catch((error)=>{
+
+    })
+  };
 
   const handleDragEnd = (result) => {
     const { source, destination } = result;
@@ -75,9 +89,19 @@ const ProjectDashboard = () => {
       });
     }
   };
+  const handleModalClose = (response) => {
+    console.log("response");
+    // Handle the response here in the main page
+    console.log(response.projectData);
+    console.log("Modal closed with response:", response.message);
+  };
+  useEffect(() => {
+    getProjectData();
+  },[]);
 
   return (
     <ThemeProvider theme={theme}>
+      <h1>{projectData?projectData.projectname:""}</h1>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Container container spacing={2}>
           <Grid item xs={4}>
@@ -108,7 +132,8 @@ const ProjectDashboard = () => {
                 )}
               </Droppable>
             </Column>
-            <TaskModal/>
+            <TaskModal id={projectId ? projectId : ""} onClose={handleModalClose} />
+
           </Grid>
           <Grid item xs={4}>
             <Column>
@@ -123,9 +148,12 @@ const ProjectDashboard = () => {
                   </div>
                 )}
               </Droppable> */}
-              <TaskCard title="Task" description=" Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica"  />       
-               </Column>
+              <TaskCard
+                title="Task"
+                description=" Lizards are a widespread group of squamate reptiles, with over 6,000
+            species, ranging across all continents except Antarctica"
+              />
+            </Column>
           </Grid>
           <Grid item xs={4}>
             <Column>

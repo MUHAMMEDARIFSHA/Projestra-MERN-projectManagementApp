@@ -1,5 +1,5 @@
 import { BarChart3, Trash, Trash2 } from "lucide-react";
-import Sidebar, { SidebarItem } from "./Sidebar";
+import Sidebar, { SidebarItem } from "../customItems/Sidebar";
 import { NoteAdd} from "@mui/icons-material";
 
 import React from 'react'

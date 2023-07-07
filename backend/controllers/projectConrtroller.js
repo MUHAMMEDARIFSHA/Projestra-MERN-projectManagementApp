@@ -45,4 +45,47 @@ const getProjects = async(req,res)=>{
   }
 }
 
-module.exports = {createProject,getProjects}
+const getProjectData = async(req,res)=>{
+ console.log("get project data indivitual");
+ console.log(req.body.projectId)
+ const id = req.body.projectId
+ try{
+ const project = await Project.findById(id)
+ return res.status(200).json({success:true,projectData:project, message:"project found succesfully"})
+ }catch(error){
+  return res.status(500).json({ success:false,message:"some error occured"})
+ }
+}
+
+const addTask = async(req,res)=>{
+  console.log("add task")
+  console.log(req.body.task)
+  console.log(req.body.projectId)
+   const task = req.body.task
+  const projectId = req.body.projectId
+  const project = await Project.findById(projectId)
+  console.log(project);
+  try{
+  if (!project) {
+    return res.status(404).json({ success: false, message: 'Project not found' });
+  }
+ const newTask = {
+    taskname: task.taskname,
+    description: task.description,
+    status: task.status,
+  };
+  
+  project.tasks.push(newTask);
+  
+  await project.save();
+
+ return res.status(200).json({ success: true,projectData:project , message: 'Task added successfully' });
+}catch(error){
+  res.status(500).json({success:false,message:"some error occured"})
+  }
+  
+
+}
+
+
+module.exports = {createProject,getProjects,getProjectData,addTask}

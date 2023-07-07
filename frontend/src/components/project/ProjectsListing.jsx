@@ -19,8 +19,10 @@ function ProjectsListing() {
   const toCreateProject = ()=>{
    navigate('/user/createproject')
   }
-  const toHandleProject = ()=>{
+  const toHandleProject = (id)=>{
     console.log("to project");
+    console.log(id +"id of project")
+     navigate(`/user/indivitualproject?id=${id}`)
   }
   const getProjects = ()=>{
 console.log("get projects");
@@ -51,7 +53,7 @@ axios.get('/user/projectlist',{ headers: { 'x-access-token': localStorage.getIte
           {projectsData.length?projectsData.filter((project) => project.type === 'Indivitual')
             .map((project) => (
               <Card key={project._id} sx={{ my: 2 }}>
-                <Box onClick={toHandleProject} sx={{cursor:"pointer"}}>
+                <Box onClick={()=>{toHandleProject(project._id)}} sx={{cursor:"pointer"}}>
                 <CardContent >
                   <Typography variant="h5">{project.projectname}</Typography>
                   <Typography variant="subtitle1" color="textSecondary">
@@ -71,7 +73,7 @@ axios.get('/user/projectlist',{ headers: { 'x-access-token': localStorage.getIte
             .filter((project) => project.type === 'Group')
             .map((project) => (
               <Card key={project.id} sx={{ mt: 2 }}>
-                <Box onClick={toHandleProject} sx={{cursor:"pointer"}}>
+                <Box onClick={()=>{toHandleProject(project._id)}} sx={{cursor:"pointer"}}>
                 <CardContent>
                   <Typography variant="h5">{project.projectname}</Typography>
                   <Typography variant="subtitle1" color="textSecondary">

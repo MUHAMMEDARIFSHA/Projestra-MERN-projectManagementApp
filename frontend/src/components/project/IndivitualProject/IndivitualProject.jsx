@@ -1,6 +1,6 @@
 import React from 'react'
-import ProjectSidebar from './ProjectSidebar'
-import ProjectDashboard from './ProjecDashboard'
+import ProjectSidebar from '../IndivitualProject/ProjectSidebar'
+import ProjectDashboard from '../IndivitualProject/ProjecDashboard'
 import { BarChart, BarChart3 } from 'lucide-react'
 import { Typography ,Box,Grid} from '@mui/material'
 

@@ -1,4 +1,19 @@
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
+const taskSchema = new mongoose.Schema({
+  taskname: {
+    type: String,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: true,
+  },
+  status: {
+    type: String,
+    enum: ["ongoing", "completed", "to-do"],
+    default: "to-do",
+  },
+});
 
 const projectSchema = new mongoose.Schema({
   projectname: {
@@ -16,7 +31,7 @@ const projectSchema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    default:"Indivitual"
+    default: "Indivitual",
   },
   end_date: {
     type: Date,
@@ -24,28 +39,35 @@ const projectSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default : "incomplete",
+    default: "incomplete",
     required: true,
   },
   admin: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
   isblocked: {
     type: Boolean,
     default: false,
   },
-  team_leads: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  }],
-  members: [{
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-  }],
+  team_leads: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  members: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  ],
+  tasks: [taskSchema],
 });
 
-const Project = mongoose.model('Project', projectSchema);
+const Project = mongoose.model("Project", projectSchema);
 
 module.exports = Project;
+
+
