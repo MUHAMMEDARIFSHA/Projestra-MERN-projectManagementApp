@@ -5,7 +5,7 @@ const multer = require('../middlewares/multer')
 const {registerUser,signInUser,verifySignUpOtp,forgotPassword,removeTokenAfterVerification,editPassword,getUserData} = require('../controllers/userController')
 const signInUserGoogle = require('../controllers/googleAuthController')
 const {getUserDataForEdit,editUserProfile,editUserNumber} = require('../controllers/userProfileController')
-const {createProject,getProjects,getProjectData,addTask} = require('../controllers/projectConrtroller')
+const {createProject,getProjects,getProjectData,addTask,changeStatus} = require('../controllers/projectConrtroller')
 
 router.get('/user/getdata',verifyToken,getUserData)
 router.get('/user/profile/getdata',verifyToken,getUserDataForEdit)
@@ -20,12 +20,16 @@ router.post('/forgotpassword/verifedtoken',removeTokenAfterVerification)
 router.post('/editpassword',editPassword)
 router.post('/user/profile/edit',verifyToken,multer.upload.single('image'), editUserProfile)
 router.post('/user/profile/edit/number/otp',verifyToken,editUserNumber)
-router.patch('/user/project/indivitual/addtask',verifyToken,addTask)
+
 
 
 // project 
 router.post('/user/createproject',verifyToken,createProject)
 router.post('/user/project/indivitual',verifyToken,getProjectData)
+
+
+router.patch('/user/project/indivitual/addtask',verifyToken,addTask)
+router.patch('/user/project/indivitual/task/statuschange',verifyToken,changeStatus)
 
 
 

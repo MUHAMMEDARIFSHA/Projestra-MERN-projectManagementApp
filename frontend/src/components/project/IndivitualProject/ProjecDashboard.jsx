@@ -4,8 +4,7 @@ import TaskModal from "../customItems/TaskModal";
 import { useLocation } from "react-router-dom";
 import axios from "../../../Axios";
 import { Typography, Grid, Paper } from "@mui/material";
-import { styled, ThemeProvider } from "@mui/material/styles";
-import { createTheme } from "@mui/material/styles";
+import { styled, ThemeProvider, createTheme } from "@mui/material/styles";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 const theme = createTheme();
@@ -27,132 +26,168 @@ const Title = styled(Typography)(({ theme }) => ({
   fontWeight: "bold",
 }));
 
-const CardForTask = styled("div")(({ theme }) => ({
-  padding: theme.spacing(2),
-  marginBottom: theme.spacing(2),
-  background: theme.palette.background.paper,
-  borderRadius: theme.spacing(1),
-}));
-
-const initialTasks = {
-  todo: [],
-  ongoing: [],
-  completed: [],
-};
-
 const ProjectDashboard = () => {
-
-  const [tasks, setTasks] = useState(initialTasks);
+  const [tasks, setTasks] = useState([]);
   const [projectId, setProjectId] = useState("");
-  const [projectData,setProjectData] = useState({})
+  const [projectData, setProjectData] = useState({});
   const location = useLocation();
 
-  const getProjectData =async () => {
+  const getProjectData = async () => {
     const Id = new URLSearchParams(location.search).get("id");
-    console.log(Id + "  project Id");
+    console.log(Id + " project Id");
     setProjectId(Id);
-    await axios.post('/user/project/indivitual',{projectId:Id}, { headers: { "x-access-token": localStorage.getItem("token") } }).then((res)=>{
- if(res.status===200){
-  console.log(`${res.data.message}`)
-  console.log(res.data.projectData);
-  setProjectData(res.data.projectData)
- }
-    }).catch((error)=>{
-
-    })
+    await axios
+      .post(
+        "/user/project/indivitual",
+        { projectId: Id },
+        { headers: { "x-access-token": localStorage.getItem("token") } }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(`${res.data.message}`);
+          console.log(res.data.projectData);
+          setProjectData(res.data.projectData);
+          setTasks(res.data.projectData.tasks);
+        }
+      })
+      .catch((error) => {});
   };
 
-  const handleDragEnd = (result) => {
-    const { source, destination } = result;
-
-    if (!destination) return;
-
-    if (source.droppableId === destination.droppableId) {
-      const updatedTasks = [...tasks[source.droppableId]];
-      const [removed] = updatedTasks.splice(source.index, 1);
-      updatedTasks.splice(destination.index, 0, removed);
-
-      setTasks({
-        ...tasks,
-        [source.droppableId]: updatedTasks,
-      });
-    } else {
-      const sourceTasks = [...tasks[source.droppableId]];
-      const destTasks = [...tasks[destination.droppableId]];
-      const [removed] = sourceTasks.splice(source.index, 1);
-      destTasks.splice(destination.index, 0, removed);
-
-      setTasks({
-        ...tasks,
-        [source.droppableId]: sourceTasks,
-        [destination.droppableId]: destTasks,
-      });
-    }
-  };
   const handleModalClose = (response) => {
     console.log("response");
     // Handle the response here in the main page
     console.log(response.projectData);
     console.log("Modal closed with response:", response.message);
+    console.log(response.projectData.tasks);
+    setTasks(response.projectData.tasks);
   };
+
+  const handleDragEnd = async(result) => {
+    const { source, destination } = result;
+
+    if (!destination) {
+      return;
+    }
+
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    ) {
+      return;
+    }
+
+    const updatedTasks = [...tasks];
+    const movedTask = { ...updatedTasks[source.index] };
+
+    if (destination.droppableId === "completed") {
+      movedTask.status = "completed";
+    } else if (destination.droppableId === "ongoing") {
+      movedTask.status = "ongoing";
+    } else if (destination.droppableId === "to-do") {
+      movedTask.status = "to-do";
+    }
+
+    updatedTasks.splice(source.index, 1);
+    updatedTasks.splice(destination.index, 0, movedTask);
+
+    setTasks(updatedTasks);
+    await axios.patch('/user/project/indivitual/task/statuschange',{taskData:updatedTasks},     { headers: { "x-access-token": localStorage.getItem("token") } }).then((res)=>{
+      if(res.status===200){
+        console.log(res.data.message);
+      }
+    })
+    .catch((error)=>{
+      console.log(error.response.data.message)
+    })
+  };
+
   useEffect(() => {
     getProjectData();
-  },[]);
+  }, []);
+
+  useEffect(() => {
+    console.log(tasks + " tasks after drag");
+  }, [tasks]);
 
   return (
     <ThemeProvider theme={theme}>
-      <h1>{projectData?projectData.projectname:""}</h1>
+      <h1>{projectData ? projectData.projectname : ""}</h1>
       <DragDropContext onDragEnd={handleDragEnd}>
         <Container container spacing={2}>
           <Grid item xs={4}>
             <Column>
               <Title variant="h6">To-Do</Title>
-              <Droppable droppableId="todo">
+              <Droppable droppableId="to-do">
                 {(provided) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {tasks.todo.map((task, index) => (
-                      <Draggable
-                        key={task.id}
-                        draggableId={task.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <CardForTask
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            {task.content}
-                          </CardForTask>
-                        )}
-                      </Draggable>
-                    ))}
+                    {tasks.map((task, index) => {
+                      if (task.status !== "to-do") {
+                        return null;
+                      }
+
+                      return (
+                        <Draggable
+                          key={task._id}
+                          draggableId={task._id}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <TaskCard
+                                title={task.taskname}
+                                description={task.description}
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      );
+                    })}
                     {provided.placeholder}
                   </div>
                 )}
               </Droppable>
+              <TaskModal
+                id={projectId ? projectId : ""}
+                onClose={handleModalClose}
+              />
             </Column>
-            <TaskModal id={projectId ? projectId : ""} onClose={handleModalClose} />
-
           </Grid>
           <Grid item xs={4}>
             <Column>
               <Title variant="h6">Ongoing</Title>
-              {/* <Droppable droppableId="ongoing">
+              <Droppable droppableId="ongoing">
                 {(provided) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {tasks.ongoing.map((task, index) => (
-                      <CardForTask key={task.id}>{task.content}</CardForTask>
-                    ))}
+                    {tasks.filter((task) => task.status === "ongoing").map(
+                      (task, index) => (
+                        <Draggable
+                          key={task._id}
+                          draggableId={task._id}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <TaskCard
+                                title={task.taskname}
+                                description={task.description}
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      )
+                    )}
                     {provided.placeholder}
                   </div>
                 )}
-              </Droppable> */}
-              <TaskCard
-                title="Task"
-                description=" Lizards are a widespread group of squamate reptiles, with over 6,000
-            species, ranging across all continents except Antarctica"
-              />
+              </Droppable>
             </Column>
           </Grid>
           <Grid item xs={4}>
@@ -161,9 +196,28 @@ const ProjectDashboard = () => {
               <Droppable droppableId="completed">
                 {(provided) => (
                   <div ref={provided.innerRef} {...provided.droppableProps}>
-                    {tasks.completed.map((task, index) => (
-                      <CardForTask key={task.id}>{task.content}</CardForTask>
-                    ))}
+                    {tasks.filter((task) => task.status === "completed").map(
+                      (task, index) => (
+                        <Draggable
+                          key={task._id}
+                          draggableId={task._id}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <div
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <TaskCard
+                                title={task.taskname}
+                                description={task.description}
+                              />
+                            </div>
+                          )}
+                        </Draggable>
+                      )
+                    )}
                     {provided.placeholder}
                   </div>
                 )}

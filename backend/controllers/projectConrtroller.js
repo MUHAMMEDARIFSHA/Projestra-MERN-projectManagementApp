@@ -87,5 +87,9 @@ const addTask = async(req,res)=>{
 
 }
 
+const changeStatus= (req,res)=>{
+  console.log("change status")
+  console.log(req.body.taskData)
+}
 
-module.exports = {createProject,getProjects,getProjectData,addTask}
+module.exports = {createProject,getProjects,getProjectData,addTask,changeStatus}
