@@ -59,8 +59,8 @@ const getProjectData = async(req,res)=>{
 
 const addTask = async(req,res)=>{
   console.log("add task")
-  console.log(req.body.task)
-  console.log(req.body.projectId)
+  // console.log(req.body.task)
+  // console.log(req.body.projectId)
    const task = req.body.task
   const projectId = req.body.projectId
   const project = await Project.findById(projectId)
@@ -90,6 +90,7 @@ const addTask = async(req,res)=>{
 const changeStatus= (req,res)=>{
   console.log("change status")
   console.log(req.body.taskData)
+  
 }
 
 module.exports = {createProject,getProjects,getProjectData,addTask,changeStatus}
