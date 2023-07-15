@@ -113,7 +113,8 @@ const ProjectDashboard = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <h1>{projectData ? projectData.projectname : ""}</h1>
+      <Typography variant="h4" mt={3}>{projectData ? projectData.projectname : ""}</Typography>
+     
       <DragDropContext onDragEnd={handleDragEnd}>
         <Container container spacing={2}>
           <Grid item xs={4}>

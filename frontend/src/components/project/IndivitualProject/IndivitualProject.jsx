@@ -12,7 +12,6 @@ function IndivitualProject() {
       <Box flex="1" ml={3}>
         <Grid container>
           <Grid item xs={12}>
-            <Typography variant="h4">This is the project page</Typography>
             <ProjectDashboard/>
           </Grid>
         </Grid>
