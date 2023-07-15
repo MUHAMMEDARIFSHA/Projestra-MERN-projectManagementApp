@@ -91,9 +91,11 @@ const ProjectDashboard = () => {
     updatedTasks.splice(destination.index, 0, movedTask);
 
     setTasks(updatedTasks);
-    await axios.patch('/user/project/indivitual/task/statuschange',{taskData:updatedTasks},     { headers: { "x-access-token": localStorage.getItem("token") } }).then((res)=>{
+    await axios.patch('/user/project/indivitual/task/statuschange',{taskData:updatedTasks,projectId},     { headers: { "x-access-token": localStorage.getItem("token") } }).then((res)=>{
       if(res.status===200){
         console.log(res.data.message);
+        console.log(res.data.projectData +"  project Data")
+        setProjectData(res.data.projectData)
       }
     })
     .catch((error)=>{

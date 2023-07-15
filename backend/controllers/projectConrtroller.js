@@ -87,10 +87,23 @@ const addTask = async(req,res)=>{
 
 }
 
-const changeStatus= (req,res)=>{
+const changeStatus= async(req,res)=>{
   console.log("change status")
   console.log(req.body.taskData)
-  
+  console.log(req.body.projectId)
+  const taskData = req.body.taskData
+  const email = req.email
+  const projectId = req.body.projectId
+  const user = await User.find({email : email})
+  const project = await Project.findById(projectId)
+  console.log(project +"project");
+  project.tasks = taskData
+  try{
+    await project.save()
+    res.status(200).json({success:true,projectData:project,message:"task updated succesfully"})
+  }catch(error){
+    return res.status(500).json({success:false,message:""})
+  }
 }
 
 module.exports = {createProject,getProjects,getProjectData,addTask,changeStatus}
