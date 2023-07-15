@@ -20,7 +20,7 @@ const createProject = async (req, res) => {
     }).save();
     const projectId = await newProject._id;
     user.projects.push({ projectId });
-    await user.save()
+    await user.save();
     console.log("project save");
 
     return res
@@ -29,81 +29,111 @@ const createProject = async (req, res) => {
   } catch (error) {}
 };
 
-const getProjects = async(req,res)=>{
-  console.log('get projects')
-  const email = req.email
-  console.log(email)
-   const user = await User.findOne({email:email})
-  console.log(user._id)
-  const projects = await Project.find({admin:user._id})
+const getProjects = async (req, res) => {
+  console.log("get projects");
+  const email = req.email;
+  console.log(email);
+  const user = await User.findOne({ email: email });
+  console.log(user._id);
+  const projects = await Project.find({ admin: user._id });
   console.log(projects);
-  try{
-    return res.status(200).json({success:true,projects:projects,message:"succesfully taken projects data"})
+  try {
+    return res
+      .status(200)
+      .json({
+        success: true,
+        projects: projects,
+        message: "succesfully taken projects data",
+      });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "some error occured" });
   }
-  catch(error){
-    return res.status(500).json({success:false,message:"some error occured"})
+};
+
+const getProjectData = async (req, res) => {
+  console.log("get project data indivitual");
+  console.log(req.body.projectId);
+  const id = req.body.projectId;
+  try {
+    const project = await Project.findById(id);
+    return res
+      .status(200)
+      .json({
+        success: true,
+        projectData: project,
+        message: "project found succesfully",
+      });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "some error occured" });
   }
-}
+};
 
-const getProjectData = async(req,res)=>{
- console.log("get project data indivitual");
- console.log(req.body.projectId)
- const id = req.body.projectId
- try{
- const project = await Project.findById(id)
- return res.status(200).json({success:true,projectData:project, message:"project found succesfully"})
- }catch(error){
-  return res.status(500).json({ success:false,message:"some error occured"})
- }
-}
-
-const addTask = async(req,res)=>{
-  console.log("add task")
+const addTask = async (req, res) => {
+  console.log("add task");
   // console.log(req.body.task)
   // console.log(req.body.projectId)
-   const task = req.body.task
-  const projectId = req.body.projectId
-  const project = await Project.findById(projectId)
+  const task = req.body.task;
+  const projectId = req.body.projectId;
+  const project = await Project.findById(projectId);
   console.log(project);
-  try{
-  if (!project) {
-    return res.status(404).json({ success: false, message: 'Project not found' });
+  try {
+    if (!project) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Project not found" });
+    }
+    const newTask = {
+      taskname: task.taskname,
+      description: task.description,
+      status: task.status,
+    };
+
+    project.tasks.push(newTask);
+
+    await project.save();
+
+    return res
+      .status(200)
+      .json({
+        success: true,
+        projectData: project,
+        message: "Task added successfully",
+      });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "some error occured" });
   }
- const newTask = {
-    taskname: task.taskname,
-    description: task.description,
-    status: task.status,
-  };
-  
-  project.tasks.push(newTask);
-  
-  await project.save();
+};
 
- return res.status(200).json({ success: true,projectData:project , message: 'Task added successfully' });
-}catch(error){
-  res.status(500).json({success:false,message:"some error occured"})
+const changeStatus = async (req, res) => {
+  console.log("change status");
+  console.log(req.body.taskData);
+  const taskData = req.body.taskData;
+  const projectId = req.body.projectId;
+  const project = await Project.findById(projectId);
+  console.log(project + "project");
+  project.tasks = taskData;
+  try {
+    await project.save();
+    res
+      .status(200)
+      .json({
+        success: true,
+        projectData: project,
+        message: "task updated succesfully",
+      });
+  } catch (error) {
+    return res.status(500).json({ success: false, message: "" });
   }
-  
+};
 
-}
-
-const changeStatus= async(req,res)=>{
-  console.log("change status")
-  console.log(req.body.taskData)
-  console.log(req.body.projectId)
-  const taskData = req.body.taskData
-  const email = req.email
-  const projectId = req.body.projectId
-  const user = await User.find({email : email})
-  const project = await Project.findById(projectId)
-  console.log(project +"project");
-  project.tasks = taskData
-  try{
-    await project.save()
-    res.status(200).json({success:true,projectData:project,message:"task updated succesfully"})
-  }catch(error){
-    return res.status(500).json({success:false,message:""})
-  }
-}
-
-module.exports = {createProject,getProjects,getProjectData,addTask,changeStatus}
+module.exports = {
+  createProject,
+  getProjects,
+  getProjectData,
+  addTask,
+  changeStatus,
+};
