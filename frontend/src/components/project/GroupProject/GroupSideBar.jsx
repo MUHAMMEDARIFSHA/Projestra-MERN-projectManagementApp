@@ -7,15 +7,27 @@ import Groups3Icon from '@mui/icons-material/Groups3';
 
 function GroupSideBar() {
   const navigate = useNavigate()
-  const toAddMember = ()=>{
-    console.log("hi ");
-   navigate('/user/project/addmenber')
-  }
+  
+  const toAddMember = () => {
+    console.log('Navigate to Add Members page');
+    const Id = new URLSearchParams(location.search).get("id");
+        console.log(Id + " project Id");
+    navigate(`/user/project/addmembers?id=${Id}`);
+  };
+  const toProject = () => {
+    console.log('Navigate to Project page');
+    // Navigate to the project page logic
+  };
+  
+  const toCalendar = () => {
+    console.log('Navigate to Calendar page');
+    // Navigate to the calendar page logic
+  };
   return (
     <Sidebar>
-    <SidebarItem icon={<Dashboard size={20}/>} text="Project"/>
-    <SidebarItem icon={<CalendarToday size={20}/>} text="Calendar"/>
-    <SidebarItem OnClick={toAddMember} icon = {<Groups3Icon size={20}/>}   text = "Add members" />
+    <SidebarItem onClick={toProject} icon={<Dashboard size={20}/>} text="Project"/>
+    <SidebarItem onClick={toCalendar} icon={<CalendarToday size={20}/>} text="Calendar"/>
+    <SidebarItem  onClick={toAddMember} icon = {<Groups3Icon size={20}/>}   text = "Add members" />
     <SidebarItem icon={<TrashIcon size={20}/>} text="Trash"/>
     <SidebarItem icon={<NoteAdd size={20}/>} text="Quick Notes"/>
     {/* <SidebarItem icon={<BarChart3 size={20}/>} text="Project"/> */}

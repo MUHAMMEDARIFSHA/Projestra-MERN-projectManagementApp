@@ -63,9 +63,13 @@ export default function Sidebar({ children }) {
   )
 }
 
-export function SidebarItem({ icon, text, active, alert }) {
+export function SidebarItem({ icon, text, active, alert ,onClick}) {
   const { expanded } = useContext(SidebarContext)
-  
+  const handleItemClick = () => {
+    if (onClick) {
+      onClick(); // Call the provided onClick function if available
+    }
+  };
   return (
     <li
       className={`
@@ -78,6 +82,7 @@ export function SidebarItem({ icon, text, active, alert }) {
             : "hover:bg-indigo-50 text-gray-600"
         }
     `}
+    onClick={handleItemClick} 
     >
       {icon}
       <span

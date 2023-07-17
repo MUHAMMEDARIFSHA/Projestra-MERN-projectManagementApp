@@ -24,6 +24,11 @@ function ProjectsListing() {
     console.log(id +"id of project")
      navigate(`/user/indivitualproject?id=${id}`)
   }
+  const toHandleGroupProject = (id)=>{
+    console.log('to group project')
+    console.log(id +" id of group project")
+    navigate(`/user/groupproject?id=${id}`)
+  }
   const getProjects = ()=>{
 console.log("get projects");
 axios.get('/user/projectlist',{ headers: { 'x-access-token': localStorage.getItem('token')} }).then((res)=>{
@@ -73,7 +78,7 @@ axios.get('/user/projectlist',{ headers: { 'x-access-token': localStorage.getIte
             .filter((project) => project.type === 'Group')
             .map((project) => (
               <Card key={project.id} sx={{ mt: 2 }}>
-                <Box onClick={()=>{toHandleProject(project._id)}} sx={{cursor:"pointer"}}>
+                <Box onClick={()=>{toHandleGroupProject(project._id)}} sx={{cursor:"pointer"}}>
                 <CardContent>
                   <Typography variant="h5">{project.projectname}</Typography>
                   <Typography variant="subtitle1" color="textSecondary">

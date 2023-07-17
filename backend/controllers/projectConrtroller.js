@@ -130,10 +130,32 @@ const changeStatus = async (req, res) => {
   }
 };
 
+const getGroupProjectData= async(req,res)=>{
+console.log("get group project data")
+const id = req.body.projectId
+console.log(id);
+try{
+  const project = await Project.findById(id)
+  const users = await User.find()
+  console.log(users+" users");
+  console.log(project);
+  if(project){
+    return res.status(200).json({success:true,projectData:project,usersData:users, message:"project found succesfully"})
+  }
+  else{
+    return res.status(404).json({success:false,message:"project not found"})
+  }
+}catch(error){
+  return res.status(500).json({success:false, message:"some error occured"})
+}
+
+}
+
 module.exports = {
   createProject,
   getProjects,
   getProjectData,
   addTask,
   changeStatus,
+  getGroupProjectData
 };

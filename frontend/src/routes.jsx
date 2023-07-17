@@ -17,6 +17,7 @@ import CreateProject from "./components/project/CreateProject";
 import IndivitualProject from "./components/project/IndivitualProject/IndivitualProject";
 import ProjectsListing from "./components/project/ProjectsListing";
 import GroupProject from "./components/project/GroupProject/GroupProject";
+import AddMembers from "./components/project/GroupProject/AddMembers";
 // Public Routes
 import UserPublicRoutes from "./routesTypes/UserPublicRoute";
 import AdminPublicRoutes from "./routesTypes/AdminPublicRoute";
@@ -49,6 +50,7 @@ function AppRoutes() {
           />
           <Route path="/user/projects" element={<ProjectsListing />} />
           <Route path="/user/groupproject" element = {<GroupProject/>}/>
+          <Route path='/user/project/addmembers' element={<AddMembers/>}/>
         </Route>
 
         <Route element={<AdminPublicRoutes />}>
