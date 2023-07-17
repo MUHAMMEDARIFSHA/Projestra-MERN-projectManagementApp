@@ -5,7 +5,7 @@ const multer = require('../middlewares/multer')
 const {registerUser,signInUser,verifySignUpOtp,forgotPassword,removeTokenAfterVerification,editPassword,getUserData} = require('../controllers/userController')
 const signInUserGoogle = require('../controllers/googleAuthController')
 const {getUserDataForEdit,editUserProfile,editUserNumber} = require('../controllers/userProfileController')
-const {createProject,getProjects,getProjectData,addTask,changeStatus,getGroupProjectData} = require('../controllers/projectConrtroller')
+const {createProject,getProjects,getProjectData,addTask,changeStatus,getGroupProjectData,addMember} = require('../controllers/projectConrtroller')
 
 router.get('/user/getdata',verifyToken,getUserData)
 router.get('/user/profile/getdata',verifyToken,getUserDataForEdit)
@@ -27,6 +27,7 @@ router.post('/user/profile/edit/number/otp',verifyToken,editUserNumber)
 router.post('/user/createproject',verifyToken,createProject)
 router.post('/user/project/indivitual',verifyToken,getProjectData)
 router.post("/user/project/group",verifyToken,getGroupProjectData)
+router.post('/user/project/addmember',verifyToken,addMember)
 
 
 router.patch('/user/project/indivitual/addtask',verifyToken,addTask)

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import GroupSideBar from "./GroupSideBar";
-
+import { Autocomplete } from "@mui/material";
 import axios from "../../../Axios";
 import {
   Container,
@@ -9,9 +9,6 @@ import {
   Typography,
   TextField,
   Button,
-  List,
-  ListItem,
-  ListItemText,
   Divider,
   Table,
   TableBody,
@@ -20,7 +17,7 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Avatar
+  Avatar,
 } from "@mui/material";
 import { setUser } from "../../../features/user/userSlice";
 
@@ -29,31 +26,41 @@ function AddMembers() {
   const [groupProjectData, setGroupProjectData] = useState({});
   const [members, setMembers] = useState([]);
   const [newMember, setNewMember] = useState("");
-  const [users,setUsers] = useState([])
+  const [users, setUsers] = useState([]);
 
-  
-const usersData = [
+  const usersData = [
     {
       id: 1,
-      name: 'John Doe',
-      email: 'john.doe@example.com',
-      profilePicture: 'https://example.com/profiles/john.jpg',
+      name: "John Doe",
+      email: "john.doe@example.com",
+      profilePicture: "https://example.com/profiles/john.jpg",
     },
     {
       id: 2,
-      name: 'Jane Smith',
-      email: 'jane.smith@example.com',
-      profilePicture: 'https://example.com/profiles/jane.jpg',
+      name: "Jane Smith",
+      email: "jane.smith@example.com",
+      profilePicture: "https://example.com/profiles/jane.jpg",
     },
     // Add more user data objects as needed
   ];
 
-
-  const handleAddMember = () => {
-    if (newMember.trim() !== "") {
-      setMembers((prevMembers) => [...prevMembers, newMember]);
-      setNewMember("");
-    }
+  const handleAddMember = async () => {
+    console.log(newMember);
+    setMembers((prevMembers) => [...prevMembers, newMember]);
+    setNewMember("");
+    await axios
+      .post(
+        "/user/project/addmember",
+        { user: newMember, projectId },
+        { headers: { "x-access-token": localStorage.getItem("token") } }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res.data.message);
+          setGroupProjectData(res.data.projectData);
+        }
+      })
+      .catch((error) => {});
   };
   const getProjectData = async () => {
     const Id = new URLSearchParams(location.search).get("id");
@@ -68,10 +75,10 @@ const usersData = [
       .then((res) => {
         if (res.status === 200) {
           console.log(`${res.data.message}`);
-          console.log(res.data.projectData +" in add members");
+          console.log(res.data.projectData + " in add members");
           setGroupProjectData(res.data.projectData);
-          console.log(res.data.usersData +"users data");
-          setUsers(res.data.usersData)
+          console.log(res.data.usersData + "users data");
+          setUsers(res.data.usersData);
           //   setTasks(res.data.projectData.tasks);
         }
       })
@@ -104,15 +111,22 @@ const usersData = [
                       ))}
                     </List>
                   </Box> */}
-                  <Box mt={2}>
+                  <Box mt={5}>
                     <Typography variant="h6">Add New Member:</Typography>
                     <Box display="flex">
-                      <TextField
+                      <Autocomplete
+                        options={users}
+                        getOptionLabel={(user) => (user ? user.email : "")}
                         value={newMember}
-                        onChange={(e) => setNewMember(e.target.value)}
-                        variant="outlined"
-                        placeholder="Enter member name"
-                        sx={{ flexGrow: 1, mr: 2 }}
+                        onChange={(event, newValue) => setNewMember(newValue)}
+                        renderInput={(params) => (
+                          <TextField
+                            {...params}
+                            variant="outlined"
+                            placeholder="Enter member email"
+                            sx={{ flexGrow: 1, mr: 52 }}
+                          />
+                        )}
                       />
                       <Button variant="contained" onClick={handleAddMember}>
                         Add Member
@@ -120,27 +134,40 @@ const usersData = [
                     </Box>
                   </Box>
                   <TableContainer component={Paper} sx={{ mt: 2 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Name</TableCell>
-              <TableCell>Email</TableCell>
-              <TableCell>Profile Picture</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {users.map((user) => (
-              <TableRow key={user.id}>
-                <TableCell>{user.username}</TableCell>
-                <TableCell>{user.email}</TableCell>
-                <TableCell>
-                  <Avatar src={user.profilePicture} alt={user.name} />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell>Name</TableCell>
+                          <TableCell>Email</TableCell>
+                          <TableCell>Profile Picture</TableCell>
+                        </TableRow>
+                      </TableHead>
+                      <TableBody>
+                        {users
+                          .filter((user) => {
+                            // Check if the user._id or email exists in the members array of the projectData
+                            return groupProjectData.members.some(
+                              (member) =>
+                                member.user.toString() ===
+                                  user._id.toString() ||
+                                member.email === user.email
+                            );
+                          })
+                          .map((user) => (
+                            <TableRow key={user.id}>
+                              <TableCell>{user.username}</TableCell>
+                              <TableCell>{user.email}</TableCell>
+                              <TableCell>
+                                <Avatar
+                                  src={user.profilePicture}
+                                  alt={user.name}
+                                />
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
                 </Box>
               </Container>
             </Grid>

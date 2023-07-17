@@ -151,11 +151,30 @@ try{
 
 }
 
+const addMember= async(req,res)=>{
+console.log("add member");
+const user = req.body.user
+const projectId = req.body.projectId
+console.log(user.email, projectId);
+const project = await Project.findById(projectId)
+try{
+  if(project){
+    const member = {user:user._id,email:user.email}
+    project.members.push(member)
+    await project.save()
+    return res.status(200).json({message:"member added succesfully",projectData:project})
+  }
+}
+catch(erreo){
+  
+}}
+
 module.exports = {
   createProject,
   getProjects,
   getProjectData,
   addTask,
   changeStatus,
-  getGroupProjectData
+  getGroupProjectData,
+  addMember
 };
