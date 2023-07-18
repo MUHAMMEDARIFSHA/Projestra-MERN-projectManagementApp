@@ -133,10 +133,11 @@ const changeStatus = async (req, res) => {
 const getGroupProjectData= async(req,res)=>{
 console.log("get group project data")
 const id = req.body.projectId
+const userEmail =req.email
 console.log(id);
 try{
   const project = await Project.findById(id)
-  const users = await User.find()
+  const users = await User.find({ email: { $ne: userEmail }, isBlocked: false, });
   console.log(users+" users");
   console.log(project);
   if(project){
