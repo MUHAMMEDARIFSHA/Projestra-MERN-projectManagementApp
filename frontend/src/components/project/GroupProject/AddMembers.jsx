@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import GroupSideBar from "./GroupSideBar";
 import { Autocomplete } from "@mui/material";
 import axios from "../../../Axios";
+import UserCard from "../customItems/UserCard";
 import {
   Container,
   Box,
@@ -133,6 +134,7 @@ function AddMembers() {
                       </Button>
                     </Box>
                   </Box>
+                  
                   <TableContainer component={Paper} sx={{ mt: 2 }}>
                     <Table>
                       <TableHead>
@@ -148,7 +150,7 @@ function AddMembers() {
                             // Check if the user._id or email exists in the members array of the projectData
                             return groupProjectData.members.some(
                               (member) =>
-                                member.user.toString() ===
+                                member.user?member.user.toString():"" ===
                                   user._id.toString() ||
                                 member.email === user.email
                             );
@@ -168,6 +170,18 @@ function AddMembers() {
                       </TableBody>
                     </Table>
                   </TableContainer>
+                  {users.filter((user) => {
+                            // Check if the user._id or email exists in the members array of the projectData
+                            return groupProjectData.members.some(
+                              (member) =>
+                                member.user?member.user.toString():"" ===
+                                  user._id.toString() ||
+                                member.email === user.email
+                            );
+                          })
+                          .map((user) => (
+                            <UserCard user={user} /> 
+                            ))}
                 </Box>
               </Container>
             </Grid>
