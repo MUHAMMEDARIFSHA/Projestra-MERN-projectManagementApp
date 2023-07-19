@@ -85,6 +85,11 @@ function AddMembers() {
       })
       .catch((error) => {});
   };
+  const handleupdateProject = (updatedProject)=>{
+       console.log("updated project data");
+       console.log(updatedProject);
+       setGroupProjectData(updatedProject)
+  }
   useEffect(() => {
     getProjectData();
   }, []);
@@ -113,9 +118,9 @@ function AddMembers() {
                     </List>
                   </Box> */}
                   <Box mt={5}>
-                    <Typography variant="h6">Add New Member:</Typography>
-                    <Box display="flex">
-                      <Autocomplete
+                    {/* <Typography variant="h6">Add New Member:</Typography> */}
+                    <Box display="flex"  >
+                      <Autocomplete 
                         options={users}
                         getOptionLabel={(user) => (user ? user.email : "")}
                         value={newMember}
@@ -125,17 +130,31 @@ function AddMembers() {
                             {...params}
                             variant="outlined"
                             placeholder="Enter member email"
-                            sx={{ flexGrow: 1, mr: 52 }}
+                            sx={{ flexGrow: 1, mr: 52}}
                           />
                         )}
                       />
-                      <Button variant="contained" onClick={handleAddMember}>
+                      {/* <Button variant="contained"  onClick={handleAddMember} sx={{ml:2}}>
                         Add Member
-                      </Button>
+                      </Button> */}
+                      <Button
+          onClick={handleAddMember}
+          
+                variant="contained"
+                sx={{
+                  ml:2,
+                  borderRadius: "3px",
+                  height: "55px",
+                  fontWeight: "700",
+                  backgroundColor: "green",
+                }}
+              >
+                Add Member
+              </Button>
                     </Box>
                   </Box>
-                  
-                  <TableContainer component={Paper} sx={{ mt: 2 }}>
+
+                  {/* <TableContainer component={Paper} sx={{ mt: 2 }}>
                     <Table>
                       <TableHead>
                         <TableRow>
@@ -169,19 +188,37 @@ function AddMembers() {
                           ))}
                       </TableBody>
                     </Table>
-                  </TableContainer>
-                  {users.filter((user) => {
-                            // Check if the user._id or email exists in the members array of the projectData
-                            return groupProjectData.members.some(
-                              (member) =>
-                                member.user?member.user.toString():"" ===
-                                  user._id.toString() ||
-                                member.email === user.email
-                            );
-                          })
-                          .map((user) => (
-                            <UserCard user={user} /> 
+                  </TableContainer> */}
+                  <Box mt={3}>
+                    <Grid container>
+                      <Grid item xs={12}>
+                        <div
+                          style={{
+                            display: "flex",
+                            flexWrap: "wrap",
+                            justifyContent: "flex-start",
+                            gap: "20px",
+                          }}
+                        >
+                          {users
+                            .filter((user) => {
+                              // Check if the user._id or email exists in the members array of the projectData
+                              return groupProjectData.members.some((member) =>
+                                    member.email === user.email
+                              );
+                            })
+                            .map((user) => (
+                              <UserCard
+                                key={user._id}
+                                user={user}
+                                projectId={projectId}
+                                updateProject={handleupdateProject}
+                              />
                             ))}
+                        </div>
+                      </Grid>
+                    </Grid>
+                  </Box>
                 </Box>
               </Container>
             </Grid>

@@ -18,6 +18,9 @@ import IndivitualProject from "./components/project/IndivitualProject/Indivitual
 import ProjectsListing from "./components/project/ProjectsListing";
 import GroupProject from "./components/project/GroupProject/GroupProject";
 import AddMembers from "./components/project/GroupProject/AddMembers";
+import ProjectsTasks from "./components/project/GroupProject/ProjectsTasks";
+import OngoingTasks from "./components/project/GroupProject/OngoingTasks";
+import CompletedTasks from "./components/project/GroupProject/CompletedTasks";
 // Public Routes
 import UserPublicRoutes from "./routesTypes/UserPublicRoute";
 import AdminPublicRoutes from "./routesTypes/AdminPublicRoute";
@@ -34,7 +37,9 @@ function AppRoutes() {
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup/otp" element={<Otp />} />
-          <Route path="/user/:id/verify/:token/editpassword"element={<EditPassword />}
+          <Route
+            path="/user/:id/verify/:token/editpassword"
+            element={<EditPassword />}
           />
         </Route>
 
@@ -49,8 +54,17 @@ function AppRoutes() {
             element={<IndivitualProject />}
           />
           <Route path="/user/projects" element={<ProjectsListing />} />
-          <Route path="/user/groupproject" element = {<GroupProject/>}/>
-          <Route path='/user/project/addmembers' element={<AddMembers/>}/>
+          <Route path="/user/groupproject" element={<GroupProject />} />
+          <Route path="/user/project/addmembers" element={<AddMembers />} />
+          <Route
+            path="/user/groupproject/project"
+            element={<ProjectsTasks />}
+          />
+          <Route path="/user/groupproject/ongoing" element={<OngoingTasks />} />
+          <Route
+            path="/user/groupproject/completed"
+            element={<CompletedTasks />}
+          />
         </Route>
 
         <Route element={<AdminPublicRoutes />}>

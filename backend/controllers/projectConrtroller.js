@@ -170,6 +170,35 @@ catch(erreo){
   
 }}
 
+const removeMember = async(req,res)=>{
+  console.log("remove member");
+  console.log(req.body.projectId)
+  console.log(req.body.memberId)
+  const projectId = req.body.projectId
+  const project = await Project.findById(projectId)
+  const memberData  = await User.findById(req.body.memberId)
+  try{
+if(project){
+      const member = {user:memberData._id,email:memberData.email}
+      const indexToRemove = project.members.findIndex(
+        (existingMember) =>
+          existingMember.user.toString() === member.user.toString() &&
+          existingMember.email === member.email
+      );
+      if(indexToRemove !== -1){
+        project.members.splice(indexToRemove, 1);
+        await project.save()
+        return res.status(200).json({success:true ,projectData:project,message:"member remove succesfully"})
+      }
+        }
+  else{
+    return res.status(404).json({success:false,message:"project not found"})
+  }
+}
+catch(error){
+ return res.status(500).json({success:false,message:"some internal server error occured"})
+}
+}
 module.exports = {
   createProject,
   getProjects,
@@ -177,5 +206,6 @@ module.exports = {
   addTask,
   changeStatus,
   getGroupProjectData,
-  addMember
+  addMember,
+  removeMember
 };
