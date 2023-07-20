@@ -50,7 +50,7 @@ function GroupSideBar() {
     <SidebarItem onClick={toDashboard} icon={<Dashboard size={20}/>} text="Dashboard"/>
     <SidebarItem onClick={toProject} icon={<Assignment size={20}/>} text={"Project"}/>
     <SidebarItem onClick={toOngoing} icon={<FormatListBulleted size={20}/>} text={"Ongoing"}/>
-    <SidebarItem onClick={toCompleted} icon={< Grading size={20}/>} text={"completed"}/>
+    <SidebarItem onClick={toCompleted} icon={< Grading size={20}/>} text={"Completed"}/>
     <SidebarItem onClick={toCalendar} icon={<CalendarToday size={20}/>} text="Calendar"/>
     <SidebarItem  onClick={toAddMember} icon = {<Groups3Icon size={20}/>}   text = "Add members" />
     {/* <SidebarItem o icon={<TrashIcon size={20}/>} text="Trash"/> */}

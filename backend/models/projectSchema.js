@@ -8,6 +8,17 @@ const taskSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  members: [
+    {
+      user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+      },
+      email: {
+        type: String,
+      },
+    },
+  ],
   status: {
     type: String,
     enum: ["ongoing", "completed", "to-do"],

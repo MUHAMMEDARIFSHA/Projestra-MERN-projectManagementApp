@@ -87,7 +87,7 @@ export function SidebarItem({ icon, text, active, alert ,onClick}) {
       {icon}
       <span
         className={`overflow-hidden transition-all ${
-          expanded ? "w-52 ml-3" : "w-0"
+          expanded ? "w-52" : "w-0"
         }`}
       >
         {text}

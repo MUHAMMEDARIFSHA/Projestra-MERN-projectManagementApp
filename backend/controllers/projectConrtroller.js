@@ -38,13 +38,11 @@ const getProjects = async (req, res) => {
   const projects = await Project.find({ admin: user._id });
   console.log(projects);
   try {
-    return res
-      .status(200)
-      .json({
-        success: true,
-        projects: projects,
-        message: "succesfully taken projects data",
-      });
+    return res.status(200).json({
+      success: true,
+      projects: projects,
+      message: "succesfully taken projects data",
+    });
   } catch (error) {
     return res
       .status(500)
@@ -58,13 +56,11 @@ const getProjectData = async (req, res) => {
   const id = req.body.projectId;
   try {
     const project = await Project.findById(id);
-    return res
-      .status(200)
-      .json({
-        success: true,
-        projectData: project,
-        message: "project found succesfully",
-      });
+    return res.status(200).json({
+      success: true,
+      projectData: project,
+      message: "project found succesfully",
+    });
   } catch (error) {
     return res
       .status(500)
@@ -96,13 +92,11 @@ const addTask = async (req, res) => {
 
     await project.save();
 
-    return res
-      .status(200)
-      .json({
-        success: true,
-        projectData: project,
-        message: "Task added successfully",
-      });
+    return res.status(200).json({
+      success: true,
+      projectData: project,
+      message: "Task added successfully",
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: "some error occured" });
   }
@@ -118,87 +112,142 @@ const changeStatus = async (req, res) => {
   project.tasks = taskData;
   try {
     await project.save();
-    res
-      .status(200)
-      .json({
-        success: true,
-        projectData: project,
-        message: "task updated succesfully",
-      });
+    res.status(200).json({
+      success: true,
+      projectData: project,
+      message: "task updated succesfully",
+    });
   } catch (error) {
     return res.status(500).json({ success: false, message: "" });
   }
 };
 
-const getGroupProjectData= async(req,res)=>{
-console.log("get group project data")
-const id = req.body.projectId
-const userEmail =req.email
-console.log(id);
-try{
-  const project = await Project.findById(id)
-  const users = await User.find({ email: { $ne: userEmail }, isBlocked: false, });
-  console.log(users+" users");
-  console.log(project);
-  if(project){
-    return res.status(200).json({success:true,projectData:project,usersData:users, message:"project found succesfully"})
-  }
-  else{
-    return res.status(404).json({success:false,message:"project not found"})
-  }
-}catch(error){
-  return res.status(500).json({success:false, message:"some error occured"})
-}
+// group project fuctions starts
+// group project
 
-}
-
-const addMember= async(req,res)=>{
-console.log("add member");
-const user = req.body.user
-const projectId = req.body.projectId
-console.log(user.email, projectId);
-const project = await Project.findById(projectId)
-try{
-  if(project){
-    const member = {user:user._id,email:user.email}
-    project.members.push(member)
-    await project.save()
-    return res.status(200).json({message:"member added succesfully",projectData:project})
+const getGroupProjectData = async (req, res) => {
+  console.log("get group project data");
+  const id = req.body.projectId;
+  const userEmail = req.email;
+  console.log(id);
+  try {
+    const project = await Project.findById(id);
+    const users = await User.find({
+      email: { $ne: userEmail },
+      isBlocked: false,
+    });
+    console.log(users + " users");
+    console.log(project);
+    if (project) {
+      return res
+        .status(200)
+        .json({
+          success: true,
+          projectData: project,
+          usersData: users,
+          message: "project found succesfully",
+        });
+    } else {
+      return res
+        .status(404)
+        .json({ success: false, message: "project not found" });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "some error occured" });
   }
-}
-catch(erreo){
-  
-}}
+};
 
-const removeMember = async(req,res)=>{
+const addMember = async (req, res) => {
+  console.log("add member");
+  const user = req.body.user;
+  const projectId = req.body.projectId;
+  console.log(user.email, projectId);
+  const project = await Project.findById(projectId);
+  try {
+    if (project) {
+      const member = { user: user._id, email: user.email };
+      project.members.push(member);
+      await project.save();
+      return res
+        .status(200)
+        .json({ message: "member added succesfully", projectData: project });
+    }
+  } catch (error) {}
+};
+
+const removeMember = async (req, res) => {
   console.log("remove member");
-  console.log(req.body.projectId)
-  console.log(req.body.memberId)
-  const projectId = req.body.projectId
-  const project = await Project.findById(projectId)
-  const memberData  = await User.findById(req.body.memberId)
-  try{
-if(project){
-      const member = {user:memberData._id,email:memberData.email}
+  console.log(req.body.projectId);
+  console.log(req.body.memberId);
+  const projectId = req.body.projectId;
+  const project = await Project.findById(projectId);
+  const memberData = await User.findById(req.body.memberId);
+  try {
+    if (project) {
+      const member = { user: memberData._id, email: memberData.email };
       const indexToRemove = project.members.findIndex(
         (existingMember) =>
           existingMember.user.toString() === member.user.toString() &&
           existingMember.email === member.email
       );
-      if(indexToRemove !== -1){
+      if (indexToRemove !== -1) {
         project.members.splice(indexToRemove, 1);
-        await project.save()
-        return res.status(200).json({success:true ,projectData:project,message:"member remove succesfully"})
+        await project.save();
+        return res
+          .status(200)
+          .json({
+            success: true,
+            projectData: project,
+            message: "member remove succesfully",
+          });
       }
-        }
-  else{
-    return res.status(404).json({success:false,message:"project not found"})
+    } else {
+      return res
+        .status(404)
+        .json({ success: false, message: "project not found" });
+    }
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "some internal server error occured" });
   }
-}
-catch(error){
- return res.status(500).json({success:false,message:"some internal server error occured"})
-}
-}
+};
+
+const addMemberToGroup = async (req, res) => {
+  console.log("add member to group ");
+  const projectId = req.body.projectId;
+  const task = req.body.task;
+  const members = req.body.members;
+
+  console.log(projectId, task, members);
+  try {
+    const project = await Project.findById(projectId);
+    const membersToAdd = members.map((user) => ({
+      user: user._id,
+      email: user.email,
+    }));
+    console.log(membersToAdd);
+    
+    // Now push the new members to the project.members array
+    // project.members.push(...membersToAdd);
+    const newTask = {
+      taskname: task.taskname,
+      description: task.description,
+      members : membersToAdd
+    };
+
+    project.tasks.push(newTask);
+
+    await project.save();
+    return res.status(200).json({success:true,projectData:project, message:"task added succesfully in group projecct"})
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ success: false, message: "some server related error occured" });
+  }
+};
 module.exports = {
   createProject,
   getProjects,
@@ -207,5 +256,6 @@ module.exports = {
   changeStatus,
   getGroupProjectData,
   addMember,
-  removeMember
+  removeMember,
+  addMemberToGroup,
 };
