@@ -235,12 +235,13 @@ const addMemberToGroup = async (req, res) => {
     const newTask = {
       taskname: task.taskname,
       description: task.description,
-      members : membersToAdd
+      members : membersToAdd,
+      start_date : task.startdate,
+      end_date : task.enddate
     };
-
-    project.tasks.push(newTask);
-
-    await project.save();
+    console.log(newTask);
+   project.tasks.push(newTask);
+   await project.save();
     return res.status(200).json({success:true,projectData:project, message:"task added succesfully in group projecct"})
   } catch (error) {
     return res
@@ -248,6 +249,40 @@ const addMemberToGroup = async (req, res) => {
       .json({ success: false, message: "some server related error occured" });
   }
 };
+
+const editGroupTask = async(req,res)=>{
+  console.log("edit group task");
+   const task = req.body.task
+   const members = req.body.members
+   console.log(task  , members);
+   const projectId = req.body.projectId
+   const taskId = task._id
+   console.log(taskId);
+   try{
+    const project = await Project.findById(projectId)
+    if(project){
+      const existingTaskIndex = project.tasks.findIndex((t) => t._id.toString() === taskId);
+    if (existingTaskIndex !== -1) {
+      project.tasks[existingTaskIndex] = task;
+     project.tasks[existingTaskIndex].members = members;
+      await project.save();
+      return res.status(200).json({success:true,message:"task updated succesfully",projectData:project})
+   }}
+  else{
+    return res.status(404).json({success:false,message:"project not found"})
+  }}
+ catch(error){
+  return res.status(500).json({success:false,message :"some error occured in server",error:error})
+ }
+}
+
+const GroupTaskChangeStatus = async(req,res)=>{
+  console.log("change status of task in group project")
+   const task = req.body.task
+   const projectId = req.body.projectId
+   const status = req.body.status
+   console.log("status ===" + status );
+}
 module.exports = {
   createProject,
   getProjects,
@@ -258,4 +293,6 @@ module.exports = {
   addMember,
   removeMember,
   addMemberToGroup,
+  editGroupTask,
+  GroupTaskChangeStatus
 };

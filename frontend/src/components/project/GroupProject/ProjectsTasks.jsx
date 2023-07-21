@@ -41,9 +41,6 @@ function ProjectsTasks() {
       .catch((error) => {});
   };
 
-  const handleAddTask = () => {
-    console.log("add task");
-  };
   useEffect(() => {
     getProjectData();
   }, []);
@@ -56,6 +53,7 @@ function ProjectsTasks() {
             <Grid item xs={12}>
               <Grid item alignContent="center" xs={11}>
                 <TaskCardGroup
+                 onClose={handleModalClose}
                   tasks={tasks}
                   users={users.filter((user) => {
                     // Check if the user email exists in the members array of the projectData
@@ -63,6 +61,8 @@ function ProjectsTasks() {
                       (member) => member.email === user.email
                     );
                   })}
+                  projectId={projectId}
+                
                 />
                 <AddTaskModal
                   id={projectId ? projectId : ""}

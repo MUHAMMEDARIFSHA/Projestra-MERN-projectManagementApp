@@ -62,7 +62,7 @@ export default function AddTaskModal({id,onClose,users}) {
     console.log(modalTask);
   };
   const handleAddMember = ()=>{
-    console.log("on chage of auto complet");
+    console.log("on chage of auto complete");
     console.log(newMember);
   }
   useEffect(() => {
@@ -129,20 +129,6 @@ export default function AddTaskModal({id,onClose,users}) {
                           />
                         )}
                       />
-                      {/* <Button
-          onClick={handleAddMember}
-          
-                variant="contained"
-                sx={{
-                  ml:2,
-                  borderRadius: "3px",
-                  height: "55px",
-                  fontWeight: "700",
-                  backgroundColor: "green",
-                }}
-              >
-                Add Member
-              </Button> */}
                     </Box>
 
             </Grid>
