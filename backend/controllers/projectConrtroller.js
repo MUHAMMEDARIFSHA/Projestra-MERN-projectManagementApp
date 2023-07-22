@@ -263,12 +263,15 @@ const editGroupTask = async (req, res) => {
   try {
     const project = await Project.findById(projectId);
     if (project) {
-      const existingTaskIndex = project.tasks.findIndex(
-        (t) => t._id.toString() === taskId
+      const existingTaskIndex = project.tasks.findIndex((t) => t._id.toString() === taskId
       );
+      const emailArr = []
+     
+     
       if (existingTaskIndex !== -1) {
         project.tasks[existingTaskIndex] = task;
-        project.tasks[existingTaskIndex].members = members;
+         await members?.map((member)=>  project.tasks[existingTaskIndex].members.push({user:member._id,email:member.email}))
+      
         await project.save();
         return res
           .status(200)
