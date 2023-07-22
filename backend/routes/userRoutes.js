@@ -6,7 +6,7 @@ const {registerUser,signInUser,verifySignUpOtp,forgotPassword,removeTokenAfterVe
 const signInUserGoogle = require('../controllers/googleAuthController')
 const {getUserDataForEdit,editUserProfile,editUserNumber} = require('../controllers/userProfileController')
 const {createProject,getProjects,getProjectData,addTask,changeStatus,getGroupProjectData,addMember,removeMember,
-    addMemberToGroup,editGroupTask,GroupTaskChangeStatus} = require('../controllers/projectConrtroller')
+    addMemberToGroup,editGroupTask,GroupTaskChangeStatus,removeMemberGroupTask} = require('../controllers/projectConrtroller')
 
 router.get('/user/getdata',verifyToken,getUserData)
 router.get('/user/profile/getdata',verifyToken,getUserDataForEdit)
@@ -32,6 +32,7 @@ router.post('/user/project/addmember',verifyToken,addMember)
 router.post('/group/member/remove',verifyToken,removeMember)
 router.post("/user/project/group/addtask",verifyToken,addMemberToGroup)
 router.post('/group/task/edit',verifyToken,editGroupTask)
+router.post('/group/task/member/remove',verifyToken,removeMemberGroupTask)
 
 
 router.patch('/user/project/indivitual/addtask',verifyToken,addTask)

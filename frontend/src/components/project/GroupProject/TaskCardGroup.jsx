@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import axios from "../../../Axios";
 import {
   Card,
@@ -22,7 +22,6 @@ import {
 import AvatarGroup from "@mui/material/AvatarGroup";
 import { Autocomplete } from "@mui/material";
 import { CreditCard, Description, Group } from "@mui/icons-material";
-import zIndex from "@mui/material/styles/zIndex";
 
 const style = {
   position: "absolute",
@@ -40,7 +39,7 @@ const style = {
 const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const closeModal = () => setIsModalOpen(false);
-  const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedTask, setSelectedTask] = useState({});
   const [newMember, setNewMember] = useState([]);
 
   const handleChange = (e) => {
@@ -52,12 +51,18 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
     }));
     console.log(selectedTask);
   };
-
+  const getStatusValue= (value)=>{
+    if (value === "to-do") return 0;
+    if (value === "ongoing") return 1;
+    if (value === "completed") return 2 ;
+  }
   const openDataModal = (task) => {
     console.log("on data modal open");
     setSelectedTask(task);
+    setStatus(getStatusValue(task.status))
     setIsModalOpen(true);
   };
+
 
     const handleMemberChange = (event, newValue) => {
     setNewMember(newValue);
@@ -74,6 +79,7 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
       .then((res) => {
         if (res.status === 200) {
           console.log(res.data.message);
+          setNewMember([])
           onClose({
             success: true,
             projectData: res.data.projectData,
@@ -83,11 +89,17 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
         }
       })
       .catch((error) => {
+        console.log("errror")
         // console.log(error.response.data.message);
       });
   };
 
   const [status, setStatus] = useState(0); // 0: To-Do, 1: Ongoing, 2: Completed
+  
+  // useEffect(() => {
+  //   // Update the status whenever the selectedTask changes
+  //   setStatus(getStatusValue(selectedTask?.status));
+  // }, []);
 
   const handleStatusChange = (event, newValue) => {
     setStatus(newValue);
@@ -97,12 +109,23 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
     { headers: { "x-access-token": localStorage.getItem("token") } }).then((res)=>{
        if(res.status===200){
         console.log(res.data.message);
+        console.log(res.data.task);
+        const statusValue = getStatusValue(res.data.task.status)
+        console.log(statusValue +"   status value");
+        setStatus(statusValue)
+        onClose({
+          success: true,
+          projectData: res.data.projectData,
+          message: "group task status changed succesfully",
+        });
+        closeModal();
+
        }
     })
   };
-
+ 
   const getStatusLabel = (value) => {
-    if (value === 0) return "todo";
+    if (value === 0) return "to-do";
     if (value === 1) return "ongoing";
     if (value === 2) return "completed";
   };
@@ -126,7 +149,24 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
   const valueLabelStyles = {
     display: 'none', // Hide the value label
   };
+  const removeMember = async(memberId)=>{
+    console.log("remove member");
+ await axios.post('/group/task/member/remove',{memberId,projectId,task:selectedTask},   
+ { headers: { "x-access-token": localStorage.getItem("token") } }).then((res)=>{
+ if(res.status === 200){
+  console.log(res.data.message);
+  setSelectedTask(res.data.projectData.tasks)
+  onClose({
+    success: true,
+    projectData: res.data.projectData,
+    message: "group task status changed succesfully",
+  });
+  closeModal();
+ }
+ }).catch((error)=>{
 
+ })
+  }
   return (
     <Box my={2}>
       {tasks.map((task) => (
@@ -211,7 +251,7 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
               <Grid item display="flex" ml={3} xs={12}>
                 <Description sx={{ fontSize: "27px", mr: 1, opacity: 0.6 }} />
                 <Typography sx={{ opacity: 0.6, fontWeight: 500 }} variant="h6">
-                  Description
+                  Description {selectedTask.status}
                 </Typography>
               </Grid>
               <Grid item mx={3} xs={12}>
@@ -247,7 +287,7 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
                   <TableContainer component={Paper}>
                     <Table>
                       <TableBody>
-                        {selectedTask.members.map((member) => {
+                        {selectedTask.members?.map((member) => {
                           const user = users.find(
                             (user) => user.email === member.email
                           );
@@ -271,7 +311,7 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
                                 <TableCell
                                   sx={{ padding: "6px 16px", height: "40px" }}
                                 >
-                                  <Button>Remove</Button>
+                                  <Button onClick={()=>{removeMember(user._id)}}>Remove</Button>
                                 </TableCell>
                                 {/* Add more table cells with member details as needed */}
                               </TableRow>
@@ -354,66 +394,7 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
                   fullWidth
                 />
               </Grid>
-              {/* <Grid container m={3} justifyContent="space-evenly" spacing={2}>
-                {/* "To-Do" Button */}
-                {/* <Grid item>
-                  <Button variant="contained" color="secondary">
-                    To-Do
-                  </Button>
-                </Grid>
-
-                {/* "Ongoing" Button */}
-                {/* <Grid item>
-                  <Button
-                    variant="contained"
-                    style={{ backgroundColor: "orange", color: "white" }}
-                  >
-                    Ongoing
-                  </Button>
-                </Grid> */}
-
-                {/* "Completed" Button */}
-                {/* <Grid item>
-                  <Button
-                    variant="contained"
-                    style={{ backgroundColor: "green", color: "white" }}
-                  >
-                    Completed
-                  </Button>
-                </Grid>
-              </Grid> */} 
-              <Grid item xs={10}>
-
-{/*            
-              <Box m={3}>
-      <Slider
-        value={status}
-        onChange={handleStatusChange}
-        valueLabelDisplay="auto"
-        step={1}
-        marks={[
-          { value: 0, label:     <Button variant="contained" color="secondary">
-                    To-Do
-                  </Button>},
-          { value: 1, label:  <Button
-            variant="contained"
-            style={{ backgroundColor: "orange", color: "white" }}
-          >
-            Ongoing
-          </Button> },
-          { value: 2, label:  <Button
-            variant="contained"
-            style={{ backgroundColor: "green", color: "white" }}
-          >
-            Completed
-          </Button> },
-        ]}
-        min={0}
-        max={2}
-      />
-      {/* <div style={{ textAlign: "center" }}>{getStatusLabel(status)}</div> */}
-    {/* </Box>  */}
-
+             <Grid item xs={10}>
     <Box m={3}>
       <Slider
         value={status}
