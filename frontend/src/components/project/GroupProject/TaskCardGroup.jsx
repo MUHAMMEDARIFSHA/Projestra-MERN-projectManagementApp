@@ -324,37 +324,42 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
                 </Box>
               </Grid>
               <Grid item my={1} ml={3} xs={12}>
-                <Typography>Add members</Typography>
-                <Box display="flex">
-                  <Autocomplete
-                    multiple // Make sure to set the `multiple` prop to true
-                    options={users}
-                    getOptionLabel={(user) => (user.email ? user.email : "")}
-                    value={newMember}
-                    onChange={handleMemberChange}
-                    renderInput={(params) => (
-                      <TextField
-                        variant="standard" // Use "standard" variant for no outline
-                        InputProps={{
-                          disableUnderline: true,
-                          sx: {
-                            backgroundColor: "#f2f2f2",
-                            borderRadius: "10px",
-                            paddingLeft: "20px",
-                            height: "45px",
-                            cursor: "pointer",
-                            "&:hover": {
-                              backgroundColor: "#dcdcdc", // Define a darker shade for hover
-                            },
-                          },
-                        }} // Remove the outline
-                        {...params}
-                        placeholder="Enter member email"
-                        sx={{ width: 500 }}
-                      />
-                    )}
-                  />
-                </Box>
+              {selectedTask.status === 'to-do' || selectedTask.status === 'ongoing' ? (
+  <>
+    <Typography>Add members</Typography>
+    <Box display="flex">
+      <Autocomplete
+        multiple // Make sure to set the `multiple` prop to true
+        options={users}
+        getOptionLabel={(user) => (user.email ? user.email : "")}
+        value={newMember}
+        onChange={handleMemberChange}
+        renderInput={(params) => (
+          <TextField
+            variant="standard" // Use "standard" variant for no outline
+            InputProps={{
+              disableUnderline: true,
+              sx: {
+                backgroundColor: "#f2f2f2",
+                borderRadius: "10px",
+                paddingLeft: "20px",
+                height: "45px",
+                cursor: "pointer",
+                "&:hover": {
+                  backgroundColor: "#dcdcdc", // Define a darker shade for hover
+                },
+              },
+            }} // Remove the outline
+            {...params}
+            placeholder="Enter member email"
+            sx={{ width: 500 }}
+          />
+        )}
+      />
+    </Box>
+  </>
+) : null}
+
               </Grid>
               <Grid item m={3} xs={5}>
                 <TextField

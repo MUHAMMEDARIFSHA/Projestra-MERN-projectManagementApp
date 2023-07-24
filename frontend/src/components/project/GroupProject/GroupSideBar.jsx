@@ -6,7 +6,7 @@ import { CalendarToday, Dashboard,FormatListBulleted,Assignment, Grading, NoteAd
 import Groups3Icon from '@mui/icons-material/Groups3';
 
 
-function GroupSideBar() {
+function GroupSideBar(userData) {
   const navigate = useNavigate()
   
   const toAddMember = () => {
@@ -46,7 +46,7 @@ function GroupSideBar() {
     // Navigate to the calendar page logic
   };
   return (
-    <Sidebar>
+    <Sidebar useremail={userData?.email} username={userData?.username}>
     <SidebarItem onClick={toDashboard} icon={<Dashboard size={20}/>} text="Dashboard"/>
     <SidebarItem onClick={toProject} icon={<Assignment size={20}/>} text={"Project"}/>
     <SidebarItem onClick={toOngoing} icon={<FormatListBulleted size={20}/>} text={"Ongoing"}/>

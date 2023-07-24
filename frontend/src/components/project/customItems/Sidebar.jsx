@@ -3,7 +3,7 @@ import { useContext, createContext, useState,useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 const SidebarContext = createContext()
 
-export default function Sidebar({ children }) {
+export default function Sidebar({ children,useremail,username }) {
   const [expanded, setExpanded] = useState(true)
   const [sidebarWidth, setSidebarWidth] = useState(60)
   const navigate = useNavigate()
@@ -52,8 +52,8 @@ export default function Sidebar({ children }) {
           `}
           >
             <div className="leading-4">
-              <h4 className="font-semibold">Username</h4>
-              <span className="text-xs text-gray-600">user@gmail.com</span>
+              <h4 className="font-semibold">{username}</h4>
+              <span className="text-xs text-gray-600">{useremail}</span>
             </div>
             <MoreVertical size={20} />
           </div>

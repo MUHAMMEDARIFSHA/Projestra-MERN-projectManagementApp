@@ -18,6 +18,7 @@ function ProjectsTasks() {
     console.log(response.projectData.tasks);
     setTasks(response.projectData.tasks);
   };
+  
   const getProjectData = async () => {
     const Id = new URLSearchParams(location.search).get("id");
     console.log(Id + " project Id");
@@ -47,14 +48,14 @@ function ProjectsTasks() {
   return (
     <>
       <Box display="flex">
-        <GroupSideBar />
+        <GroupSideBar userData={users} />
         <Box flex="1" ml={3}>
           <Grid container>
             <Grid item xs={12}>
               <Grid item alignContent="center" xs={11}>
                 <TaskCardGroup
                  onClose={handleModalClose}
-                  tasks={tasks}
+                  tasks={tasks.filter((t)=>t.status==="to-do")}
                   users={users.filter((user) => {
                     // Check if the user email exists in the members array of the projectData
                     return groupProjectData.members.some(
