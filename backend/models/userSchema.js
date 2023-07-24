@@ -28,20 +28,35 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
- 
+
   profilePicture: {
     type: String,
   },
-    projects: [
-      {
-        
-          projectId: {
-            type: mongoose.Schema.Types.ObjectId,
-            ref: "Project",
-          
-        },
+  projects: [
+    {
+      projectId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Project",
       },
-    ],
+    },
+  ],
+  memberProjects: [
+    {
+      projectId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Project",
+      },
+      taskDetails:{
+         taskId:{
+       type: mongoose.Schema.Types.ObjectId,
+         }
+      },
+      position: {
+        type: String,
+        default: "member"
+      },
+    },
+  ],
 
   company: {
     type: String,
@@ -49,8 +64,8 @@ const UserSchema = new mongoose.Schema({
   about: {
     type: String,
   },
-  job:{
-type:String
+  job: {
+    type: String,
   },
   location: {
     type: String,

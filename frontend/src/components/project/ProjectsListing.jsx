@@ -6,15 +6,10 @@ import { useNavigate } from 'react-router-dom';
 import axios from "../../Axios"
 import Navbar from '../user/Navbar';
 
-const projects = [
-  { id: 1, title: 'Individual Project 1', type: 'Individual' },
-  { id: 2, title: 'Individual Project 2', type: 'Individual' },
-  { id: 3, title: 'Group Project 1', type: 'Group' },
-  { id: 4, title: 'Group Project 2', type: 'Group' },
-];
 
 function ProjectsListing() {
   const [projectsData,setProjectsData] = useState([])
+  const [memberProject,setMemberProject] = useState([])
   const navigate = useNavigate()
   const toCreateProject = ()=>{
    navigate('/user/createproject')
@@ -29,6 +24,11 @@ function ProjectsListing() {
     console.log(id +" id of group project")
     navigate(`/user/groupproject?id=${id}`)
   }
+  const toHandleMemberProject = (id)=>{
+    console.log('to group project member view')
+    console.log(id +" id of group project member")
+    navigate(`/user/groupproject/member?id=${id}`)
+  }
   const getProjects = ()=>{
 console.log("get projects");
 axios.get('/user/projectlist',{ headers: { 'x-access-token': localStorage.getItem('token')} }).then((res)=>{
@@ -36,6 +36,7 @@ axios.get('/user/projectlist',{ headers: { 'x-access-token': localStorage.getIte
     console.log(`${res.data.message}`)
     console.log(res.data.projects)
     setProjectsData(res.data.projects)
+    setMemberProject(res.data.memberProjects)
   }
 })
   .catch((error)=>{
@@ -50,7 +51,7 @@ axios.get('/user/projectlist',{ headers: { 'x-access-token': localStorage.getIte
       <Navbar/>
       <Container >
       <Grid container marginTop="70px"spacing={2}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
            <PersonIcon sx={{color:"#999999" ,fontSize: '60px'}}/>
           <Typography variant="h4" sx={{ mt: 2 }}>
             Individual Projects
@@ -69,7 +70,7 @@ axios.get('/user/projectlist',{ headers: { 'x-access-token': localStorage.getIte
               </Card>
             )) :""}
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={4}>
           <Groups3Icon sx={{color:"#999999" ,fontSize: '60px'}}/>
           <Typography variant="h4" sx={{ my: 2 }}>
             Group Projects
@@ -79,6 +80,26 @@ axios.get('/user/projectlist',{ headers: { 'x-access-token': localStorage.getIte
             .map((project) => (
               <Card key={project.id} sx={{ mt: 2 }}>
                 <Box onClick={()=>{toHandleGroupProject(project._id)}} sx={{cursor:"pointer"}}>
+                <CardContent>
+                  <Typography variant="h5">{project.projectname}</Typography>
+                  <Typography variant="subtitle1" color="textSecondary">
+                   {project.description}
+                  </Typography>
+                </CardContent>
+                </Box>
+              </Card>
+            )):""}
+        </Grid>
+        <Grid item xs={12} md={4}>
+          <Groups3Icon sx={{color:"#999999" ,fontSize: '60px'}}/>
+          <Typography variant="h4" sx={{ my: 2 }}>
+            Member Projects
+          </Typography>
+          {memberProject.length?memberProject
+            // .filter((project) => project.type === 'Group')
+            .map((project) => (
+              <Card key={project.id} sx={{ mt: 2 }}>
+                <Box onClick={()=>{toHandleMemberProject(project._id)}} sx={{cursor:"pointer"}}>
                 <CardContent>
                   <Typography variant="h5">{project.projectname}</Typography>
                   <Typography variant="subtitle1" color="textSecondary">

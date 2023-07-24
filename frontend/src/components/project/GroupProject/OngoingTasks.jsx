@@ -48,29 +48,28 @@ function OngoingTasks() {
   return (
     <div>
       <Box display="flex">
-      <GroupSideBar/>
-      <Box flex="1" ml={3}>
-        <Grid container>
-          <Grid item xs={12}>
-    <h1>on going</h1>
-    <TaskCardGroup
-                 onClose={handleModalClose}
-                  tasks={tasks.filter((t)=>t.status==="ongoing")}
-                  users={users.filter((user) => {
-                    // Check if the user email exists in the members array of the projectData
-                    return groupProjectData.members.some(
-                      (member) => member.email === user.email
-                    );
-                  })}
-                  projectId={projectId}
-                
-                />
+        <GroupSideBar />
+        <Box flex="1" ml={3}>
+          <Grid container>
+            <Grid item xs={12}>
+              <h1>on going</h1>
+              <TaskCardGroup
+                onClose={handleModalClose}
+                tasks={tasks.filter((t) => t.status === "ongoing")}
+                users={users.filter((user) => {
+                  // Check if the user email exists in the members array of the projectData
+                  return groupProjectData.members.some(
+                    (member) => member.email === user.email
+                  );
+                })}
+                projectId={projectId}
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        </Box>
       </Box>
-    </Box>
     </div>
-  )
+  );
 }
 
-export default OngoingTasks
+export default OngoingTasks;

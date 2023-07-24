@@ -45,11 +45,11 @@ function AddMembers() {
     // Add more user data objects as needed
   ];
 
-  const handleAddMember = async () => {
+  const handleAddMember =() => {
     console.log(newMember);
     setMembers((prevMembers) => [...prevMembers, newMember]);
     setNewMember("");
-    await axios
+     axios
       .post(
         "/user/project/addmember",
         { user: newMember, projectId },
@@ -67,7 +67,7 @@ function AddMembers() {
     const Id = new URLSearchParams(location.search).get("id");
     console.log(Id + " project Id");
     setProjectId(Id);
-    await axios
+     axios
       .post(
         "/user/project/group",
         { projectId: Id },

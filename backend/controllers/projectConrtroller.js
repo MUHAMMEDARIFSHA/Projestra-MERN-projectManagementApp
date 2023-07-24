@@ -36,11 +36,20 @@ const getProjects = async (req, res) => {
   const user = await User.findOne({ email: email });
   console.log(user._id);
   const projects = await Project.find({ admin: user._id });
+  const memberProjects = await Project.find({
+    "members": {
+      $elemMatch: {
+        "user": { $in: user._id },
+      },
+    },
+  })
   console.log(projects);
+  console.log(memberProjects + "     member Projects")
   try {
     return res.status(200).json({
       success: true,
       projects: projects,
+      memberProjects,
       message: "succesfully taken projects data",
     });
   } catch (error) {
@@ -159,20 +168,28 @@ const getGroupProjectData = async (req, res) => {
 
 const addMember = async (req, res) => {
   console.log("add member");
-  const user = req.body.user;
+  const userData = req.body.user;
   const projectId = req.body.projectId;
-  console.log(user.email, projectId);
-  const project = await Project.findById(projectId);
+  console.log(userData.email, projectId);
+
   try {
+    const project = await Project.findById(projectId);
+    const user = await User.findById(userData._id)
+     console.log(user +" it is the user to add in the group task");
+     
     if (project) {
-      const member = { user: user._id, email: user.email };
+      user.memberProjects.push({projectId:projectId})
+      await user.save()
+      const member = { user: userData._id, email: userData.email };
       project.members.push(member);
       await project.save();
       return res
         .status(200)
         .json({ message: "member added succesfully", projectData: project });
     }
-  } catch (error) {}
+  } catch (error) {
+  return res.status(500).json({success:false,message:"some error occured in the server",error:error})
+  }
 };
 
 const removeMember = async (req, res) => {
@@ -180,9 +197,16 @@ const removeMember = async (req, res) => {
   console.log(req.body.projectId);
   console.log(req.body.memberId);
   const projectId = req.body.projectId;
-  const project = await Project.findById(projectId);
-  const memberData = await User.findById(req.body.memberId);
+
   try {
+    const project = await Project.findById(projectId);
+    const memberData = await User.findById(req.body.memberId);
+      const indexOfProject = memberData.memberProjects.findIndex((p)=>p.projectId.toString() === projectId.toString()) 
+      console.log(indexOfProject +"   index of project");
+      if(indexOfProject !== -1){
+        memberData.memberProjects.splice(indexOfProject,1)
+        await memberData.save()
+      }
     if (project) {
       const member = { user: memberData._id, email: memberData.email };
       const indexToRemove = project.members.findIndex(
@@ -212,7 +236,7 @@ const removeMember = async (req, res) => {
 };
 
 const addMemberToGroup = async (req, res) => {
-  console.log("add member to group ");
+  console.log("add member to group task ");
   const projectId = req.body.projectId;
   const task = req.body.task;
   const members = req.body.members;
