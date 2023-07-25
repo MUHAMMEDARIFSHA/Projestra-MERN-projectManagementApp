@@ -1,11 +1,33 @@
-import React from 'react'
+import React ,{useEffect} from 'react'
 import Sidebar,{SidebarItem} from '../../customItems/Sidebar'
 import { useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import axios from '../../../../Axios'
+import { setUser } from '../../../../features/user/userSlice';
 
 import { CalendarToday, Dashboard,FormatListBulleted,Assignment, Grading, NoteAdd,Groups3} from "@mui/icons-material";
 
 function MemberSidebar() {
     const navigate = useNavigate()
+    const dispatch = useDispatch()
+    const getData = ()=>{
+        console.log("get data");
+        axios.get('/user/getdata',{ headers: { 'x-access-token': localStorage.getItem('token')} }).then((res)=>{
+          if(res.status===200){
+            console.log(res.data.user)
+            dispatch(setUser(res.data.user))
+          }
+        
+        }).catch((error)=>{
+       if(response.error && response.error.status===404){
+        console.log(error.response.data.message)
+       }
+        })
+      }
+    
+      useEffect(()=>{
+       getData()
+      },[])
     const toDashboard = ()=>{
         console.log('Navigate to Dashboard page');
         const Id = new URLSearchParams(location.search).get("id");

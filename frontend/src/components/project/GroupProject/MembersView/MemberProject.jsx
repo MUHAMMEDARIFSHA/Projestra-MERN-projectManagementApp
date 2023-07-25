@@ -1,6 +1,7 @@
 import React from 'react'
 import MemberSidebar from './MemberSidebar'
 import { Box,Grid } from '@mui/material'
+import TaskHandling from './TaskHandling'
 
 function MemberProject() {
   return (
@@ -12,6 +13,7 @@ function MemberProject() {
             <Grid item xs={12}>
               <Grid item alignContent="center" xs={11}>
               <h1>member project</h1>
+<TaskHandling/>
               </Grid>
             </Grid>
           </Grid>

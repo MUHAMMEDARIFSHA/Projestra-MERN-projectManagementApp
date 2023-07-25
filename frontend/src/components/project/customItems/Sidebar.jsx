@@ -2,11 +2,13 @@ import { MoreVertical, ChevronLast, ChevronFirst } from "lucide-react"
 import { useContext, createContext, useState,useEffect } from "react"
 import { useNavigate } from "react-router-dom"
 const SidebarContext = createContext()
+import { useSelector } from "react-redux"
 
-export default function Sidebar({ children,useremail,username }) {
+export default function Sidebar({ children }) {
   const [expanded, setExpanded] = useState(true)
   const [sidebarWidth, setSidebarWidth] = useState(60)
   const navigate = useNavigate()
+  const userData = useSelector((state) => state.userReducer.user);
 
   const toHome =()=>{
     navigate('/home')
@@ -52,8 +54,8 @@ export default function Sidebar({ children,useremail,username }) {
           `}
           >
             <div className="leading-4">
-              <h4 className="font-semibold">{username}</h4>
-              <span className="text-xs text-gray-600">{useremail}</span>
+              <h4 className="font-semibold">{userData.username}</h4>
+              <span className="text-xs text-gray-600">{userData.email}</span>
             </div>
             <MoreVertical size={20} />
           </div>
