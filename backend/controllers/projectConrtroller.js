@@ -267,7 +267,7 @@ const addMemberToGroup = async (req, res) => {
       .json({
         success: true,
         projectData: project,
-        message: "task added succesfully in group projecct",
+        message: "task added succesfully in group project",
       });
   } catch (error) {
     return res
@@ -411,6 +411,30 @@ const removeMemberGroupTask = async (req, res) => {
       });
   }
 };
+const changeStatusOfMember = async(req,res)=>{
+  console.log('change status of the member')
+  console.log(req.body.projectId);
+  console.log(req.body.task );
+  console.log(req.body.status  +"  status");
+  const projectId = req.body.projectId
+  const memberEmail = req.email
+  const task = req.body.task
+  const taskId = task._id
+  const status = req.body.status
+  try{
+     const project  =  await Project.findById(projectId)
+     console.log(project +"  project");
+     console.log(task._id +"   task id 1")
+    //  const toChangeTask = project.tasks.filter((t)=>t.id === task.id)
+    const indexOftask = project.tasks.findIndex((task) => task._id.toString() === taskId);
+     console.log( " task to change ===   " + project.tasks[indexOftask].members.find((m)=>m.email ===memberEmail).status  +" change task");
+     project.tasks[indexOftask].members.find((m)=>m.email ===memberEmail).status = status
+     await project.save()
+     res.status(200).json({success:true,message :"member status updated succesfully",projectData:project})
+  }catch(error){
+    return res.status(500).json({success:false,message:"some server error occured",error:error})
+  }
+}
 module.exports = {
   createProject,
   getProjects,
@@ -424,4 +448,5 @@ module.exports = {
   editGroupTask,
   GroupTaskChangeStatus,
   removeMemberGroupTask,
+  changeStatusOfMember
 };

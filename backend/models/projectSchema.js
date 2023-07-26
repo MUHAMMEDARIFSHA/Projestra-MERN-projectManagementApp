@@ -9,6 +9,7 @@ const taskSchema = new mongoose.Schema({
     required: true,
   },
   members: [
+    
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -17,7 +18,13 @@ const taskSchema = new mongoose.Schema({
       email: {
         type: String,
       },
+      status: {
+        type: String,
+        enum: ["ongoing", "completed", "to-do"],
+        default: "to-do",
+      },
     },
+    
   ],
   start_date: {
     type: Date,
