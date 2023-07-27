@@ -33,8 +33,11 @@ const style = {
     outline: "none", // Remove the black border
     boxShadow: 24,
   };
-function MemberModal({ open, onClose, taskData,projectId }) {
-  
+function MemberModal({ open, onClose, taskData,projectId ,project}) {
+  const closeModal = () => {
+    console.log(" inside the close modal");
+    onClose({ success: true ,projectData:project, message: 'Modal closed without changes' });
+  }
     const changeStatusMember = (value)=>{
         console.log("change status of the member task");
         console.log(value);
@@ -44,14 +47,24 @@ function MemberModal({ open, onClose, taskData,projectId }) {
             if(res.status === 200){
                 console.log(res.data.message)
                 console.log(res.data.projectData)
+                onClose({ success: true,projectData:res.data.projectData ,message: "Task added successfully from modal" });
+              
             }
+        }).catch((error)=>{
+
         })
     }
+    const handleBackdropClick = (event) => {
+      if (event.target === event.currentTarget) {
+        closeModal();
+      }
+    };
 
   return (
     <Modal
     open={open}
-     onClose={onClose}
+     onClose={closeModal}
+     BackdropProps={{ onClick: handleBackdropClick }}
     aria-labelledby="modal-modal-title"
     aria-describedby="modal-modal-description"
   >
@@ -202,7 +215,22 @@ function MemberModal({ open, onClose, taskData,projectId }) {
       paddingX={2}
       my={2}
     >
-        
+         <Box m={1} borderRadius='20px'  bgcolor={'#FFA500'}>
+        <Button 
+        onClick={()=>{changeStatusMember('to-do')}}
+         sx={{
+            fontWeight: 'bold',
+            textTransform: 'uppercase',
+            padding: '8px 16px',
+            boxShadow: 'none',
+          }}
+          style={{ borderRadius:'5px', backgroundColor: 'red' }}
+          variant="contained"
+          disableElevation
+        >
+          To-Do
+        </Button>
+      </Box>
       <Box m={1} borderRadius='20px'  bgcolor={'#FFA500'}>
         <Button 
         onClick={()=>{changeStatusMember('ongoing')}}
