@@ -26,6 +26,7 @@ import MemberDashboard from "./components/project/GroupProject/MembersView/Membe
 import MemberCompleted from "./components/project/GroupProject/MembersView/MemberCompleted";
 import MemberOngoing from "./components/project/GroupProject/MembersView/MemberOngoing";
 import MemberTask from "./components/project/GroupProject/MembersView/MemberTask";
+import ChatPage from "./components/project/GroupProject/Chat/ChatPage";
 // Public Routes
 import UserPublicRoutes from "./routesTypes/UserPublicRoute";
 import AdminPublicRoutes from "./routesTypes/AdminPublicRoute";
@@ -71,12 +72,20 @@ function AppRoutes() {
             path="/user/groupproject/completed"
             element={<CompletedTasks />}
           />
+            <Route
+            path="/user/groupproject/chat"
+            element={<ChatPage />}
+          />
+
+          {/* Member Routes */}
            <Route path="/user/groupproject/member" element={<MemberProject />} />
            <Route path='/user/groupproject/member/dashboard' element={<MemberDashboard/>}/>
            <Route path='/user/groupproject/member/project' element={<MemberProject/>}/>
            <Route path='/user/groupproject/member/task' element={<MemberTask/>}/>
            <Route path='/user/groupproject/member/ongoing' element={<MemberOngoing/>}/>
            <Route path='/user/groupproject/member/completed' element={<MemberCompleted/>}/>
+           {/* Member Routes  */}
+      
         </Route>
 
         <Route element={<AdminPublicRoutes />}>

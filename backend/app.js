@@ -10,6 +10,7 @@ const cookieSession = require("cookie-session")
 
 const userRouter = require("./routes/userRoutes");
 const adminRouter = require('./routes/adminRoutes')
+const messageRouter = require('./routes/messageRouter')
 
 // .env file
 dotenv.config();
@@ -38,6 +39,7 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // / creating the routes
+app.use('/messages',messageRouter)
 app.use("/", userRouter);
 app.use("/admin",adminRouter)
 
