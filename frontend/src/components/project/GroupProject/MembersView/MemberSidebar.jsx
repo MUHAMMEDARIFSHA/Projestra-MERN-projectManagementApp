@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import axios from '../../../../Axios'
 import { setUser } from '../../../../features/user/userSlice';
+import ChatIcon from '@mui/icons-material/Chat';
 
 import { CalendarToday, Dashboard,FormatListBulleted,Assignment, Grading, NoteAdd,Groups3} from "@mui/icons-material";
 
@@ -58,6 +59,12 @@ function MemberSidebar() {
             console.log(Id + " project Id");
         navigate(`/user/groupproject/member/completed?id=${Id}`);
     }
+    const toChat = ()=>{
+        console.log(" to chat")
+        const Id = new URLSearchParams(location.search).get("id");
+        console.log(Id + " project Id");
+        navigate(`/user/groupproject/chat?id=${Id}`)
+      }
     
   return (
     <div>
@@ -67,6 +74,7 @@ function MemberSidebar() {
     <SidebarItem onClick={toTask} icon={<Assignment size={20}/>} text={"Your task"}/>
     <SidebarItem onClick={toOngoing} icon={<FormatListBulleted size={20}/>} text={"Ongoing"}/>
     <SidebarItem onClick={toCompleted} icon={< Grading size={20}/>} text={"Completed"}/>
+    <SidebarItem onClick={toChat} icon={<ChatIcon size={20}/>} text={'Chat'}/>
         </Sidebar>
       
     </div>

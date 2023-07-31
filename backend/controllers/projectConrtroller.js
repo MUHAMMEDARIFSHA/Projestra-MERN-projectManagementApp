@@ -1,6 +1,6 @@
 const Project = require("../models/projectSchema");
 const User = require("../models/userSchema");
-
+const Chat = require('../models/chatSchema')
 const createProject = async (req, res) => {
   console.log("create project");
   const projectData = req.body.projectData;
@@ -10,6 +10,17 @@ const createProject = async (req, res) => {
   const { projectname, type, startdate, enddate, description, teamlead } =
     req.body.projectData;
   try {
+
+    if(type === 'Group'){
+      console.log(" it is a group project we want to create a chat")
+      var groupChat = await Chat.create({
+        chatName: projectname,
+        isGroupChat: true,
+        groupAdmin: user._id,
+      });
+}
+  
+
     const newProject = await new Project({
       projectname: projectname,
       type: type,
@@ -17,7 +28,17 @@ const createProject = async (req, res) => {
       start_date: startdate,
       end_date: enddate,
       admin: user._id,
+      chatId:groupChat._id
     }).save();
+try {
+  groupChat.groupId = newProject._id
+  console.log(groupChat)
+  await groupChat.save()
+
+} catch (error) {
+  res.status(500).json({message:"some server error"})
+}
+   
     const projectId = await newProject._id;
     user.projects.push({ projectId });
     await user.save();
@@ -145,8 +166,8 @@ const getGroupProjectData = async (req, res) => {
       email: { $ne: userEmail },
       isBlocked: false,
     });
-    console.log(users + " users");
-    console.log(project);
+    // console.log(users + " users");
+    // console.log(project);
     if (project) {
       return res.status(200).json({
         success: true,
@@ -167,7 +188,7 @@ const getGroupProjectData = async (req, res) => {
 };
 
 const addMember = async (req, res) => {
-  console.log("add member");
+  console.log("add member to group (not task)");
   const userData = req.body.user;
   const projectId = req.body.projectId;
   console.log(userData.email, projectId);
@@ -176,6 +197,14 @@ const addMember = async (req, res) => {
     const project = await Project.findById(projectId);
     const user = await User.findById(userData._id)
      console.log(user +" it is the user to add in the group task");
+     const chatId = project.chatId
+     let chat = await Chat.findById(chatId)
+     try {
+      chat.users.push(user._id)
+      chat.save()
+     } catch (error) {
+      console.log(error)
+     }
      
     if (project) {
       user.memberProjects.push({projectId:projectId})

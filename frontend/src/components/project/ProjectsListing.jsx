@@ -46,7 +46,7 @@ axios.get('/user/projectlist',{ headers: { 'x-access-token': localStorage.getIte
    getProjects()
   },[])
   return (
-<div style={{background: 'linear-gradient(to right, #007BFF, #00BFA5)', height: "100vh"}}>
+<div style={{background: 'linear-gradient(to right, #007BFF, #00BFA5)'}}>
 
       <Navbar/>
       <Container >

@@ -7,10 +7,10 @@ const dotenv = require("dotenv");
 const db = require("./database/mongoDb");
 const passport = require("passport")
 const cookieSession = require("cookie-session")
-
+const io = require('./socket/socket')
 const userRouter = require("./routes/userRoutes");
 const adminRouter = require('./routes/adminRoutes')
-const messageRouter = require('./routes/messageRouter')
+const chatRouter = require('./routes/chatRouter')
 
 // .env file
 dotenv.config();
@@ -39,10 +39,12 @@ const corsOptions = {
 app.use(cors(corsOptions));
 
 // / creating the routes
-app.use('/messages',messageRouter)
+app.use('/chat',chatRouter)
 app.use("/", userRouter);
 app.use("/admin",adminRouter)
 
 // listening to the port
 const PORT = process.env.PORT || 5001;
-app.listen(PORT, () => console.log(`server conected to ${PORT}`));
+const server = app.listen(PORT, () => console.log(`server conected to ${PORT}`));
+io.attach(server)
+

@@ -3,6 +3,7 @@ import GroupSideBar from '../GroupSideBar'
 import { Box,Grid } from '@mui/material'
 import ChatUI from './ChatUI'
 function ChatPage() {
+  
   return (
     <>
           <Box display="flex">

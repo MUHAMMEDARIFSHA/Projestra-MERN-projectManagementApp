@@ -1,4 +1,8 @@
-import * as React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "../../../../Axios";
+
+import { isSameSender, isLastMessage } from "./ChatLogics";
+import { useLocation } from "react-router-dom";
 import {
   Box,
   TextField,
@@ -7,28 +11,111 @@ import {
   Avatar,
   Grid,
   Paper,
+  Skeleton,
 } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-
-const messages = [
-  { id: 1, text: "Hi there!", sender: "bot" },
-  { id: 2, text: "Hello!", sender: "user" },
-  { id: 3, text: "How can I assist you today?", sender: "bot" },
-];
+import { useSelector } from "react-redux";
+import io from 'socket.io-client'
+const ENDPOINT = 'http://localhost:5000/'
+var socket,selectedChatCompare
 
 const ChatUI = () => {
-  const [input, setInput] = React.useState("");
+  const [groupProjectData, setGroupProjectData] = useState({});
+  const [projectId, setProjectId] = useState("");
+  const [loggedUser, setLoggedUser] = React.useState("initialState");
+  const [users, setUsers] = useState("");
+  const location = useLocation();
+  const userData = useSelector((state) => state.userReducer.user);
+  // for messages
+  const [chatId, setChatId] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [newMessage, setNewMessage] = useState();
+  useEffect(() => {
+    getProjectData();
+  }, []);
 
-  const handleSend = () => {
-    if (input.trim() !== "") {
-      console.log(input);
-      setInput("");
+  const getProjectData = async () => {
+    const Id = new URLSearchParams(location.search).get("id");
+    console.log(Id + " project Id");
+    setProjectId(Id);
+    axios
+      .post(
+        "/user/project/group",
+        { projectId: Id },
+        { headers: { "x-access-token": localStorage.getItem("token") } }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(`${res.data.message}`);
+          console.log(res.data.projectData + " in add members");
+          setGroupProjectData(res.data.projectData);
+          console.log(res.data.usersData + "users data");
+          setUsers(res.data.usersData);
+          console.log(res.data.projectData.chatId + " chat id");
+          setChatId(res.data.projectData.chatId);
+          //   setTasks(res.data.projectData.tasks);
+        }
+      })
+      .catch((error) => {});
+  };
+
+  const getMessageData = () => {
+    console.log("get chat data messages");
+    setLoading(true);
+    axios
+      .post(
+        `/chat/message/getdata`,
+        { chatId },
+        { headers: { "x-access-token": localStorage.getItem("token") } }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res.data.messageData);
+          setMessages(res.data.messageData); // Ensure res.data.messageData is an array
+          setLoading(false);
+        }
+      })
+      .catch((err) => {
+        // Handle error
+      });
+  };
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    console.log(newMessage);
+    setNewMessage("");
+    setLoading(true);
+    if (newMessage !== "") {
+      axios
+        .post(
+          "/chat/message",
+          { content: newMessage, chatId: groupProjectData.chatId },
+          { headers: { "x-access-token": localStorage.getItem("token") } }
+        )
+        .then((res) => {
+          if (res.status === 200) {
+            console.log("message saved succesfully");
+            console.log(res.data);
+            setMessages((prevMessages) => [...prevMessages, res.data]);
+            setLoading(false);
+          }
+        })
+        .catch((err) => {});
     }
   };
 
   const handleInputChange = (event) => {
-    setInput(event.target.value);
+    setNewMessage(event.target.value);
   };
+
+  useEffect(() => {
+    getMessageData();
+  }, [chatId]);
+
+  useEffect(()=>{
+  socket = io(ENDPOINT)
+  },[])
 
   return (
     <Box
@@ -42,9 +129,58 @@ const ChatUI = () => {
       }}
     >
       <Box sx={{ flexGrow: 1, overflow: "auto", p: 2 }}>
-        {messages.map((message) => (
-          <Message key={message.id} message={message} />
-        ))}
+        {messages &&
+          messages.map((message, index) => {
+            const isUser = message.sender?._id === userData._id;
+            return loading ? (
+              <Typography variant="h1">
+                {loading ? <Skeleton /> : "h1"}
+              </Typography>
+            ) : (
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: isUser ? "flex-end" : "flex-start",
+                  mb: 2,
+                }}
+              >
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: isUser ? "row-reverse" : "row",
+                    alignItems: "center",
+                  }}
+                >
+                  {(isSameSender(messages, message, index, userData._id) ||
+                    isLastMessage(messages, index, userData._id)) && (
+                    <Avatar
+                      src={message.sender?.profilePicture}
+                      sx={{
+                        bgcolor: isUser ? "primary.main" : "secondary.main",
+                      }}
+                    ></Avatar>
+                  )}
+
+                  <Paper
+                    variant="outlined"
+                    sx={{
+                      p: 1,
+                      ml: isUser ? 0 : 1,
+                      mr: isUser ? 1 : 0,
+                      backgroundColor: isUser
+                        ? "primary.light"
+                        : "secondary.light",
+                      borderRadius: isUser
+                        ? "15px 15px 1px 15px "
+                        : "15px 15px 15px 1px",
+                    }}
+                  >
+                    <Typography variant="body1"> {message.content}</Typography>
+                  </Paper>
+                </Box>
+              </Box>
+            );
+          })}
       </Box>
       <Box sx={{ p: 2, backgroundColor: "background.default" }}>
         <Grid container spacing={2}>
@@ -54,7 +190,7 @@ const ChatUI = () => {
               fullWidth
               placeholder="Type a message"
               variant="outlined"
-              value={input}
+              value={newMessage}
               onChange={handleInputChange}
             />
           </Grid>
@@ -65,7 +201,6 @@ const ChatUI = () => {
               fullWidth
               variant="contained"
               sx={{
-                
                 borderRadius: "3px",
                 height: "40px",
                 fontWeight: "700",
@@ -76,44 +211,6 @@ const ChatUI = () => {
             </Button>
           </Grid>
         </Grid>
-      </Box>
-    </Box>
-  );
-};
-
-const Message = ({ message }) => {
-  const isBot = message.sender === "bot";
-
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: isBot ? "flex-start" : "flex-end",
-        mb: 2,
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: isBot ? "row" : "row-reverse",
-          alignItems: "center",
-        }}
-      >
-        <Avatar sx={{ bgcolor: isBot ? "primary.main" : "secondary.main" }}>
-          {isBot ? "B" : "U"}
-        </Avatar>
-        <Paper
-          variant="outlined"
-          sx={{
-            p: 2,
-            ml: isBot ? 1 : 0,
-            mr: isBot ? 0 : 1,
-            backgroundColor: isBot ? "primary.light" : "secondary.light",
-            borderRadius: isBot ? "20px 20px 20px 5px" : "20px 20px 5px 20px",
-          }}
-        >
-          <Typography variant="body1">{message.text}</Typography>
-        </Paper>
       </Box>
     </Box>
   );

@@ -8,8 +8,8 @@ const taskSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  members: [
-    
+ 
+members: [
     {
       user: {
         type: mongoose.Schema.Types.ObjectId,
@@ -24,15 +24,12 @@ const taskSchema = new mongoose.Schema({
         default: "to-do",
       },
     },
-    
   ],
   start_date: {
     type: Date,
-   
   },
   end_date: {
     type: Date,
-   
   },
   status: {
     type: String,
@@ -59,6 +56,10 @@ const projectSchema = new mongoose.Schema({
     required: true,
     default: "Indivitual",
   },
+  chatId: {
+    type: mongoose.Schema.Types.ObjectId,
+    red: "Chat",
+  },
   end_date: {
     type: Date,
     required: true,
@@ -83,7 +84,7 @@ const projectSchema = new mongoose.Schema({
       ref: "User",
     },
   ],
- 
+
   members: [
     {
       user: {
@@ -101,5 +102,3 @@ const projectSchema = new mongoose.Schema({
 const Project = mongoose.model("Project", projectSchema);
 
 module.exports = Project;
-
-

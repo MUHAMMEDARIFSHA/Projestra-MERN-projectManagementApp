@@ -13,7 +13,7 @@ const chatModal = mongoose.Schema(
     users: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
+         ref: "User",
       },
     ],
     latestMessage: {
@@ -24,6 +24,10 @@ const chatModal = mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
     },
+    groupId:{
+      type:mongoose.Schema.Types.ObjectId,
+      ref:"Project"
+    }
   },
   {
     timestamps: true,
