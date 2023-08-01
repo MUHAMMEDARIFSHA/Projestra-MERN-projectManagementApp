@@ -1,8 +1,8 @@
 import { React, useState, useEffect } from "react";
-import axios from "../../Axios";
-import { setUser } from "../../features/user/userSlice";
+// import axios from "../../Axios";
+// import { setUser } from "../../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
-import { userClearAuth } from "../../features/user/userAuthSlice";
+// import { userClearAuth } from "../../features/user/userAuthSlice";
 import { useDispatch, useSelector } from "react-redux";
 
 import AppBar from "@mui/material/AppBar";
@@ -21,10 +21,11 @@ import AdbIcon from "@mui/icons-material/Adb";
 import Person2Icon from "@mui/icons-material/Person2";
 import { ListItemIcon } from "@mui/material";
 import LogoutIcon from '@mui/icons-material/Logout';
+import SignArea from "./SignArea";
 
 const pages = ["Products", "Pricing", "Blog"];
 
-function Navbar() {
+function NavbarBeforeSignIn() {
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -59,37 +60,37 @@ function Navbar() {
   const profileImage = useSelector(
     (state) => state.userReducer.user.profilePicture
   );
-  const getData = () => {
-    console.log("get data");
-    axios
-      .get("/user/getdata", {
-        headers: { "x-access-token": localStorage.getItem("token") },
-      })
-      .then((res) => {
-        if (res.status === 200) {
-          console.log(res.data.user);
-          dispatch(setUser(res.data.user));
-        }
-      })
-      .catch((error) => {
-        if (response.error && response.error.status === 404) {
-          console.log(error.response.data.message);
-        }
-      });
-  };
+//   const getData = () => {
+//     console.log("get data");
+//     axios
+//       .get("/user/getdata", {
+//         headers: { "x-access-token": localStorage.getItem("token") },
+//       })
+//       .then((res) => {
+//         if (res.status === 200) {
+//           console.log(res.data.user);
+//           dispatch(setUser(res.data.user));
+//         }
+//       })
+//       .catch((error) => {
+//         if (response.error && response.error.status === 404) {
+//           console.log(error.response.data.message);
+//         }
+//       });
+//   };
 
-  useEffect(() => {
-    getData();
-  }, []);
+//   useEffect(() => {
+//     getData();
+//   }, []);
 
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar
         position="fixed"
         className="navbar"
-        sx={{ height: "60px", backgroundColor: "white" }}
+        sx={{ height: "60px", backgroundColor: "white"  }}
       >
-        <Container maxWidth="xl">
+        
           <Toolbar disableGutters>
             <Box
               component="img"
@@ -152,45 +153,22 @@ function Navbar() {
               Projestra
             </Typography>
 
-            <Box sx={{ flexGrow: 1 }} />
-            {/* <Box>
-              <Typography color="black">hi {username}</Typography>
-            </Box> */}
-            
-            <Box sx={{ display: "flex", alignItems: "center" }}>
-              <Avatar
-                alt="User Avatar"
-                src={profileImage}
-                onClick={handleMenuOpen}
-                sx={{ cursor: "pointer", marginRight: 1 }}
-              />
-              <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={handleMenuClose}
-              >
-                <MenuItem onClick={handleProfile}>
-                  {/* ListItemIcon to display the icon */}
-                  <ListItemIcon>
-                    <Person2Icon />
-                  </ListItemIcon>
-                  {/* The text label */}
-                  <Typography fontWeight={600}>Profile</Typography>
-                </MenuItem>
-                
-                <MenuItem onClick={handleLogout}>
-                <ListItemIcon>
-                    <LogoutIcon />
-                  </ListItemIcon>
-                  <Typography fontWeight={600}>Logout</Typography>
-                </MenuItem>
-              </Menu>
+            <Box sx={{ flexGrow: 1 , m: 0, p: 0 }} />
+            <Box>
+              <Typography color="black">before login</Typography>
             </Box>
+      
+
+<SignArea/>
+          
+
+           
           </Toolbar>
-        </Container>
+   
       </AppBar>
     </Box>
   );
 }
 
-export default Navbar;
+export default NavbarBeforeSignIn;
+

@@ -3,8 +3,9 @@ import React from "react";
 import Navbar from "../Navbar";
 import styles from "../../../styles/home.module.css";
 import CustomCard from "../../customItems/CustomCard";
-
-
+import BottomBar from "./BottomBar";
+import FourCardComponent from "./FourCardComponent";
+import TwoBoxComponent from "./TwoBoxComponent";
 
 import {
   Box,
@@ -91,7 +92,7 @@ function HomeAfterSignIn() {
             <Grid container justifyContent={"center"}>
               <Typography
                 item
-                sx={{ fontSize: "50px", fontWeight: 550, marginTop: 7 }}
+                sx={{ fontSize: "45px", fontWeight: 550, marginTop: 7 }}
               >
                 Choose your project type...!
               </Typography>
@@ -160,7 +161,8 @@ function HomeAfterSignIn() {
 
         <Box
           sx={{
-            background: "linear-gradient(to bottom, rgba(255,255,255,1), rgba(0,0,0,0.5))",
+            background:
+              "linear-gradient(to bottom, rgba(255,255,255,1), rgba(0,0,0,0.5))",
             height: "550px",
             width: "100vw",
             display: "flex",
@@ -171,34 +173,43 @@ function HomeAfterSignIn() {
           }}
         >
           <Container>
-          <Grid>
-            <Typography variant="h3" fontWeight={500}  sx={{mt:4}} >
-            Easy to manage....!
-            </Typography>
-            <Typography variant="h3" fontWeight={500} sx={{mt:3}} >
-            Now using Projestro you can manage<br/>
-             a large team easily.
-            </Typography>
-          </Grid>
-          <Grid  display="flex" justifyContent="space-between">
-          <CustomCard 
-          title="Free"
-          description="Small individual projects are free."
-          backgroundColor="#4C9AFF"/>
-             <CustomCard 
-          title="Gold"
-          description="Small Group projects.
+            <Grid>
+              <Typography variant="h4" fontWeight={500} sx={{ mt: 4 }}>
+                Easy to manage....!
+              </Typography>
+              <Typography variant="h4" fontWeight={500} sx={{ mt: 3 }}>
+                Now using Projestro you can manage
+                <br />a large team easily.
+              </Typography>
+            </Grid>
+            <Grid display="flex" justifyContent="space-between">
+              <CustomCard
+                title="Free"
+                description="Small individual projects are free."
+                backgroundColor="#4C9AFF"
+              />
+              <CustomCard
+                title="Gold"
+                description="Small Group projects.
           Enables group chat and other features."
-          backgroundColor="#E19325"/>
-             <CustomCard 
-          title="Platinum"
-          description="Large Group projects.
+                backgroundColor="#E19325"
+              />
+              <CustomCard
+                title="Platinum"
+                description="Large Group projects.
           Unlocks all features.
           Enables individual calls."
-          backgroundColor="#838080"/>
-          </Grid>
-              </Container>
+                backgroundColor="#838080"
+              />
+            </Grid>
+          </Container>
         </Box>
+
+<FourCardComponent/>
+<TwoBoxComponent/>
+        <BottomBar />
+
+
       </Stack>
     </>
   );

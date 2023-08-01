@@ -17,6 +17,7 @@ const createProject = async (req, res) => {
         chatName: projectname,
         isGroupChat: true,
         groupAdmin: user._id,
+        users: [user._id]
       });
 }
   
