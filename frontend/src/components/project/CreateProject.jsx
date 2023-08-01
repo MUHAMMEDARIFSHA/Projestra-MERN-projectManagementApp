@@ -150,7 +150,7 @@ function CreateProject() {
                   <MenuItem value="Group">Group Project </MenuItem>
                 </Select>
               </Grid>
-              {projectData.type === "Group" ? (
+              {/* {projectData.type === "Group" ? (
                 <Grid item xs={12} sm={6} md={6}>
                   <Autocomplete
                     freeSolo
@@ -172,7 +172,7 @@ function CreateProject() {
                 </Grid>
               ) : (
                 ""
-              )}
+              )} */}
 
               <Button
                 type="submit"

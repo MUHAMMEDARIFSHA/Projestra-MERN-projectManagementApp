@@ -1,11 +1,23 @@
 import React from 'react'
 import { Box,Button } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 function SignArea() {
+  const navigate = useNavigate()
+  const toSignIn = ()=>{
+  navigate('/signin')
+  }
+
+  const toSignUp = ()=>{
+    navigate('/signup')
+  }
+
+
   return (
     <>
       
       <Box sx={{ m: 0, p: 0 }}>
             <Button
+            onClick={toSignIn}
                 fullWidth
               sx={{
                   height: "50px",
@@ -21,7 +33,8 @@ function SignArea() {
               </Button>
             </Box>
             <Box sx={{ m: 0, p: 0 }}>
-            <Button
+            <Button 
+            onClick={toSignUp}
                 fullWidth
                 variant="contained"
                 sx={{

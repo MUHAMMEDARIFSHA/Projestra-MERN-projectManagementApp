@@ -50,10 +50,10 @@ function BottomBar() {
         left: 0,
       }}
     >
-      <Grid container spacing={4}>
+      <Grid container m={1} spacing={4}>
         {" "}
         {/* Add spacing between grid items */}
-        <Grid item xs={12} md={2} ml={15} display="flex" flexDirection="column">
+        <Grid item xs={12} md={2} ml={15}  display="flex" flexDirection="column">
           {" "}
           {/* Adjusted xs and md values */}
           <Typography
@@ -118,19 +118,15 @@ function BottomBar() {
           <Divider component="li" />
         </Grid>
         <Grid container spacing={0} alignItems={"center"} mt={3} mb={2}>
-          <Grid item ml={15} xs={3} md={3} display="flex" flexDirection="row">
+          <Grid item ml={15} xs={6} md={3} display="flex" flexDirection="row">
             <Typography variant="h6" fontWeight={500}>
               © 2023 Projestra. All rights reserved.
             </Typography>
           </Grid>
-          <Grid item xs={2} md={2} display="flex" flexDirection="row">
-            <Typography variant="body1" fontWeight={500}>
-              Privacy & Policy
-            </Typography>
-          </Grid>
-
+         
           <Grid
             item
+            m={1}
             xs={4}
             md={2}
             ml={5}
@@ -151,3 +147,4 @@ function BottomBar() {
 }
 
 export default BottomBar;
+

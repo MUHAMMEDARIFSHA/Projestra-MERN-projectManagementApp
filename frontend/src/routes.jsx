@@ -40,6 +40,7 @@ function AppRoutes() {
     <Router>
       <Routes>
         <Route element={<UserPublicRoutes />}>
+        <Route path="/" element={<HomeBeforeSignIn />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup/otp" element={<Otp />} />
@@ -47,11 +48,12 @@ function AppRoutes() {
             path="/user/:id/verify/:token/editpassword"
             element={<EditPassword />}
           />
+          
         </Route>
 
         <Route element={<UserProtectedRoutes />}>
-          <Route path="/" element={<HomeBeforeSignIn />} />
-          <Route path="/home" element={<HomeAfterSignIn />} />
+        
+          <Route path="/home" element={< HomeAfterSignIn/>} />
           <Route path="/user/profile" element={<UserProfile />} />
           <Route path="/user/profile/edit" element={<ProfileEdit />} />
           <Route path="/user/createproject" element={<CreateProject />} />
@@ -61,7 +63,7 @@ function AppRoutes() {
           />
           <Route path="/user/projects" element={<ProjectsListing />} />
           <Route path="/user/groupproject" element={<GroupProject />} />
-         
+
           <Route path="/user/project/addmembers" element={<AddMembers />} />
           <Route
             path="/user/groupproject/project"
@@ -72,20 +74,31 @@ function AppRoutes() {
             path="/user/groupproject/completed"
             element={<CompletedTasks />}
           />
-            <Route
-            path="/user/groupproject/chat"
-            element={<ChatPage />}
-          />
+          <Route path="/user/groupproject/chat" element={<ChatPage />} />
 
           {/* Member Routes */}
-           <Route path="/user/groupproject/member" element={<MemberProject />} />
-           <Route path='/user/groupproject/member/dashboard' element={<MemberDashboard/>}/>
-           <Route path='/user/groupproject/member/project' element={<MemberProject/>}/>
-           <Route path='/user/groupproject/member/task' element={<MemberTask/>}/>
-           <Route path='/user/groupproject/member/ongoing' element={<MemberOngoing/>}/>
-           <Route path='/user/groupproject/member/completed' element={<MemberCompleted/>}/>
-           {/* Member Routes  */}
-      
+          <Route path="/user/groupproject/member" element={<MemberProject />} />
+          <Route
+            path="/user/groupproject/member/dashboard"
+            element={<MemberDashboard />}
+          />
+          <Route
+            path="/user/groupproject/member/project"
+            element={<MemberProject />}
+          />
+          <Route
+            path="/user/groupproject/member/task"
+            element={<MemberTask />}
+          />
+          <Route
+            path="/user/groupproject/member/ongoing"
+            element={<MemberOngoing />}
+          />
+          <Route
+            path="/user/groupproject/member/completed"
+            element={<MemberCompleted />}
+          />
+          {/* Member Routes  */}
         </Route>
 
         <Route element={<AdminPublicRoutes />}>

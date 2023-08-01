@@ -4,6 +4,7 @@ import { setUser } from "../../features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import { userClearAuth } from "../../features/user/userAuthSlice";
 import { useDispatch, useSelector } from "react-redux";
+import SignArea from '../../components/user/HomePage/SignArea'
 
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
@@ -55,9 +56,9 @@ function Navbar() {
   const handleProfile = () => {
     navigate("/user/profile");
   };
-  const username = useSelector((state) => state.userReducer.user.username);
-  const profileImage = useSelector(
-    (state) => state.userReducer.user.profilePicture
+  
+  const userData = useSelector(
+    (state) => state.userReducer.user
   );
   const getData = () => {
     console.log("get data");
@@ -156,11 +157,10 @@ function Navbar() {
             {/* <Box>
               <Typography color="black">hi {username}</Typography>
             </Box> */}
-            
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            {userData? <Box sx={{ display: "flex", alignItems: "center" }}>
               <Avatar
                 alt="User Avatar"
-                src={profileImage}
+                src={userData.profilePicture}
                 onClick={handleMenuOpen}
                 sx={{ cursor: "pointer", marginRight: 1 }}
               />
@@ -185,7 +185,9 @@ function Navbar() {
                   <Typography fontWeight={600}>Logout</Typography>
                 </MenuItem>
               </Menu>
-            </Box>
+            </Box>: <SignArea/>}
+           
+          
           </Toolbar>
         </Container>
       </AppBar>
