@@ -31,6 +31,7 @@ const UserSchema = new mongoose.Schema({
 
   profilePicture: {
     type: String,
+    default :"https://www.pngitem.com/pimgs/m/581-5813504_avatar-dummy-png-transparent-png.png"
   },
   projects: [
     {

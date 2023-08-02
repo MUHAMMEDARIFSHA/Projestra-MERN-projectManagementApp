@@ -8,8 +8,8 @@ function ProjectSidebar() {
   return (
     <Sidebar>
     <SidebarItem icon={<BarChart3 size={20}/>} text="Project"/>
-    <SidebarItem icon={<Trash size={20}/>} text="Trash"/>
-    <SidebarItem icon={<NoteAdd size={20}/>} text="Quick Notes"/>
+    {/* <SidebarItem icon={<Trash size={20}/>} text="Trash"/> */}
+    {/* <SidebarItem icon={<NoteAdd size={20}/>} text="Quick Notes"/> */}
     {/* <SidebarItem icon={<BarChart3 size={20}/>} text="Project"/> */}
  
 </Sidebar>

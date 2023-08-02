@@ -56,6 +56,9 @@ function Navbar() {
   const handleProfile = () => {
     navigate("/user/profile");
   };
+  const toHome = ()=>{
+    navigate('/home')
+  }
   
   const userData = useSelector(
     (state) => state.userReducer.user
@@ -94,6 +97,7 @@ function Navbar() {
           <Toolbar disableGutters>
             <Box
               component="img"
+              onClick={toHome}
               sx={{
                 height: 60,
                 width: 60,

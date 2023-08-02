@@ -9,8 +9,10 @@ const createProject = async (req, res) => {
   console.log(projectData, userEmail);
   const { projectname, type, startdate, enddate, description, teamlead } =
     req.body.projectData;
-  try {
 
+
+  try {
+    console.log(projectname)
     if(type === 'Group'){
       console.log(" it is a group project we want to create a chat")
       var groupChat = await Chat.create({
@@ -29,18 +31,15 @@ const createProject = async (req, res) => {
       start_date: startdate,
       end_date: enddate,
       admin: user._id,
-      chatId:groupChat._id
+      chatId: groupChat ? groupChat._id : undefined 
     }).save();
-try {
-  groupChat.groupId = newProject._id
-  console.log(groupChat)
-  await groupChat.save()
-
-} catch (error) {
-  res.status(500).json({message:"some server error"})
-}
-   
-    const projectId = await newProject._id;
+    console.log("project saved first");
+    if (groupChat && groupChat.groupId === newProject._id) {
+      console.log(groupChat);
+      await groupChat.save();
+    }
+    
+   const projectId =  newProject._id;
     user.projects.push({ projectId });
     await user.save();
     console.log("project save");
@@ -48,7 +47,9 @@ try {
     return res
       .status(200)
       .json({ success: true, message: "project created succesfully" });
-  } catch (error) {}
+  } catch (error) {
+    return res.status(500)
+  }
 };
 
 const getProjects = async (req, res) => {
@@ -465,6 +466,61 @@ const changeStatusOfMember = async(req,res)=>{
     return res.status(500).json({success:false,message:"some server error occured",error:error})
   }
 }
+const deleteProject =async (req,res)=>{
+  console.log('delete project');
+  const projectId = req.body.projectId
+  console.log(projectId);
+  try {
+  const project=  await Project.findById(projectId)
+    console.log(project);
+    await Project.deleteOne({_id:projectId})
+    return res.status(200).json({message:'project deleted'})
+  } catch (error) {
+    return res.status(500).json({message:"some server error occures"})
+  }
+}
+
+const changeStatusOfProject = async(req,res)=>{
+  console.log('change status of project')
+  const newStatus = req.body.status
+  const projectId = req.body.projectId
+  console.log(newStatus , projectId);
+  try {
+    await Project.updateOne({_id:projectId},{$set:{status:newStatus}})
+    const project = await Project.findById(projectId)
+    return res.status(200).json({success:true, projectData:project,message:"project status changed"})
+  } catch (error) {
+    return res.status(500).json({message:"some internal server error"})
+  }
+  
+}
+
+const deleteTask = async(req,res)=>{
+  console.log('delete task')
+  const projectId = req.body.projectId
+  const taskId = req.body.taskId
+  console.log(projectId , taskId);
+
+  try {
+    const project = await Project.findById(projectId);
+    if (project) {
+      const existingTaskIndex = project.tasks.findIndex(
+        (t) => t._id.toString() === taskId
+      );
+    
+      if (existingTaskIndex !== -1) {
+        // Task exists in the array, remove it
+        project.tasks.splice(existingTaskIndex, 1);
+        await project.save();
+        return res.status(200).json({message:"task deleted succesfully",projectData : project})
+    }}
+    else{
+      console.log('task not found');
+    }
+  } catch (error) {
+    
+  }
+}
 module.exports = {
   createProject,
   getProjects,
@@ -478,5 +534,8 @@ module.exports = {
   editGroupTask,
   GroupTaskChangeStatus,
   removeMemberGroupTask,
-  changeStatusOfMember
+  changeStatusOfMember,
+  deleteProject,
+  changeStatusOfProject,
+  deleteTask
 };

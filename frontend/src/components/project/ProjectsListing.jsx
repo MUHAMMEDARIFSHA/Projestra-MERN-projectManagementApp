@@ -49,8 +49,8 @@ axios.get('/user/projectlist',{ headers: { 'x-access-token': localStorage.getIte
 <div style={{background: 'linear-gradient(to right, #007BFF, #00BFA5)'}}>
 
       <Navbar/>
-      <Container >
-      <Grid container marginTop="60px"spacing={2}>
+      <Container  >
+      <Grid container marginTop="60px"spacing={2} minHeight={'100vh'}>
         <Grid item xs={12} md={4}>
            <PersonIcon sx={{color:"#999999" ,fontSize: '60px'}}/>
           <Typography variant="h4" sx={{ mt: 2 }}>

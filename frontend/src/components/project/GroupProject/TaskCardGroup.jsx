@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "../../../Axios";
 import {
   Card,
@@ -17,8 +17,9 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Slider
+  Slider,
 } from "@mui/material";
+import DeleteIcon from '@mui/icons-material/Delete';
 import AvatarGroup from "@mui/material/AvatarGroup";
 import { Autocomplete } from "@mui/material";
 import { CreditCard, Description, Group } from "@mui/icons-material";
@@ -51,20 +52,19 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
     }));
     console.log(selectedTask);
   };
-  const getStatusValue= (value)=>{
+  const getStatusValue = (value) => {
     if (value === "to-do") return 0;
     if (value === "ongoing") return 1;
-    if (value === "completed") return 2 ;
-  }
+    if (value === "completed") return 2;
+  };
   const openDataModal = (task) => {
     console.log("on data modal open");
     setSelectedTask(task);
-    setStatus(getStatusValue(task.status))
+    setStatus(getStatusValue(task.status));
     setIsModalOpen(true);
   };
 
-
-    const handleMemberChange = (event, newValue) => {
+  const handleMemberChange = (event, newValue) => {
     setNewMember(newValue);
   };
   const editGroupTask = async (e) => {
@@ -79,7 +79,7 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
       .then((res) => {
         if (res.status === 200) {
           console.log(res.data.message);
-          setNewMember([])
+          setNewMember([]);
           onClose({
             success: true,
             projectData: res.data.projectData,
@@ -89,13 +89,13 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
         }
       })
       .catch((error) => {
-        console.log("errror")
+        console.log("errror");
         // console.log(error.response.data.message);
       });
   };
 
   const [status, setStatus] = useState(0); // 0: To-Do, 1: Ongoing, 2: Completed
-  
+
   // useEffect(() => {
   //   // Update the status whenever the selectedTask changes
   //   setStatus(getStatusValue(selectedTask?.status));
@@ -103,27 +103,31 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
 
   const handleStatusChange = (event, newValue) => {
     setStatus(newValue);
-    const x = getStatusLabel(newValue)
-    console.log(x +" status");
-    axios.patch('/group/task/changestatus',{status:x,projectId,task:selectedTask},
-    { headers: { "x-access-token": localStorage.getItem("token") } }).then((res)=>{
-       if(res.status===200){
-        console.log(res.data.message);
-        console.log(res.data.task);
-        const statusValue = getStatusValue(res.data.task.status)
-        console.log(statusValue +"   status value");
-        setStatus(statusValue)
-        onClose({
-          success: true,
-          projectData: res.data.projectData,
-          message: "group task status changed succesfully",
-        });
-        closeModal();
-
-       }
-    })
+    const x = getStatusLabel(newValue);
+    console.log(x + " status");
+    axios
+      .patch(
+        "/group/task/changestatus",
+        { status: x, projectId, task: selectedTask },
+        { headers: { "x-access-token": localStorage.getItem("token") } }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res.data.message);
+          console.log(res.data.task);
+          const statusValue = getStatusValue(res.data.task.status);
+          console.log(statusValue + "   status value");
+          setStatus(statusValue);
+          onClose({
+            success: true,
+            projectData: res.data.projectData,
+            message: "group task status changed succesfully",
+          });
+          closeModal();
+        }
+      });
   };
- 
+
   const getStatusLabel = (value) => {
     if (value === 0) return "to-do";
     if (value === 1) return "ongoing";
@@ -131,7 +135,7 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
   };
 
   const sliderStyles = {
-    color: 'grey', // Change the color of the slider bar to grey
+    color: "grey", // Change the color of the slider bar to grey
   };
 
   const railStyles = {
@@ -139,79 +143,162 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
   };
 
   const trackStyles = {
-    color: 'grey', // Change the color of the active part of the slider to grey
+    color: "grey", // Change the color of the active part of the slider to grey
   };
 
   const thumbStyles = {
-    color: 'grey', // Change the color of the thumb (dragging handle) to grey
+    color: "grey", // Change the color of the thumb (dragging handle) to grey
   };
 
   const valueLabelStyles = {
-    display: 'none', // Hide the value label
+    display: "none", // Hide the value label
   };
-  const removeMember = async(memberId)=>{
+  const removeMember = async (memberId) => {
     console.log("remove member");
- await axios.post('/group/task/member/remove',{memberId,projectId,task:selectedTask},   
- { headers: { "x-access-token": localStorage.getItem("token") } }).then((res)=>{
- if(res.status === 200){
-  console.log(res.data.message);
-  setSelectedTask(res.data.projectData.tasks)
-  onClose({
-    success: true,
-    projectData: res.data.projectData,
-    message: "group task status changed succesfully",
-  });
-  closeModal();
- }
- }).catch((error)=>{
+    await axios
+      .post(
+        "/group/task/member/remove",
+        { memberId, projectId, task: selectedTask },
+        { headers: { "x-access-token": localStorage.getItem("token") } }
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          console.log(res.data.message);
+          setSelectedTask(res.data.projectData.tasks);
+          onClose({
+            success: true,
+            projectData: res.data.projectData,
+            message: "group task status changed succesfully",
+          });
+          closeModal();
+        }
+      })
+      .catch((error) => {});
+  };
+  const [showDeleteButton, setShowDeleteButton] = useState(false);
 
- })
+  const handleMouseEnter = () => {
+    setShowDeleteButton(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowDeleteButton(false);
+  };
+  const handleTaskDelete = (id)=>{
+    console.log("delete task ")
+    console.log(id)
+    axios.post('/user/group/project/task/delete',{taskId:id,projectId:projectId}, { headers: { "x-access-token": localStorage.getItem("token") } })
+    .then((res)=>{
+      if(res.status === 200){
+        console.log(res.data.message)
+        onClose({
+          success: true,
+          projectData: res.data.projectData,
+          message: "group task updated succesfully",
+        });
+      }
+    })
   }
   return (
     <Box my={2}>
       {tasks.map((task) => (
-        <Card
-          onClick={() => openDataModal(task)}
-          key={task.id}
-          sx={{
-            width: "100%",
-            display: "flex",
-            justifyContent: "space-between",
-            my: 2,
-          }}
-        >
-          <CardContent
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "flex-start",
-              alignItems: "start",
-            }}
-          >
-            <Typography variant="h5" marginBottom={1}>
-              {task.taskname}
-            </Typography>
-            <Typography>{task.description}</Typography>
-          </CardContent>
-          <Box sx={{ display: "flex", alignItems: "center", paddingRight: 2 }}>
-            <AvatarGroup>
-              {task.members.map((member) => {
-                const user = users.find((user) => user.email === member.email);
-                if (user) {
-                  return (
-                    <Avatar
-                      key={user.id}
-                      alt={user.username}
-                      src={user.profilePicture}
-                    />
-                  );
-                }
-                // You can handle the case when a user is not found or provide a default avatar here.
-                return null;
-              })}
-            </AvatarGroup>
-          </Box>
-        </Card>
+         <Card
+         onMouseEnter={handleMouseEnter}
+         onMouseLeave={handleMouseLeave}
+         onClick={() => openDataModal(task)}
+         key={task.id}
+         sx={{
+           width: "100%",
+           display: "flex",
+           justifyContent: "space-between",
+           my: 2,
+         }}
+       >
+         <CardContent
+           sx={{
+             display: "flex",
+             flexDirection: "column",
+             justifyContent: "flex-start",
+             alignItems: "start",
+           }}
+         >
+           <Typography variant="h5" marginBottom={1}>
+             {task.taskname}
+           </Typography>
+           <Typography>{task.description}</Typography>
+         </CardContent>
+         <Box sx={{ display: "flex", alignItems: "center", paddingRight: 2 }}>
+           <AvatarGroup>
+             {task.members.map((member) => {
+               const user = users.find((user) => user.email === member.email);
+               if (user) {
+                 return (
+                   <Avatar
+                     key={user.id}
+                     alt={user.username}
+                     src={user.profilePicture}
+                   />
+                 );
+               }
+               return null;
+             })}
+           </AvatarGroup>
+         </Box>
+         {/* Delete button */}
+         {showDeleteButton && (
+           <Button
+             onClick={(e) => {
+               e.stopPropagation(); // Prevent card click event from triggering
+               handleTaskDelete(task._id);
+             }}
+             sx={{color:'red'}}
+           >
+            <DeleteIcon/>
+           </Button>
+         )}
+       </Card>
+        // <Card
+        //   onClick={() => openDataModal(task)}
+        //   key={task.id}
+        //   sx={{
+        //     width: "100%",
+        //     display: "flex",
+        //     justifyContent: "space-between",
+        //     my: 2,
+        //   }}
+        // >
+        //   <CardContent
+        //     sx={{
+        //       display: "flex",
+        //       flexDirection: "column",
+        //       justifyContent: "flex-start",
+        //       alignItems: "start",
+        //     }}
+        //   >
+        //     <Typography variant="h5" marginBottom={1}>
+        //       {task.taskname}
+        //     </Typography>
+        //     <Typography>{task.description}</Typography>
+        //   </CardContent>
+        //   <Box sx={{ display: "flex", alignItems: "center", paddingRight: 2 }}>
+        //     <AvatarGroup>
+        //       {task.members.map((member) => {
+        //         const user = users.find((user) => user.email === member.email);
+        //         if (user) {
+        //           return (
+        //             <Avatar
+        //               key={user.id}
+        //               alt={user.username}
+        //               src={user.profilePicture}
+        //             />
+        //           );
+        //         }
+        //         // You can handle the case when a user is not found or provide a default avatar here.
+        //         return null;
+        //       })}
+        //     </AvatarGroup>
+        //   </Box>
+        // </Card>
       ))}
       {/* Render the modal here based on the isModalOpen state */}
       {isModalOpen && selectedTask && (
@@ -236,7 +323,13 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
                   }}
                 >
                   {/* Your content goes here */}
-                  <Typography item variant="h5" fontWeight="700" my={2} textAlign="center">
+                  <Typography
+                    item
+                    variant="h5"
+                    fontWeight="700"
+                    my={2}
+                    textAlign="center"
+                  >
                     TO-DO
                   </Typography>
                 </Box>
@@ -311,7 +404,13 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
                                 <TableCell
                                   sx={{ padding: "6px 16px", height: "40px" }}
                                 >
-                                  <Button onClick={()=>{removeMember(user._id)}}>Remove</Button>
+                                  <Button
+                                    onClick={() => {
+                                      removeMember(user._id);
+                                    }}
+                                  >
+                                    Remove
+                                  </Button>
                                 </TableCell>
                                 {/* Add more table cells with member details as needed */}
                               </TableRow>
@@ -324,42 +423,44 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
                 </Box>
               </Grid>
               <Grid item my={1} ml={3} xs={12}>
-              {selectedTask.status === 'to-do' || selectedTask.status === 'ongoing' ? (
-  <>
-    <Typography>Add members</Typography>
-    <Box display="flex">
-      <Autocomplete
-        multiple // Make sure to set the `multiple` prop to true
-        options={users}
-        getOptionLabel={(user) => (user.email ? user.email : "")}
-        value={newMember}
-        onChange={handleMemberChange}
-        renderInput={(params) => (
-          <TextField
-            variant="standard" // Use "standard" variant for no outline
-            InputProps={{
-              disableUnderline: true,
-              sx: {
-                backgroundColor: "#f2f2f2",
-                borderRadius: "10px",
-                paddingLeft: "20px",
-                height: "45px",
-                cursor: "pointer",
-                "&:hover": {
-                  backgroundColor: "#dcdcdc", // Define a darker shade for hover
-                },
-              },
-            }} // Remove the outline
-            {...params}
-            placeholder="Enter member email"
-            sx={{ width: 500 }}
-          />
-        )}
-      />
-    </Box>
-  </>
-) : null}
-
+                {selectedTask.status === "to-do" ||
+                selectedTask.status === "ongoing" ? (
+                  <>
+                    <Typography>Add members</Typography>
+                    <Box display="flex">
+                      <Autocomplete
+                        multiple // Make sure to set the `multiple` prop to true
+                        options={users}
+                        getOptionLabel={(user) =>
+                          user.email ? user.email : ""
+                        }
+                        value={newMember}
+                        onChange={handleMemberChange}
+                        renderInput={(params) => (
+                          <TextField
+                            variant="standard" // Use "standard" variant for no outline
+                            InputProps={{
+                              disableUnderline: true,
+                              sx: {
+                                backgroundColor: "#f2f2f2",
+                                borderRadius: "10px",
+                                paddingLeft: "20px",
+                                height: "45px",
+                                cursor: "pointer",
+                                "&:hover": {
+                                  backgroundColor: "#dcdcdc", // Define a darker shade for hover
+                                },
+                              },
+                            }} // Remove the outline
+                            {...params}
+                            placeholder="Enter member email"
+                            sx={{ width: 500 }}
+                          />
+                        )}
+                      />
+                    </Box>
+                  </>
+                ) : null}
               </Grid>
               <Grid item m={3} xs={5}>
                 <TextField
@@ -399,32 +500,62 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
                   fullWidth
                 />
               </Grid>
-             <Grid item xs={10}>
-    <Box m={3}>
-      <Slider
-        value={status}
-        onChange={handleStatusChange}
-        // valueLabelDisplay="auto"
-        step={1}
-        marks={[
-          { value: 0, label: <Button variant="contained" color="secondary">To-Do</Button> },
-          { value: 1, label: <Button variant="contained" style={{ backgroundColor: "orange", color: "white" }}>Ongoing</Button> },
-          { value: 2, label: <Button variant="contained" style={{ backgroundColor: "green", color: "white" }}>Completed</Button> },
-        ]}
-        min={0}
-        max={2}
-        track="inverted" // This slows down the dragging speed
-        style={sliderStyles} // Apply the custom styles to the Slider
-        classes={{
-          rail: railStyles,
-          track: trackStyles,
-          thumb: thumbStyles,
-          valueLabel: valueLabelStyles,
-        }}
-      />
-      {/* <div style={{ textAlign: "center" }}>{getStatusLabel(status)}</div> */}
-    </Box>
-    </Grid>
+              <Grid item xs={10}>
+                <Box m={3}>
+                  <Slider
+                    value={status}
+                    onChange={handleStatusChange}
+                    // valueLabelDisplay="auto"
+                    step={1}
+                    marks={[
+                      {
+                        value: 0,
+                        label: (
+                          <Button variant="contained" color="secondary">
+                            To-Do
+                          </Button>
+                        ),
+                      },
+                      {
+                        value: 1,
+                        label: (
+                          <Button
+                            variant="contained"
+                            style={{
+                              backgroundColor: "orange",
+                              color: "white",
+                            }}
+                          >
+                            Ongoing
+                          </Button>
+                        ),
+                      },
+                      {
+                        value: 2,
+                        label: (
+                          <Button
+                            variant="contained"
+                            style={{ backgroundColor: "green", color: "white" }}
+                          >
+                            Completed
+                          </Button>
+                        ),
+                      },
+                    ]}
+                    min={0}
+                    max={2}
+                    track="inverted" // This slows down the dragging speed
+                    style={sliderStyles} // Apply the custom styles to the Slider
+                    classes={{
+                      rail: railStyles,
+                      track: trackStyles,
+                      thumb: thumbStyles,
+                      valueLabel: valueLabelStyles,
+                    }}
+                  />
+                  {/* <div style={{ textAlign: "center" }}>{getStatusLabel(status)}</div> */}
+                </Box>
+              </Grid>
               <Grid item mb={3} xs={10}>
                 <Button
                   type="submit"

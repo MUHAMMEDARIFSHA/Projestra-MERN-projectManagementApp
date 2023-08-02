@@ -40,7 +40,7 @@ function AppRoutes() {
     <Router>
       <Routes>
         <Route element={<UserPublicRoutes />}>
-        <Route path="/" element={<HomeBeforeSignIn />} />
+        {/* <Route path="/" element={<HomeBeforeSignIn />} /> */}
           <Route path="/signup" element={<SignUp />} />
           <Route path="/signin" element={<SignIn />} />
           <Route path="/signup/otp" element={<Otp />} />
