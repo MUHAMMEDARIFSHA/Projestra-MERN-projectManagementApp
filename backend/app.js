@@ -14,6 +14,8 @@ const chatRouter = require('./routes/chatRouter')
 
 // .env file
 dotenv.config();
+
+
 //  creating express
 const app = express();
 
@@ -44,7 +46,7 @@ app.use("/", userRouter);
 app.use("/admin",adminRouter)
 
 // listening to the port
-const PORT = process.env.PORT || 5001;
+const PORT = process.env.PORT || 5002;
 const server = app.listen(PORT, () => console.log(`server conected to ${PORT}`));
 io.attach(server)
 

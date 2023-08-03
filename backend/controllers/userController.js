@@ -214,14 +214,12 @@ const getUserData = async(req,res)=>{
       return res.status(200).json({user:user,message:"user data found"})
     }
     else{
-      return res.status(404).json({message:"user not found"})
+      return res.status(404).json({message:"user not found in the database"})
     }
   }
   catch(error){
-    return res.status(500).json({message: "error occured ",error:error})
+    return res.status(500).json({message: "some server error occured ",error:error})
   }
-
-
 }
 module.exports = {
   registerUser,
