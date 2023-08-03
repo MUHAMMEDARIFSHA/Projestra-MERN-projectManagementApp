@@ -344,7 +344,8 @@ import {
 import SendIcon from "@mui/icons-material/Send";
 import { useSelector } from "react-redux";
 import io from 'socket.io-client'
-const ENDPOINT = 'http://localhost:4000'
+// just chaged the url using the .env vite syntax
+const ENDPOINT = import.meta.env.VITE_AXIOS_URL
 var socket, selectedChatCompare
 
 const ChatUI = () => {
