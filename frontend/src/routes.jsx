@@ -8,7 +8,7 @@ import Otp from "./components/user/SignUp/Otp";
 import HomeBeforeSignIn from "./components/user/HomePage/HomeBeforeSignIn";
 import HomeAfterSignIn from "./components/user/HomePage/HomeAfterSignIn.jsx";
 import AdminSignIn from "./components/admin/AdminSignIn";
-import AdminHome from "./components/admin/adminHome";
+import AdminHome from "./components/admin/AdminHome";
 import UserDetails from "./components/admin/UserDeatails";
 import EditPassword from "./components/user/SignIn/EditPassword";
 import UserProfile from "./components/user/Profile/UserProfile";
