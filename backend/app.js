@@ -27,7 +27,7 @@ app.use(passport.initialize())
 
 // code for giving access to headers through axios
 const corsOptions = {
-  origin: "*",
+  origin: "https://projestramanagement.netlify.app",
   credentials: true, //access-control-allow-credentials:true
   optionSuccessStatus: 200,
   allowedHeaders: [
