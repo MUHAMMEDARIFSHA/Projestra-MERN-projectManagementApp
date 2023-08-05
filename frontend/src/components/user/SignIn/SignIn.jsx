@@ -1,6 +1,7 @@
 import { React, useState } from "react";
 import LoginImages from "../LoginImages";
-import axios from "../../../Axios";
+// import axios from "../../../Axios";
+import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { userSetAuth } from "../../../features/user/userAuthSlice";
@@ -26,7 +27,7 @@ function SignIn() {
     e.preventDefault();
     console.log(FormValues);
     axios
-      .post("/signin", { FormValues })
+      .post("http//:localhost:4000/signin", { FormValues })
       .then((res) => {
         if (res.status === 200) {
           console.log(res.data.jwtToken);
