@@ -139,11 +139,11 @@ const forgotPassword = async (req, res) => {
       const link = `${process.env.BASE_URL}/user/${user._id}/verify/${token.token}/editpassword`;
       await verifyEmail(user.email, link);
       console.log("verify email");
-      res.status(200).json({ success: true, message: "check your email" });
+      res.status(200).json({ success: true, message: "Check your email" });
     } else {
       return res
         .status(404)
-        .json({ success: false, message: "user with email not found" });
+        .json({ success: false, message: "User with email not found" });
     }
   } catch (error) {
     return res.status(500).json({ success: false, message: error });
