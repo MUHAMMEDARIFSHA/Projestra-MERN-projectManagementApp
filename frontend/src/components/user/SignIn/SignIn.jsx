@@ -21,7 +21,7 @@ function SignIn() {
   const dispatch = useDispatch();
   const [FormErrors, setFormErrors] = useState({});
   const [FormValues, setFormValues] = useState({});
-  const [loading,setLoading] = useState('')
+  const [loading,setLoading] = useState(false)
   const handleSubmit = (e) => {
     const errors = {};
     e.preventDefault();
@@ -56,6 +56,7 @@ function SignIn() {
     navigate("/signup");
   };
   const forgotPassword = async (e) => {
+    setLoading(true)
     const errors = {};
     e.preventDefault();
     console.log("forgot password");
@@ -66,6 +67,7 @@ function SignIn() {
       setFormErrors({});
  await axios.post("/signin/forgotpassword", { email: FormValues.email })
         .then((res) => {
+          setLoading(false)
           if (res.status === 200) {
             console.log("email found");
             dispatch(setEmail(FormValues.email))
@@ -74,8 +76,12 @@ function SignIn() {
           setFormErrors(errors)
         })
         .catch((error) => {
+          setLoading(false)
           if (error.response && error.response.status === 404) {
             console.log(`${error.response.data.message}`);
+            errors.forgot = `${error.response.data.message}`;
+          }
+          else{
             errors.forgot = `${error.response.data.message}`;
           }
           setFormErrors(errors);
@@ -86,6 +92,7 @@ function SignIn() {
   return (
     <>
       <LoginImages />
+    {loading? "":(
       <Box
         sx={{
           position: "fixed",
@@ -251,6 +258,7 @@ function SignIn() {
           </Grid>
         </Container>
       </Box>
+    )}
     </>
   );
 }

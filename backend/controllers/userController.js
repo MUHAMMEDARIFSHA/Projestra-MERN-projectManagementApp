@@ -146,7 +146,7 @@ const forgotPassword = async (req, res) => {
         .json({ success: false, message: "User with email not found" });
     }
   } catch (error) {
-    return res.status(500).json({ success: false, message: error });
+    return res.status(500).json({ success: false, message: " try after 24 hours" });
   }
 };
 
