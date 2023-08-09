@@ -47,9 +47,6 @@ app.use("/admin",adminRouter)
 
 // listening to the port
 const PORT = process.env.PORT || 5002;
-// const server = app.listen(PORT, () => console.log(`server conected to ${PORT}`));
-// io.attach(server)
-
 const server = app.listen(PORT, db.connect().then(() => console.log(`server conected to ${PORT}`)));
 io.attach(server)
 

@@ -16,8 +16,9 @@ const verifyToken = (req, res, next) => {
       next();
     }
     else{
-      res.json({message:"notoken"})
-      console.log("no user in token")
+	res.json({message:"token illa"})      
+	console.log("no user in token")
+
     }
   });
   

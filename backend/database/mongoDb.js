@@ -38,5 +38,3 @@ return mongoose
 
 module.exports = {connect};
 
-
-

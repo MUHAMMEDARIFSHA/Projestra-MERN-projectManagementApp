@@ -7,7 +7,7 @@ const Chat = require('../models/chatSchema')
 const io = new Server({
     pingTimeout: 60000,
     cors: {
-      origin: process.env.BASE_URL,
+      origin: '*',
     },
   })
 
