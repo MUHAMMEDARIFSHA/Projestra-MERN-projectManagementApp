@@ -330,7 +330,7 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
                     my={2}
                     textAlign="center"
                   >
-                    TO-DO
+                    TASK
                   </Typography>
                 </Box>
               </Grid>
@@ -401,12 +401,26 @@ const TaskCardGroup = ({ tasks, users, projectId, onClose }) => {
                                 >
                                   {user.email}
                                 </TableCell>
+                                <TableCell>
+                                  <Typography fontWeight={600} color={'blue'}>
+                                  {member.status}
+                                  </Typography>
+                                
+                                  </TableCell>
                                 <TableCell
                                   sx={{ padding: "6px 16px", height: "40px" }}
                                 >
+
                                   <Button
                                     onClick={() => {
                                       removeMember(user._id);
+                                    }}
+                                    variant="contained"
+                                    sx={{
+                                      borderRadius: "3px",
+                                      height: "35px",
+                                      fontWeight: "700",
+                                      backgroundColor: "green",
                                     }}
                                   >
                                     Remove

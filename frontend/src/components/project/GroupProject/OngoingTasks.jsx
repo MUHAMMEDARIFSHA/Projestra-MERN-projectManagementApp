@@ -52,7 +52,7 @@ function OngoingTasks() {
         <Box flex="1" ml={3}>
           <Grid container>
             <Grid item xs={12}>
-              <h1>on going</h1>
+            <Typography variant="h6" my={2} fontWeight={600}>Ongoing</Typography>
               <TaskCardGroup
                 onClose={handleModalClose}
                 tasks={tasks.filter((t) => t.status === "ongoing")}

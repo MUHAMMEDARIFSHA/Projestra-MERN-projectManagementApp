@@ -54,7 +54,7 @@ function CompletedTasks() {
       <Box flex="1" ml={3}>
         <Grid container>
           <Grid item xs={12}>
-    <h1>completed</h1>
+    <Typography variant="h6" my={2} fontWeight={600}>Completed</Typography>
     <TaskCardGroup
                  onClose={handleModalClose}
                   tasks={tasks.filter((t)=>t.status==="completed")}

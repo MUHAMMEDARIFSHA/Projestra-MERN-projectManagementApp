@@ -185,6 +185,27 @@ function GroupDashboard() {
                 </CardContent>
               </Card>
             </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Card>
+                <CardContent>
+                  <Grid
+                    display="flex"
+                    alignItems="center"
+                    justifyContent="space-around"
+                  >
+                    <Grid item>
+                      <FcFlowChart size={"50px"} />
+                    </Grid>
+                    <Grid item>
+                      <Typography variant="h6">Completed</Typography>
+                      <Typography variant="h4">
+                        60%
+                      </Typography>
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
 
             {/* Add one more card here */}
 
@@ -202,7 +223,7 @@ function GroupDashboard() {
                           .split("T")[0]
                       : ""
                   }
-                  type="date"
+                
                   label="startdate"
                   name="start_date"
                   fullWidth
@@ -222,7 +243,7 @@ function GroupDashboard() {
                           .split("T")[0]
                       : ""
                   }
-                  type="date"
+                  
                   label="startdate"
                   name="start_date"
                   fullWidth

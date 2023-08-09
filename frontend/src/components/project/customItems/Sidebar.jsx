@@ -29,6 +29,13 @@ export default function Sidebar({ children }) {
             }`}
             alt=""
           />
+         <div className="flex md:flex items-center">
+  <a href="/home" className= {` text-blue-700 font-semibold mr-4 hidden md:flex overflow-hidden transition-all ${
+              expanded ? "w-20" : "w-0"
+            }  `}>
+    <h2 className="text-lg">Projestra</h2>
+  </a>
+</div>
           <button
             onClick={() => setExpanded((curr) => !curr)}
             className="p-1.5 rounded-lg bg-gray-50 hover:bg-gray-100"

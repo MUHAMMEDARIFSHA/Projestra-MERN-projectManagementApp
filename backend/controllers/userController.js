@@ -139,7 +139,7 @@ const forgotPassword = async (req, res) => {
       const link = `${process.env.BASE_URL}/user/${user._id}/verify/${token.token}/editpassword`;
       await verifyEmail(user.email, link);
       console.log("verify email");
-      res.status(200).json({ success: true, message: "Check your email" });
+      res.status(200).json({ success: true, message: "Mail sent to your email" });
     } else {
       return res
         .status(404)

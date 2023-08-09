@@ -47,12 +47,15 @@ function ProjectsTasks() {
   }, []);
   return (
     <>
+  
       <Box display="flex">
         <GroupSideBar userData={users} />
         <Box flex="1" ml={3}>
           <Grid container>
             <Grid item xs={12}>
+
               <Grid item alignContent="center" xs={11}>
+              <Typography variant="h6" my={2} fontWeight={600}>Tasks</Typography>
                 <TaskCardGroup
                  onClose={handleModalClose}
                   tasks={tasks.filter((t)=>t.status==="to-do")}
