@@ -143,6 +143,7 @@ const ProjectDashboard = () => {
                               <TaskCard
                                 title={task.taskname}
                                 description={task.description}
+                                bottomColor={"red"}
                               />
                             </div>
                           )}
@@ -181,6 +182,7 @@ const ProjectDashboard = () => {
                               <TaskCard
                                 title={task.taskname}
                                 description={task.description}
+                                bottomColor="orange"
                               />
                             </div>
                           )}
@@ -215,6 +217,7 @@ const ProjectDashboard = () => {
                               <TaskCard
                                 title={task.taskname}
                                 description={task.description}
+                                bottomColor="green"
                               />
                             </div>
                           )}

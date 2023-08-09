@@ -46,7 +46,7 @@ const TaskCard = ({ title, description, status, bottomColor }) => {
     <Card
       sx={{
         marginBottom: 2,
-        borderBottom: `15px solid ${bottomColor ? bottomColor : "green"}`,
+        borderBottom: `15px solid ${bottomColor}`,
       }}
     >
       <CardContent sx={{ padding: 0, margin: 0, paddingBottom: "0 !important" }}>

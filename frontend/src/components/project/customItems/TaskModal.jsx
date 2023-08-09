@@ -38,6 +38,7 @@ export default function TaskModal({id,onClose}) {
       .then((res) => {
         if (res.status === 200) {
           console.log(res.data.message + "   in modal");
+          setModalTask({})
           onClose({ success: true,projectData:res.data.projectData ,message: "Task added successfully from modal" });
           closeModal()
         }
@@ -62,7 +63,16 @@ export default function TaskModal({id,onClose}) {
   }, [modalTask]);
   return (
     <div>
-      <Button onClick={openModal}>Add Task</Button>
+      <Button onClick={openModal}
+      fullWidth
+      variant="contained"
+      sx={{
+        borderRadius: "3px",
+        height: "35px",
+        fontWeight: "700",
+        backgroundColor: "green",
+      }}
+      >Add Task</Button>
       <Modal
         open={open}
         onClose={closeModal}
@@ -115,7 +125,16 @@ export default function TaskModal({id,onClose}) {
               />
             </Grid>
             <Grid item xs={12}>
-              <Button type="submit">Add Task</Button>
+              <Button type="submit"
+              fullWidth
+              variant="contained"
+              sx={{
+                borderRadius: "3px",
+                height: "40px",
+                fontWeight: "700",
+                backgroundColor: "green",
+              }}
+              >Add Task</Button>
             </Grid>
           </Grid>
         </Box>
