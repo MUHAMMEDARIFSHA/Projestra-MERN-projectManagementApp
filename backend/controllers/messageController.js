@@ -7,9 +7,7 @@ const Chat = require('../models/chatSchema');
 
 // }
 const allMessages = async (req, res) => {
-    console.log("inside allMessages");
     try {
-        console.log(req.body.chatId  , 'chat id');
       const messages = await Message.find({ chat: req.body.chatId })
         .populate("sender", "username profilePicture email")
         .populate("chat");
@@ -25,12 +23,9 @@ const sendMessage = async (req, res) => {
     const { content, chatId } = req.body;
   
     if (!content || !chatId) {
-      console.log("Invalid data passed into request");
       return res.status(400).json({success:false, message:"Ivalid data passed"})
     }
     let user = await User.find({email:req.email})
-    console.log(user);
-    console.log(user[0].username   + "  user id   " , req.email);
     let newMessage = {
       sender: user[0]._id,
       content: content,

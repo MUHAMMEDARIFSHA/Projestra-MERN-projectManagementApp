@@ -1,10 +1,8 @@
 const User = require('../models/userSchema')
 const jwt = require('jsonwebtoken')
 const signInUserGoogle =async(req,res)=>{
-    console.log("google")
     const userData = req.body.userData
-    console.log(userData)
-    console.log(userData.name)
+
   
 
     const user = await User.findOne({email:userData.email,isVerified:true})
@@ -14,11 +12,10 @@ const signInUserGoogle =async(req,res)=>{
         process.env.SECRET_KEY_JWT,
         { expiresIn: "3d" }
       );
-      console.log(token);
+      
       // jwt token creation
 
     if(user){
-        console.log("user exist with email")
         return res.status(200).json({success:true,userEmail:userData.email,jwtToken:token})
     }
     else{
