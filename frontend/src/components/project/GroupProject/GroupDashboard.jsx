@@ -199,13 +199,15 @@ function GroupDashboard() {
                     <Grid item>
                       <Typography variant="h6">Completed</Typography>
                       <Typography variant="h4">
-                        60%
+                      {Math.round((((groupProjectData?.tasks?.filter(task => task.status === 'completed').length)/(groupProjectData?.tasks?.length))*100)  )||0 } %
                       </Typography>
                     </Grid>
                   </Grid>
                 </CardContent>
               </Card>
             </Grid>
+
+         
 
             {/* Add one more card here */}
 
