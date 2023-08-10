@@ -27,6 +27,8 @@ import MemberCompleted from "./components/project/GroupProject/MembersView/Membe
 import MemberOngoing from "./components/project/GroupProject/MembersView/MemberOngoing";
 import MemberTask from "./components/project/GroupProject/MembersView/MemberTask";
 import ChatPage from "./components/project/GroupProject/Chat/ChatPage";
+import PageNotFound from "./components/user/PageNotFound";
+import StripePage from "./components/payments/StripePage";
 // Public Routes
 import UserPublicRoutes from "./routesTypes/UserPublicRoute";
 import AdminPublicRoutes from "./routesTypes/AdminPublicRoute";
@@ -34,6 +36,7 @@ import AdminPublicRoutes from "./routesTypes/AdminPublicRoute";
 // Protected Routes
 import UserProtectedRoutes from "./routesTypes/UserProtectedRoute";
 import AdminProtectedRoute from "./routesTypes/AdminProtectedRoute";
+
 
 function AppRoutes() {
   return (
@@ -98,6 +101,7 @@ function AppRoutes() {
             path="/user/groupproject/member/completed"
             element={<MemberCompleted />}
           />
+          <Route  path="/user/subcription/payment" element={<StripePage/>}/>
           {/* Member Routes  */}
         </Route>
 
@@ -109,6 +113,8 @@ function AppRoutes() {
           <Route path="/admin/home" element={<AdminHome />} />
           <Route path="/admin/users" element={<UserDetails />} />
         </Route>
+
+        <Route path="*" element={<PageNotFound/>}/>
       </Routes>
     </Router>
   );

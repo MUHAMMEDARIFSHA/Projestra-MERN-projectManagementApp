@@ -33,9 +33,10 @@
     "passport-local": "^1.0.0",
     "passport-local-mongoose": "^8.0.0",
     "path": "^0.12.7",
+    "save": "^2.9.0",
     "socket.io": "^4.7.1",
+    "stripe": "^12.17.0",
     "twilio": "^4.11.2"
   },
-  "devDependencies": {},
   "description": ""
 }

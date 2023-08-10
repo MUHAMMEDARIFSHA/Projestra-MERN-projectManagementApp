@@ -8,13 +8,6 @@ const verifyToken = require('../middlewares/Authorization')
 
 //  chat routes 
 
-// router.route("/").post(protect, accessChat);
-// router.route("/").get(protect, fetchChats);
-// router.route("/group").post(protect, createGroupChat);
-// router.route("/rename").put(protect, renameGroup);
-// router.route("/groupremove").put(protect, removeFromGroup);
-// router.route("/groupadd").put(protect, addToGroup);
-
 router.post('/',verifyToken,accessChat)
 router.get('/',verifyToken,getChatData)
 router.post('/group',verifyToken,createGroupChat)

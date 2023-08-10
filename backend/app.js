@@ -11,6 +11,7 @@ const io = require('./socket/socket')
 const userRouter = require("./routes/userRoutes");
 const adminRouter = require('./routes/adminRoutes')
 const chatRouter = require('./routes/chatRouter')
+const paymentRouter = require('./routes/paymentRoutes')
 
 // .env file
 dotenv.config();
@@ -40,10 +41,15 @@ const corsOptions = {
 // cors connecting
 app.use(cors(corsOptions));
 
+// stripe 
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+
 // / creating the routes
 app.use('/chat',chatRouter)
 app.use("/", userRouter);
 app.use("/admin",adminRouter)
+app.use('/payment',paymentRouter)
 
 // listening to the port
 const PORT = process.env.PORT || 5002;

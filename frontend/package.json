@@ -19,6 +19,7 @@
     "@mui/styles": "^5.13.2",
     "@redux-devtools/extension": "^3.2.5",
     "@reduxjs/toolkit": "^1.9.5",
+    "@stripe/react-stripe-js": "^2.1.2",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
     "dotenv": "^16.1.4",
