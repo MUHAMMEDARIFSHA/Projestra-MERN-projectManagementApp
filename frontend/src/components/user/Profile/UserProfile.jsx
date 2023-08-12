@@ -16,6 +16,7 @@ import {
   TableHead,
   TableRow,
   Container,
+  Button,
 } from "@mui/material";
 import { Edit, Folder } from "@mui/icons-material";
 import InfoIcon from '@mui/icons-material/Info';
@@ -32,6 +33,9 @@ const UserProfile = () => {
  const toProjects = ()=>{
   console.log("project");
   navigate('/user/projects')
+ }
+ const toSubcription = ()=>{
+  navigate("/user/subcription/payment")
  }
 
   return (
@@ -83,6 +87,11 @@ const UserProfile = () => {
                     <Typography variant="body1" mt="5px" color="textSecondary">
                       {userData.number}
                     </Typography>
+                    <Button
+                    onClick={toSubcription}
+                    >
+                      Get subcription
+                    </Button>
                   </Box>
                 </Grid>
                 <Grid item xs={12} md={8}>

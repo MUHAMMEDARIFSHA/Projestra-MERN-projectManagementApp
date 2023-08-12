@@ -1,7 +1,9 @@
 const jwt = require("jsonwebtoken");
 
 const verifyToken = (req, res, next) => {
+  console.log("inside verify token");
   const token = req.headers["x-access-token"];
+  console.log(token);
   if (!token) {
     res.status(404).json({ message: "No token found" });
   }

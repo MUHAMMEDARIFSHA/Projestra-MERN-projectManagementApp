@@ -29,6 +29,7 @@ import MemberTask from "./components/project/GroupProject/MembersView/MemberTask
 import ChatPage from "./components/project/GroupProject/Chat/ChatPage";
 import PageNotFound from "./components/user/PageNotFound";
 import StripePage from "./components/payments/StripePage";
+import SuccessPayment from "./components/payments/SuccessPayment";
 // Public Routes
 import UserPublicRoutes from "./routesTypes/UserPublicRoute";
 import AdminPublicRoutes from "./routesTypes/AdminPublicRoute";
@@ -103,6 +104,7 @@ function AppRoutes() {
           />
           <Route  path="/user/subcription/payment" element={<StripePage/>}/>
           {/* Member Routes  */}
+          <Route path='/subscription/success' element={<SuccessPayment/>}/>
         </Route>
 
         <Route element={<AdminPublicRoutes />}>

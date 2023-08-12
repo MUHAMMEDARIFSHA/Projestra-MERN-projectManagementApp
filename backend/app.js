@@ -46,10 +46,11 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 
 // / creating the routes
+app.use('/payment', paymentRouter);
 app.use('/chat',chatRouter)
 app.use("/", userRouter);
 app.use("/admin",adminRouter)
-app.use('/payment',paymentRouter)
+
 
 // listening to the port
 const PORT = process.env.PORT || 5002;

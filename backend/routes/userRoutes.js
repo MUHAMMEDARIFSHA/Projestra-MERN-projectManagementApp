@@ -9,6 +9,8 @@ const {createProject,getProjects,getProjectData,addTask,changeStatus,getGroupPro
     addMemberToGroup,editGroupTask,GroupTaskChangeStatus,removeMemberGroupTask,changeStatusOfMember,deleteProject,changeStatusOfProject
 ,deleteTask} = require('../controllers/projectConrtroller')
 
+
+
 router.get('/user/getdata',verifyToken,getUserData)
 router.get('/user/profile/getdata',verifyToken,getUserDataForEdit)
 router.get('/user/projectlist',verifyToken,getProjects)
@@ -38,6 +40,7 @@ router.post('/user/group/member/status/change',verifyToken,changeStatusOfMember)
 router.post('/user/group/project/delete',verifyToken,deleteProject)
 router.post('/user/group/project/changestatus',verifyToken,changeStatusOfProject)
 router.post('/user/group/project/task/delete',verifyToken,deleteTask)
+
 
 router.patch('/user/project/indivitual/addtask',verifyToken,addTask)
 router.patch('/user/project/indivitual/task/statuschange',verifyToken,changeStatus)
