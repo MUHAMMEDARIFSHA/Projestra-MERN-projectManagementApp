@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "../../Axios";
 
@@ -11,7 +11,7 @@ import CardOverflow from "@mui/joy/CardOverflow";
 
 function StripePage() {
   const navigate = useNavigate();
-  const [loading,setLoading] = useS
+  const [loading,setLoading] = useState(false)
   const toPayment = () => {
     console.log("to payment");
     axios
@@ -32,15 +32,24 @@ function StripePage() {
         console.log(error.response.data.message);
       });
   };
+  const backgroundImageStyle = {
+    backgroundImage: "url('https://img.freepik.com/free-vector/blue-polygonal-shapes-background_1053-434.jpg?size=626&ext=jpg')",
+    backgroundSize: 'cover',
+    backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center center',
+    height: '100vh', // Adjust the height as needed
+  };
+
 
   return (
-    <>
+    <div style={backgroundImageStyle}>
+    
       <Container
         style={{
           display: "flex", // Use flex display
           justifyContent: "center", // Center horizontally
           alignItems: "center", // Center vertically
-          marginTop: 70,
+     
         }}
       >
         <Paper
@@ -48,6 +57,7 @@ function StripePage() {
           style={{
             padding: "2rem",
             backgroundImage: "linear-gradient(to right, #CADDF6, #70A6ED)",
+            marginTop: 70,
           }}
         >
           <Card
@@ -130,7 +140,7 @@ function StripePage() {
           </Card>
         </Paper>
       </Container>
-    </>
+    </div>
   );
 }
 

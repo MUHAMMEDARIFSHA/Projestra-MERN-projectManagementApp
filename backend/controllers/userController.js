@@ -29,6 +29,7 @@ const registerUser = async (req, res) => {
       number: number,
       password: password,
     });
+    console.log(newUser,'=>new user');
     try {
       await newUser.save();
       await twilio.sentotp(number);

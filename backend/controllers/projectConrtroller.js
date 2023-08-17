@@ -1,6 +1,8 @@
 const Project = require("../models/projectSchema");
 const User = require("../models/userSchema");
 const Chat = require('../models/chatSchema')
+
+
 const createProject = async (req, res) => {
   console.log("create project");
   const projectData = req.body.projectData;
@@ -22,10 +24,10 @@ const createProject = async (req, res) => {
         users: [user._id]
       });
 }
-  
+  console.log("chat created");
 
     const newProject = await new Project({
-      projectname: projectname,
+     projectname: projectname,
       type: type,
       description: description,
       start_date: startdate,
@@ -33,6 +35,7 @@ const createProject = async (req, res) => {
       admin: user._id,
       chatId: groupChat ? groupChat._id : undefined 
     }).save();
+    console.log(newProject);
     console.log("project saved first");
     if (groupChat && groupChat.groupId === newProject._id) {
       console.log(groupChat);
@@ -40,8 +43,8 @@ const createProject = async (req, res) => {
     }
     
    const projectId =  newProject._id;
-    user.projects.push({ projectId });
-    await user.save();
+   await User.findByIdAndUpdate({_id:user._id},{$push:{projects:projectId}})
+  
     console.log("project save");
 
     return res
@@ -209,8 +212,7 @@ const addMember = async (req, res) => {
      }
      
     if (project) {
-      user.memberProjects.push({projectId:projectId})
-      await user.save()
+      await User.findByIdAndUpdate({_id:user._id},{$push:{memberProjects:{projectId:projectId}}})
       const member = { user: userData._id, email: userData.email };
       project.members.push(member);
       await project.save();
